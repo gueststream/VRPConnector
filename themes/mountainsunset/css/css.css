@@ -1,0 +1,12 @@
+
+
+.unit_thumbnail {
+    width:100%;
+}
+
+.vrpPages li {
+    list-style-type:none;
+    float:left;
+    padding: 5px;
+    border: 1px solid #333;
+}
