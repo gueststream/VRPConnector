@@ -11,15 +11,24 @@ Vacation Rental Platform Connector allows you to display and book your vacation 
 
 == Description ==
 
+The Vacation Rental Property Connector plugin by Gueststream, Inc. allows you to sync all of your vacation rental
+properties from a wide variety of property management software to your website allowing potential guests to
+search, sort, compare and book your rental properties right from your website.
 
+= Example Sites =
+* http://www.grandcaymanvillas.net
+* http://www.breckenridgeloging.com
+* http://www.mauihawaiivacations.com
+* http://www.tellurideluxury.com
 
 
 == Installation ==
 
-1. Extract the contents of VRPAPI.zip and upload the resulting folder `VRPAPI` to the `/wp-content/plugins/` directory
+1. Download the ZIP file from https://github.com/Gueststream-Inc/VRPConnector
+1. Extract the contents of the zip file and upload the resulting folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Navigate to Wordpress Admin > VRP > API Key and enter your Gueststream.net API key
-1. Begin adding your shortcodes to your posts and pages as desired.
+1. Begin adding the available shortcodes to your posts and pages as desired.
 
 == Frequently Asked Questions ==
 
@@ -29,20 +38,13 @@ HomeAway, ISILink, Escapia, Barefoot, RNS.
 
 = Does the VRP Connector require an account with Gueststream.net? =
 
-Yes.
-
-== Screenshots ==
-
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+Yes, Gueststream.net provides the back-end service of interfacing with many property management software APIs that allows
+you to seamlessly connect your website to your property management software data.
 
 == Changelog ==
 
-= 0.1 =
-* Preparing plugin for distribution via wordpress.org/plugins
+= 1.0 =
+* Initial Release
 
 == Shortcodes ==
 
