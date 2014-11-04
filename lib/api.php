@@ -82,6 +82,7 @@ class vrpapi
         add_shortcode("vrpAreaList", array($this, "vrpAreaList"));
         add_shortcode("vrpSpecials", array($this, "vrpSpecials"));
         add_shortcode("vrpLinks", array($this, "vrpLinks"));
+        add_shortcode("vrpCompare", array($this, "vrpCompare"));
     }
 
     function villafilter() {
@@ -489,6 +490,8 @@ class vrpapi
 
     function compare() {
 
+        //print_r($_GET['c']);
+
         if (isset($_GET['shared'])) {
             $_SESSION['cp'] = 1;
             $id = (int)$_GET['shared'];
@@ -505,20 +508,17 @@ class vrpapi
         $obj = new stdClass();
 
         if (isset($_GET['c']['compare'])) {
-
             $compare = $_GET['c']['compare'];
             $_SESSION['compare'] = $compare;
             if (!is_array($compare)) {
                 return;
             }
         } else {
-
             $compare = $_SESSION['compare'];
             if (!is_array($compare)) {
                 return;
             }
         }
-
 
         if (isset($_GET['c']['arrival'])) {
             $obj->arrival = $_GET['c']['arrival'];
@@ -548,12 +548,7 @@ class vrpapi
         $results = curl_exec($ch);
 
         $results = json_decode($results);
-        ob_start();
-        include TEMPLATEPATH . "/vrp/compare.php";
-
-        $contents = ob_get_contents();
-
-        ob_end_clean();
+        $contents = $this->loadTheme('vrpCompare',$results);
 
         return $contents;
     }
@@ -1085,6 +1080,15 @@ class vrpapi
         }
         $ret .= "</ul>";
         return $ret;
+    }
+
+    /**
+     * [vrpCompare] Shortcode
+     *
+     * @return string
+     */
+    function vrpCompare() {
+        return $this->compare();
     }
 
     //
