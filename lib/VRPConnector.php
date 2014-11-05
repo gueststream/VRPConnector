@@ -5,7 +5,7 @@
 class VRPConnector
 {
     var $apiKey;                                // Gueststream.net API Key
-    var $apiURL = "http://vrp.dev/api/v1/";     // Gueststream.net API Endpoint
+    var $apiURL = "https://www.gueststream.net/api/v1/";     // Gueststream.net API Endpoint
     var $allowCache = true;                     // @todo - Remove this.
     var $theme = "";                            // Full path to plugin theme folder
     var $themename = "";                        // Plugin theme name.
