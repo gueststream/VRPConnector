@@ -12,6 +12,7 @@ class VRPConnector
     var $default_theme_name = "mountainsunset"; // Default plugin theme name.
     var $otheractions = array();                //
     var $time;                                  // Time (in seconds?) spent making calls to the API
+    var $debug = array();                       // Container for debug data
 
     /**
      * Class Construct
@@ -404,11 +405,13 @@ class VRPConnector
             $obj->limit = 10;
         }
 
-        if ($obj->arrival == 'Not Sure') {
-            $obj->arrival = '';
-            $obj->depart = '';
-        } else {
-            //$obj->arrival = date("m/d/Y", strtotime($obj->arrival));
+        if(isset($obj->arrival)) {
+            if ($obj->arrival == 'Not Sure') {
+                $obj->arrival = '';
+                $obj->depart = '';
+            } else {
+                $obj->arrival = date("m/d/Y", strtotime($obj->arrival));
+            }
         }
 
         $search['search'] = json_encode($obj);
@@ -868,6 +871,7 @@ class VRPConnector
         if (isset($_GET['page'])) {
             $items['page'] = (int)$_GET['page'];
         }
+
         if (isset($_GET['beds'])) {
             $items['beds'] = (int)$_GET['beds'];
         }
@@ -877,6 +881,7 @@ class VRPConnector
                 $items[$k] = $v;
             endforeach;
         }
+
         if (isset($_GET['minbed'])) {
             $items['minbed'] = (int)$_GET['minbed'];
             $items['maxbed'] = (int)$_GET['maxbed'];
@@ -984,7 +989,7 @@ class VRPConnector
         }
 
         if (isset($items['special_id'])) {
-            $data = json_decode($this->call("getspecialbyid/" . $id));
+            $data = json_decode($this->call("getspecialbyid/" . $items['special_id']));
         } else {
             $data = json_decode($this->call("getspecialsbycat/" . $items['cat']));
         }
@@ -1164,7 +1169,7 @@ class VRPConnector
      * @param $param [] $param
      */
     function clearCache($file, $action, $slug) {
-        @unlink($param['file']);
+        @unlink($file);
         $data = $this->call("getunit/" . $slug);
         $this->cache($action, $slug, $data);
     }

@@ -33,6 +33,7 @@ class mountainsunset
 }
 
 function vrp_pagination($totalpages, $page = 1) {
+    $fields_string = "";
     foreach ($_GET['search'] as $key => $value) {
         if (is_array($value)) {
             foreach ($value as $v):
@@ -96,6 +97,7 @@ function vrp_pagination($totalpages, $page = 1) {
 }
 
 function vrp_paginationmobile($totalpages, $page = 1) {
+    $fields_string = "";
     foreach ($_GET['search'] as $key => $value) {
         $fields_string .= 'search[' . $key . ']=' . $value . '&';
     }
@@ -174,6 +176,7 @@ function vrpsortlinks($unit) {
         $order = "low";
     }
 
+    $fields_string = "";
     foreach ($_GET['search'] as $key => $value) {
         if ($key == 'sort') {
             continue;
@@ -233,6 +236,7 @@ function vrpsortlinks2($unit) {
         $order = "low";
     }
 
+    $fields_string = "";
     foreach ($_GET['search'] as $key => $value) {
         if ($key == 'sort') {
             continue;
@@ -290,6 +294,7 @@ function vrpsortlinks2($unit) {
 }
 
 function vrp_resultsperpage() {
+    $fields_string = "";
     foreach ($_GET['search'] as $key => $value) {
         $fields_string .= 'search[' . $key . ']=' . $value . '&';
     }
