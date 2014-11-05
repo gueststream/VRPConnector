@@ -79,14 +79,19 @@ class VRPConnector
         }
 
         // Shortcodes
-        add_shortcode("vrpComplexes", array($this, "vrpComplexes"));
+
         add_shortcode("vrpUnits", array($this, "vrpUnits"));
-        add_shortcode("vrpAdvancedSearch", array($this, "vrpAdvancedSearch"));
         add_shortcode("vrpSearch", array($this, "vrpSearch"));
+
+        add_shortcode("vrpSearchForm", array($this, "vrpSearchForm"));
+        add_shortcode("vrpAdvancedSearchForm", array($this, "vrpAdvancedSearchForm"));
+
+        add_shortcode("vrpComplexes", array($this, "vrpComplexes"));
         add_shortcode("vrpComplexSearch", array($this, "vrpComplexSearch"));
-        add_shortcode("vrpAreaList", array($this, "vrpAreaList"));
-        add_shortcode("vrpSpecials", array($this, "vrpSpecials"));
-        add_shortcode("vrpLinks", array($this, "vrpLinks"));
+
+        //add_shortcode("vrpAreaList", array($this, "vrpAreaList"));
+        //add_shortcode("vrpSpecials", array($this, "vrpSpecials"));
+        //add_shortcode("vrpLinks", array($this, "vrpLinks"));
         add_shortcode("vrpCompare", array($this, "vrpCompare"));
     }
 
@@ -903,13 +908,24 @@ class VRPConnector
     }
 
     /**
+     * [vrpSearchForm] Shortcode
+     *
+     * @return string
+     */
+    function vrpSearchForm() {
+        $data = "";
+        $page = $this->loadTheme("vrpSearchForm", $data);
+        return $page;
+    }
+
+    /**
      * [vrpAdvancedSearch] Shortcode
      *
      * @return string
      */
-    function vrpAdvancedSearch() {
+    function vrpAdvancedSearchForm() {
         $data = "";
-        $page = $this->loadTheme("vrpAdvancedSearch", $data);
+        $page = $this->loadTheme("vrpAdvancedSearchForm", $data);
         return $page;
     }
 

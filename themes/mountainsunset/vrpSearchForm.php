@@ -65,7 +65,7 @@
     global $vrp;
     $searchoptions = $vrp->searchoptions();
 
-print_r($searchoptions);
+//print_r($searchoptions);
 
     ?>
 
