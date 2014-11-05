@@ -1,18 +1,16 @@
 <?php
 /*
-  Plugin Name: Vacation Rental Platform Connector
+  Plugin Name: VRPConnector
   Plugin URI: http://www.gueststream.com
-  Description: Utilizes the VRPc API.
+  Description: Vacation Rental Platform Connector.
   Author: GuestStream, Inc.
   Version: 1.11
   Author URI: http://www.gueststream.com/ 
  */
-$vrpVersion = "1.11";
-session_start();
 
 include "lib/DummyResult.php";
-include "lib/api.php";
+include "lib/VRPConnector.php";
 include "lib/calendar.php";
 
-$vrp = new vrpapi();
+$vrp = new VRPConnector();
 

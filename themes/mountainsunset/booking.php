@@ -1,9 +1,8 @@
 <?php
 if (isset($data->Error)) {
-    //echo "We're sorry, this property is not available at for the dates requested. <a href='/'>Please try again.</a><br><br>";
     echo $data->Error;
     echo "<br><br><a href='/'>Please try again.</a> ";
-} elseif (! isset($data->Charges)) {
+} elseif (!isset($data->Charges)) {
     echo "We're sorry, this property is not available at for the dates requested. <a href='/'>Please try again.</a><br><br>";
 } else {
     ?>
@@ -13,21 +12,21 @@ if (isset($data->Error)) {
         <?php if (isset($data->booksettings->HasPackages)) { ?>
             <div class="vrpgrid_2 passed padit alpha omega">1. Select <br> Unit</div>
             <div class="vrpgrid_2 padit alpha omega <?php
-            if ($_GET[ 'slug' ] == 'step1a' || $_GET[ 'slug' ] == 'step2' || $_GET[ 'slug' ] == 'step3'
-                || $_GET[ 'slug' ] == 'confirm'
+            if ($_GET['slug'] == 'step1a' || $_GET['slug'] == 'step2' || $_GET['slug'] == 'step3'
+                || $_GET['slug'] == 'confirm'
             ) {
                 echo "passed";
             }
             ?>">2. Optional Add-ons
             </div>
             <div class="vrpgrid_2 padit alpha omega <?php
-            if ($_GET[ 'slug' ] == 'step2' || $_GET[ 'slug' ] == 'step3' || $_GET[ 'slug' ] == 'confirm') {
+            if ($_GET['slug'] == 'step2' || $_GET['slug'] == 'step3' || $_GET['slug'] == 'confirm') {
                 echo "passed";
             }
             ?>">3. Guest <br> Info
             </div>
             <div class="vrpgrid_2 padit alpha omega <?php
-            if ($_GET[ 'slug' ] == 'confirm') {
+            if ($_GET['slug'] == 'confirm') {
                 echo "passed";
             }
             ?>">4. Confirm<br>Booking
@@ -35,13 +34,13 @@ if (isset($data->Error)) {
         <?php } else { ?>
             <div class="vrpgrid_3 passed padit alpha omega">1. Select <br>Unit</div>
             <div class="vrpgrid_3 padit alpha omega <?php
-            if ($_GET[ 'slug' ] == 'step2' || $_GET[ 'slug' ] == 'step3' || $_GET[ 'slug' ] == 'confirm') {
+            if ($_GET['slug'] == 'step2' || $_GET['slug'] == 'step3' || $_GET['slug'] == 'confirm') {
                 echo "passed";
             }
             ?>">2. Guest <br>Info
             </div>
             <div class="vrpgrid_3 padit alpha omega <?php
-            if ($_GET[ 'slug' ] == 'confirm') {
+            if ($_GET['slug'] == 'confirm') {
                 echo "passed";
             }
             ?>">3. Confirm<br>Booking
@@ -88,7 +87,7 @@ if (isset($data->Error)) {
                             <td><?= $v->Description; ?>:</td>
                             <td><?php if (isset($v->Type) && $v->Type == 'discount') {
                                     echo "-";
-                                } ?>$<?= number_format ($v->Amount, 2); ?></td>
+                                } ?>$<?= number_format($v->Amount, 2); ?></td>
                         </tr>
                     <?php
                     endforeach;
@@ -100,18 +99,18 @@ if (isset($data->Error)) {
                 <?php if (isset($data->booksettings->HasPackages)) { ?>
                     <tr>
                         <td>Add-on Package:</td>
-                        <td id="packageinfo">$<?= number_format ($data->package->packagecost, 2); ?></td>
+                        <td id="packageinfo">$<?= number_format($data->package->packagecost, 2); ?></td>
                     </tr>
                 <?php } ?>
                 <tr>
                     <td>Tax:</td>
-                    <td>$<?= number_format ($data->TotalTax, 2); ?></td>
+                    <td>$<?= number_format($data->TotalTax, 2); ?></td>
                 </tr>
 
 
                 <tr>
                     <td><b>Reservation Total:</b></td>
-                    <td id="TotalCost">$<?= number_format (
+                    <td id="TotalCost">$<?= number_format(
                             ((isset($data->package->TotalCost) ? $data->package->TotalCost : $data->TotalCost)
                                 - $data->InsuranceAmount), 2
                         ); ?></td>
@@ -124,11 +123,11 @@ if (isset($data->Error)) {
                 <table class="table table-striped">
                     <tr>
                         <td>Optional Travel Insurance:</td>
-                        <td>$<?= number_format ($data->InsuranceAmount, 2); ?></td>
+                        <td>$<?= number_format($data->InsuranceAmount, 2); ?></td>
                     </tr>
                     <tr>
                         <td><b>Reservation Total with Insurance:</b></td>
-                        <td>$<?= number_format (
+                        <td>$<?= number_format(
                                 (isset($data->package->TotalCost) ? $data->package->TotalCost : $data->TotalCost), 2
                             ); ?></td>
                     </tr>
@@ -143,11 +142,11 @@ if (isset($data->Error)) {
 
     </div>
     <div class="alert alert-info" style='text-align:center'>
-        You are booking <?=$data->Name;?> for <?=$data->Nights;?> nights for
+        You are booking <?= $data->Name; ?> for <?= $data->Nights; ?> nights for
         <a href="#myModal2" data-toggle="modal">
             <span id="TotalCost2">
                 <?php if (isset($data->package) && isset($data->InsuranceAmount)): ?>
-                $<?= number_format (
+                $<?= number_format(
                     ((isset($data->package->TotalCost) ? $data->package->TotalCost : $data->TotalCost)
                         - $data->InsuranceAmount), 2
                 ); ?>
@@ -155,10 +154,12 @@ if (isset($data->Error)) {
         </a>.
     <?php else: ?>
         $<?php echo $data->TotalCost; ?></span></a>.
-    <?php endif; ?>
+    <?php
+    endif;
+    ?>
         <?php
         if ($data->TotalCost != $data->DueToday) {
-            echo "A deposit of <a href='#myModal2'>$" . number_format($data->DueToday,2) . "</a> is due now.";
+            echo "A deposit of <a href='#myModal2'>$" . number_format($data->DueToday, 2) . "</a> is due now.";
         }
         ?>
     </div>
@@ -169,12 +170,13 @@ if (isset($data->Error)) {
 
     <div class="">
 
-
         <?php
-        if (file_exists (ABSPATH . "wp-content/plugins/VRPAPI/themes/mountainsunset/" . $_GET[ 'slug' ] . ".php")) {
-            include $_GET[ 'slug' ] . ".php";
+        if(file_exists(get_stylesheet_directory(). $_GET['slug'].'.php')) {
+            include(get_stylesheet_directory() . $_GET['slug'] . '.php');
+        } else if (file_exists(__DIR__ . '/'. $_GET['slug'] . ".php")) {
+            include $_GET['slug'] . ".php";
         } else {
-            echo $_GET[ 'slug' ] . ".php does not exist.";
+            echo $_GET['slug'] . ".php does not exist.";
         }
         ?>
 
@@ -182,18 +184,6 @@ if (isset($data->Error)) {
 
     <div class="clear"></div>
 
-    <?php
-    if (isset($_GET[ 'tester' ])) {
-        echo "<pre>";
-//print_r($data->package);
-//print_r($_SESSION['userinfo']);
-        print_r ($data);
-        echo "</pre>";
-    }
+<?php
 }
 ?>
-<div style="text-align:center;">
-    <a href="http://www.instantssl.com">
-        <img src="/assets/comodo_secure_100x85_transp.png" alt="SSL Certificate" width="100" height="85"
-             style="border: 0px;"><br> <span style="font-weight:bold; font-size:7pt">SSL Certificate</span></a><br>
-</div>

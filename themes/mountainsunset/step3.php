@@ -1,5 +1,5 @@
 <?php
-$userinfo = $_SESSION[ 'userinfo' ];
+    $userinfo = $_SESSION['userinfo'];
 ?>
 <form
     action="/vrp/book/confirm/?obj[Arrival]=<?= $data->Arrival; ?>&obj[Departure]=<?= $data->Departure; ?>&obj[PropID]=<?= $_GET[ 'obj' ][ 'PropID' ]; ?>"

@@ -3,8 +3,6 @@
 class mountainsunset
 {
 
-    var $otheractions = array();
-
     function actions() {
         add_action('wp_enqueue_scripts', array($this, 'my_scripts_method'));
         add_action('wp_print_styles', array($this, 'add_my_stylesheet'));
@@ -13,29 +11,17 @@ class mountainsunset
     function my_scripts_method() {
         wp_register_script(
             'VRPjQueryUI',
-            '/wp-content/plugins/VRPAPI/themes/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.js',
+            plugins_url('/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.js', dirname(__FILE__)),
             array('jquery')
         );
 
         wp_enqueue_script('VRPjQueryUI');
-
-        if (isset($_GET['action'])) {
-
-            wp_enqueue_script(
-                'BootstrapJS',
-                'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'
-            );
-
-            wp_enqueue_script(
-                'themeJS', plugins_url('/mountainsunset/js/js.js', dirname(__FILE__))
-            );
-            
-        }
+        wp_enqueue_script('themeJS', plugins_url('/mountainsunset/js/js.js', dirname(__FILE__)));
     }
 
     function add_my_stylesheet() {
         wp_enqueue_style('BootstrapCSS', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css');
-        wp_enqueue_style('VRPjQueryUISmoothness','/wp-content/plugins/VRPAPI/themes/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.css');
+        wp_enqueue_style('VRPjQueryUISmoothness', plugins_url('/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.css', dirname(__FILE__)));
 
         $myStyleUrl = plugins_url(
             '/mountainsunset/css/css.css', dirname(__FILE__)
@@ -404,77 +390,3 @@ function vrpCalendar($r, $totalMonths = 3) {
 
     return "" . $ret . $theKey;
 }
-
-//
-//  Shortcodes
-//
-
-function vrpshort($items) {
-    $items['sort'] = "Name";
-    $items['order'] = "low";
-    if (isset($items['complexid'])) {
-        $cid = $items['complexid'];
-        unset($items['complexid']);
-        $items['ComplexID'] = $cid;
-    }
-    ob_start();
-    include TEMPLATEPATH . "/vrp/shortcode.php";
-
-    $content = ob_get_contents();
-    ob_end_clean();
-    return $content;
-}
-
-add_shortcode("vrpshort", "vrpshort");
-
-function vrplinks($items) {
-    $items['showall'] = true;
-
-    global $vrp;
-    switch ($items['type']) {
-        case "Condo";
-            $url = $vrp->apiURL . $vrp->apiKey . "/allcomplexes/";
-            break;
-        case "Villa";
-            $url = $vrp->apiURL . $vrp->apiKey . "/allunits/";
-            break;
-    }
-
-
-    $obj = new stdClass();
-    $obj->okay = 1;
-    if (count($items) != 0) {
-        foreach ($items as $k => $v) {
-            $obj->$k = $v;
-        }
-    }
-
-    $search['search'] = json_encode($obj);
-    $ch = curl_init();
-
-//set the url, number of POST vars, POST data
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $search);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
-//execute post
-    $results = curl_exec($ch);
-
-    $results = json_decode($results);
-
-    $ret = "<ul style='list-style:none'>";
-    if ($items['type'] == 'Villa') {
-        foreach ($results->results as $v):
-            $ret .= "<li><a href='/vrp/unit/$v->page_slug'>$v->Name</a></li>";
-        endforeach;
-    } else {
-        foreach ($results as $v):
-            $ret .= "<li><a href='/vrp/complex/$v->page_slug'>$v->name</a></li>";
-        endforeach;
-    }
-    $ret .= "</ul>";
-    return $ret;
-}
-
-add_shortcode("vrplinks", "vrplinks");

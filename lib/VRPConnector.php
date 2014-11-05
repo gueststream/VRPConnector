@@ -2,19 +2,22 @@
 /**
  * Class vrpapi
  */
-class vrpapi
+class VRPConnector
 {
-    var $apiKey;
-    var $apiURL = "http://vrp.dev/api/v1/";
-    var $allowCache = true;
-    var $theme = "";
-    var $themename = "";
-    var $otheractions = array();
+    var $apiKey;                                // Gueststream.net API Key
+    var $apiURL = "http://vrp.dev/api/v1/";     // Gueststream.net API Endpoint
+    var $allowCache = true;                     // @todo - Remove this.
+    var $theme = "";                            // Full path to plugin theme folder
+    var $themename = "";                        // Plugin theme name.
+    var $default_theme_name = "mountainsunset"; // Default plugin theme name.
+    var $otheractions = array();                //
+    var $time;                                  // Time (in seconds?) spent making calls to the API
 
     /**
      * Class Construct
      */
     function __construct() {
+        session_start();
         $this->apiKey = get_option('vrpAPI');
         if ($this->apiKey == '') {
             add_action('admin_notices', array($this, 'notice'));
@@ -35,6 +38,7 @@ class vrpapi
         if (!isset($_GET['action'])) {
             return false;
         }
+
         echo "<div style='position:absolute;left:0;width:100%;background:white;color:black;'>";
         echo "API Time Spent: " . $this->time . "<br/>";
         echo "GET VARIABLES:<br><pre>";
@@ -54,10 +58,10 @@ class vrpapi
         // Actions
         add_action("init", array($this, "ajax"));
         add_action("init", array($this, "sitemap"));
-        add_action('init', array($this, 'featuredunit'));
+        add_action('init', array($this, "featuredunit"));
         add_action("init", array($this, "otheractions"));
-        add_action('init', array($this, 'do_rewrite11'));
-        add_action('init', array($this, 'villafilter'));
+        add_action('init', array($this, "do_rewrite11"));
+        add_action('init', array($this, "villafilter"));
 
         add_action('cacheClear', array($this, "clearCache"), 1, 3);
         add_action('admin_menu', array($this, 'setupPage'));
@@ -85,21 +89,22 @@ class vrpapi
         add_shortcode("vrpCompare", array($this, "vrpCompare"));
     }
 
-    function villafilter() {
-        if (!isset($_GET['action'])) {
-            return;
-        }
+    /**
+     * Set the plugin theme used & include the theme functions file.
+     */
+    function setTheme() {
+        $plugin_theme_Folder = __DIR__ . "/../themes/";
+        $theme = get_option('vrptheme');
 
-        if ($_GET['action'] == 'complexsearch') {
-            if ($_GET['search']['type'] == 'Villa') {
-                $_GET['action'] = 'search';
-            }
+        if (!$theme) {
+            $theme = $this->default_theme_name;
+            $this->theme = $plugin_theme_Folder . $this->default_theme_name;
+        } else {
+            $this->theme = $plugin_theme_Folder . $theme;
         }
-    }
+        $this->themename = $theme;
 
-    function usecustom() {
-        include(get_template_directory() . "/page.php");
-        exit();
+        include $this->theme . "/functions.php";
     }
 
     function themeActions() {
@@ -109,27 +114,12 @@ class vrpapi
         }
     }
 
-    function setTheme() {
-        $themeFolder = ABSPATH . "/wp-content/plugins/VRPAPI/themes/";
-        $theme = get_option('vrptheme');
-        if (!$theme) {
-            $theme = "mountainsunset";
-            $this->theme = $themeFolder . "mountainsunset";
-        } else {
-            $this->theme = $themeFolder . $theme;
-        }
-        $this->themename = $theme;
-        include $this->theme . "/functions.php";
-    }
-
     function otheractions() {
         if (isset($_GET['otherslug']) && $_GET['otherslug'] != '') {
             $theme = $this->themename;
             $theme = new $theme;
             $func = $theme->otheractions;
-
             $func2 = $func[$_GET['otherslug']];
-
             call_user_method($func2, $theme);
         }
     }
@@ -296,6 +286,7 @@ class vrpapi
                         $_GET['slug'] = "step3";
                     }
                 }
+
                 if (isset($_POST['booking'])) {
                     $_SESSION['userinfo'] = $_POST['booking'];
                 }
@@ -315,16 +306,19 @@ class vrpapi
                 $data->PropID = $_GET['obj']['PropID'];
                 //if ($_GET['slug']=='step2'){
                 $data->booksettings = $this->bookSettings($data->PropID);
+
                 if ($_GET['slug'] == 'step1') {
                     unset($_SESSION['package']);
                 }
+
                 $data->package = new stdClass();
                 $data->package->packagecost = "0.00";
                 $data->package->items = array();
+
                 if (isset($_SESSION['package'])) {
                     $data->package = $_SESSION['package'];
                 }
-                //$data->TotalCost=$data->TotalCost + $data->package->packagecost;
+
                 if ($_GET['slug'] == 'step1a') {
                     if (isset($data->booksettings->HasPackages)) {
                         $a = date("Y-m-d", strtotime($data->Arrival));
@@ -338,14 +332,12 @@ class vrpapi
                 if ($_GET['slug'] == 'step3') {
                     $data->form = json_decode($this->call("bookingform/"));
                 }
-                //}
 
                 if ($_GET['slug'] == 'confirm') {
                     $data->thebooking = json_decode($_SESSION['bresults']);
                     $pagetitle = "Reservations";
                     $content = $this->loadTheme("confirm", $data);
                 } else {
-
                     $pagetitle = "Reservations";
                     $content = $this->loadTheme("booking", $data);
                 }
@@ -361,28 +353,17 @@ class vrpapi
         return array(new DummyResult(0, $pagetitle, $content));
     }
 
-    /**
-     * Get available search options.
-     *
-     * Example: minbeds, maxbeds, minbaths, maxbaths, minsleeps, maxsleeps, types (hotel, villa), cities, areas, views, attributes, locations
-     *
-     * @return mixed
-     */
-    function searchoptions() {
-        return json_decode($this->call("searchoptions"));
-    }
+    function villafilter() {
+        if (!isset($_GET['action'])) {
+            return;
+        }
 
-    function featuredunit() {
-        if (isset($_GET['featuredunit'])) {
-            echo $this->call("featuredunit");
-            die();
+        if ($_GET['action'] == 'complexsearch') {
+            if ($_GET['search']['type'] == 'Villa') {
+                $_GET['action'] = 'search';
+            }
         }
     }
-
-    function allSpecials() {
-        return json_decode($this->call("allspecials"));
-    }
-
 
     function searchjax() {
         if (isset($_GET['search']['arrival'])) {
@@ -458,23 +439,7 @@ class vrpapi
         }
 
         $search['search'] = json_encode($obj);
-        $ch = curl_init();
-
-        //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $search);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        //execute post
-        $results = curl_exec($ch);
-        //echo $results;
-        if (!$ch) {
-            echo 'Curl error: ' . curl_error($ch);
-        }
-        //close connection
-        curl_close($ch);
-
+        $results = $this->call('complexsearch3',$search);
         return $results;
     }
 
@@ -656,36 +621,19 @@ class vrpapi
     function checkavailability($par = false, $ret = false) {
         set_time_limit(50);
 
-        $url = $this->apiURL . $this->apiKey . "/checkavail/";
         $fields_string = "obj=" . json_encode($_GET['obj']);
-        $ch = curl_init();
+        $results = $this->call('checkavail',$fields_string);
 
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
-
-        $results = curl_exec($ch);
-        if (!$ch) {
-
-            echo 'Curl error: ' . curl_error($ch);
-        }
-
-        curl_close($ch);
-        $this->debug['results'] = $results;
         if ($ret == true) {
             $_SESSION['bookingresults'] = $results;
             return $results;
         }
-        if ($par != false) {
 
+        if ($par != false) {
             $_SESSION['bookingresults'] = $results;
             echo $results;
             return false;
         }
-
 
         $res = json_decode($results);
 
@@ -698,29 +646,8 @@ class vrpapi
     }
 
     function processbooking($par = false, $ret = false) {
-        // $fields=$_GET['obj'];
-        $url = $this->apiURL . $this->apiKey . "/processbooking/";
-        //foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
-        //rtrim($fields_string,'&');
         $fields_string = "obj=" . json_encode($_POST['booking']);
-        $ch = curl_init();
-
-        //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
-
-        //execute post
-        $results = curl_exec($ch);
-        if (!$ch) {
-
-            echo 'Curl error: ' . curl_error($ch);
-        }
-
-        curl_close($ch);
+        $results = $this->call('processbooking',$fields_string);
         $res = json_decode($results);
         if (isset($res->Results)) {
             $_SESSION['bresults'] = json_encode($res->Results);
@@ -803,17 +730,6 @@ class vrpapi
         return $output;
     }
 
-    function getflipkey() {
-        $id = $_GET['slug'];
-        $call = "getflipkey/?unit_id=$id";
-        $data = $this->customcall($call);
-        echo "<!DOCTYPE html><html>";
-        echo "<body>";
-        echo $data;
-        echo "</body></html>";
-        die();
-    }
-
     //
     //  API Calls
     //
@@ -833,11 +749,6 @@ class vrpapi
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         $results = curl_exec($ch);
-
-        if (!$ch) {
-            echo 'Curl error: ' . curl_error($ch);
-        }
-
         curl_close($ch);
         return $results;
     }
@@ -860,6 +771,48 @@ class vrpapi
 
     function bookSettings($propID) {
         return json_decode($this->call("booksettings/" . $propID));
+    }
+
+    /**
+     * Get available search options.
+     *
+     * Example: minbeds, maxbeds, minbaths, maxbaths, minsleeps, maxsleeps, types (hotel, villa), cities, areas, views, attributes, locations
+     *
+     * @return mixed
+     */
+    function searchoptions() {
+        return json_decode($this->call("searchoptions"));
+    }
+
+    /**
+     * Get a featured unit
+     * @ajax
+     */
+    function featuredunit() {
+        if (isset($_GET['featuredunit'])) {
+            echo $this->call("featuredunit");
+            die();
+        }
+    }
+
+    function allSpecials() {
+        return json_decode($this->call("allspecials"));
+    }
+
+    /**
+     * Get flipkey reviews for a given unit.
+     *
+     * @ajax
+     */
+    function getflipkey() {
+        $id = $_GET['slug'];
+        $call = "getflipkey/?unit_id=$id";
+        $data = $this->customcall($call);
+        echo "<!DOCTYPE html><html>";
+        echo "<body>";
+        echo $data;
+        echo "</body></html>";
+        die();
     }
 
     //
@@ -1099,8 +1052,7 @@ class vrpapi
      * Display notice for user to enter their VRPc API key.
      */
     function notice() {
-        $siteurl = get_option('siteurl');
-        $siteurl .= "/wp-admin/admin.php?page=vrp-api";
+        $siteurl = get_option('siteurl') . "/wp-admin/admin.php?page=vrp-api";
         echo "<div class=\"updated fade\"><b>Vacation Rental Platform</b>: <a href=\"$siteurl\">Please enter your API key.</a></div>";
     }
 
@@ -1109,10 +1061,10 @@ class vrpapi
      */
     function setupPage() {
         add_menu_page(
-            'VRP', 'VRP', 7, "vrpmain", array($this, 'loadVRP'), plugin_dir_url(__FILE__) . "../themes/mountainsunset/images/shack.png"
+            'VRP', 'VRP', 'edit_pages', "vrpmain", array($this, 'loadVRP'), plugin_dir_url(__FILE__) . "../themes/mountainsunset/images/shack.png"
         );
-        add_submenu_page("vrpmain", 'Manage Units', 'Manage Units', 7, "vrpmain", array($this, 'loadVRP'));
-        add_submenu_page("vrpmain", 'API Key', 'API Key', 8, "vrp-api", array($this, 'settingsPage'));
+        add_submenu_page("vrpmain", 'Manage Units', 'Manage Units', 'edit_pages', "vrpmain", array($this, 'loadVRP'));
+        add_submenu_page("vrpmain", 'API Key', 'API Key', 'activate_plugins', "vrp-api", array($this, 'settingsPage'));
         // add_options_page('VRP', 'VRP', 'manage_options', 'vrp-api', array($this, 'settingsPage'));
     }
 

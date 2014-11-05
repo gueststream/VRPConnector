@@ -109,8 +109,6 @@
             }
         });
 
-
-
         if (jQuery("#featuredimg").length > 0){
             jQuery.getJSON('/?featuredunit=1', function(data) {
 
@@ -123,6 +121,7 @@
                 });
             });
         }
+
         jQuery(".nextfeatured").click(function(){
             jQuery("#featuredunit").fadeOut(500,function(){
                 jQuery("#loadingimg").fadeIn(500);
@@ -142,12 +141,12 @@
         });
 
         jQuery("#bookmsg").hide();
+
         jQuery("#bookingform").submit(function(){
             checkavailability();
             return false;
         });
 
-        //jQuery("#thetotal,#booklink").hide();
         if (jQuery("#datespicked").length > 0){
             checkavailability();
         }
@@ -168,7 +167,6 @@
         jQuery("#newuserbox").height(jQuery("#returnbox").height());
 
         jQuery("#packagesform").submit(function(){
-
             return false;
         });
 
@@ -197,6 +195,7 @@
                 return false;
             });
         }
+
         if (jQuery("#packagesform").length > 0){
 
             jQuery.get("/?vrpjax=1&act=addtopackage",jQuery("#packagesform").serialize(),function(data){
@@ -216,6 +215,7 @@
             });
             return false;
         });
+
         jQuery(".continuebtn").click(function(){
             jQuery.get("/?vrpjax=1&act=addtopackage",jQuery("#packagesform").serialize(),function(data){
                 var obj=jQuery.parseJSON(data);
@@ -226,9 +226,6 @@
 
             return false;
         });
-
-
-
 
         jQuery("#country").change(function(){
 
@@ -308,16 +305,45 @@
             return false;
         });
 
-
         jQuery(".dpinquiry").datepicker();
 
         jQuery(".vrp-pagination li a,.dobutton").button();
 
-        jQuery(".hastabs").tabs();
+        // Unit Compare
+
+        jQuery(".compareit").click(function(){
+            var id=jQuery(this).attr("rel");
+
+            jQuery("#comparison").load("/?addcompare=1&id=" + id,function(){
+                jQuery("#comparecount").load("/?comparecount=1");
+            });
+            jQuery("#cpr_" + id).show();
+            jQuery("#cpc_" + id).hide();
+
+            return false;
+        });
+
+        jQuery(".compareremove").click(function(){
+            var id=jQuery(this).attr("rel");
+
+            jQuery("#comparison").load("/?addcompare=1&remove=1&id=" + id,function(){
+                jQuery("#comparecount").load("/?comparecount=1");
+            });
+            jQuery("#cpc_" + id).show();
+            jQuery("#cpr_" + id).hide();
+
+            return false;
+        });
+
+        jQuery("#sharethecompare").click(function(){
+
+            jQuery('#sharingcompare').load("/?savecompare=1",function(d){
+                jQuery(this).slideDown();
+            });
 
 
-
-
+            return false;
+        });
     });
 
     function checkavailability(){
@@ -378,49 +404,5 @@
         tbl.append(total);
         tbl.append(totaldue);
         $('#myModal').modal('show')
-    }
-
-
-
-    jQuery(document).ready(function(){
-        compareitstuff();
-
-        jQuery("#sharethecompare").click(function(){
-
-            jQuery('#sharingcompare').load("/?savecompare=1",function(d){
-                jQuery(this).slideDown();
-            });
-
-
-            return false;
-        });
-    });
-
-    function compareitstuff(){
-        jQuery(".compareit").click(function(){
-            var id=jQuery(this).attr("rel");
-
-            jQuery("#comparison").load("/?addcompare=1&id=" + id,function(){
-                jQuery("#comparecount").load("/?comparecount=1");
-            });
-            jQuery("#cpr_" + id).show();
-            jQuery("#cpc_" + id).hide();
-
-            return false;
-        });
-        jQuery(".compareremove").click(function(){
-            var id=jQuery(this).attr("rel");
-
-            jQuery("#comparison").load("/?addcompare=1&remove=1&id=" + id,function(){
-                jQuery("#comparecount").load("/?comparecount=1");
-            });
-            jQuery("#cpc_" + id).show();
-            jQuery("#cpr_" + id).hide();
-
-            return false;
-        });
-
-
-
     }
 
