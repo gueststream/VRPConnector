@@ -1,8 +1,11 @@
 <?php
+
 namespace Gueststream;
+
 /**
  * VRPConnector Class
  */
+
 class VRPConnector
 {
     var $apiKey;                                // Gueststream.net API Key
@@ -1074,7 +1077,7 @@ class VRPConnector
      * Display notice for user to enter their VRPc API key.
      */
     function notice() {
-        $siteurl = get_option('siteurl') . "/wp-admin/admin.php?page=vrp-api";
+        $siteurl = get_option('siteurl') . "/wp-admin/admin.php?page=VRPConnector";
         echo "<div class=\"updated fade\"><b>Vacation Rental Platform</b>: <a href=\"$siteurl\">Please enter your API key.</a></div>";
     }
 
@@ -1086,22 +1089,21 @@ class VRPConnector
             'VRP', 'VRP', 'edit_pages', "vrpmain", array($this, 'loadVRP'), plugin_dir_url(__FILE__) . "../themes/mountainsunset/images/shack.png"
         );
         add_submenu_page("vrpmain", 'Manage Units', 'Manage Units', 'edit_pages', "vrpmain", array($this, 'loadVRP'));
-        add_submenu_page("vrpmain", 'API Key', 'API Key', 'activate_plugins', "vrp-api", array($this, 'settingsPage'));
-        // add_options_page('VRP', 'VRP', 'manage_options', 'vrp-api', array($this, 'settingsPage'));
+        add_submenu_page("vrpmain", 'API Key', 'API Key', 'activate_plugins', "VRPConnector", array($this, 'settingsPage'));
     }
 
     /**
      * Displays the 'VRP Login' admin page.
      */
     function loadVRP() {
-        include WP_PLUGIN_DIR . "/VRPAPI/views/login.php";
+        include __DIR__ . "/../views/login.php";
     }
 
     /**
      * Displays the 'VRP API Code Entry' admin page
      */
     function settingsPage() {
-        include WP_PLUGIN_DIR . "/VRPAPI/views/settings.php";
+        include __DIR__ . "/../views/settings.php";
     }
 
     /**
