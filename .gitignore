@@ -1,4 +1,8 @@
+# OSx hates filesystems
 .DS_Store
-_notes
+
+# Logs
 error_log
-.idea/
+
+# IDE
+tags

@@ -1,6 +1,7 @@
 <?php
+namespace Gueststream;
 /**
- * Class vrpapi
+ * VRPConnector Class
  */
 class VRPConnector
 {
@@ -317,7 +318,7 @@ class VRPConnector
                     unset($_SESSION['package']);
                 }
 
-                $data->package = new stdClass();
+                $data->package = new stdClass;
                 $data->package->packagecost = "0.00";
                 $data->package->items = array();
 

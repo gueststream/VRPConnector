@@ -1,5 +1,7 @@
 <?php
 
+namespace Gueststream;
+
 class DummyResult
 {
     public $ID;

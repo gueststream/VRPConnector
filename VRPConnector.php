@@ -1,16 +1,23 @@
 <?php
-/*
-  Plugin Name: VRPConnector
-  Plugin URI: http://www.gueststream.com
-  Description: Vacation Rental Platform Connector.
-  Author: GuestStream, Inc.
-  Version: 1.11
-  Author URI: http://www.gueststream.com/ 
+/**
+ * Plugin Name: VRPConnector
+ * Plugin URI: http://www.gueststream.com
+ * Description: Vacation Rental Platform Connector.
+ * Author: GuestStream, Inc.
+ * Version: 0
+ * Author URI: http://www.gueststream.com/ 
  */
+error_reporting(-1);
+ini_set("display_errors",1);
 
-include "lib/DummyResult.php";
-include "lib/VRPConnector.php";
-include "lib/calendar.php";
+require __DIR__ . "/vendor/autoload.php";
+//require __DIR__ . "/lib/VRPConnector.php";
+require __DIR__ . "/lib/DummyResult.php";
+require __DIR__ . "/lib/calendar.php";
+//require __DIR__ . "/lib/PluginUpdater.php";
 
-$vrp = new VRPConnector();
+$vrp = new \Gueststream\VRPConnector;
 
+if ( is_admin() ) {
+    new \Gueststream\PluginUpdater( __FILE__, 'Gueststream-Inc', "VRPConnector" );
+}
