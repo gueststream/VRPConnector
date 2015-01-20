@@ -321,7 +321,7 @@ class VRPConnector
                     unset($_SESSION['package']);
                 }
 
-                $data->package = new stdClass;
+                $data->package = new \stdClass;
                 $data->package->packagecost = "0.00";
                 $data->package->items = array();
 
@@ -396,7 +396,7 @@ class VRPConnector
     }
 
     function search() {
-        $obj = new stdClass();
+        $obj = new \stdClass();
 
         foreach ($_GET['search'] as $k => $v) {
             $obj->$k = $v;
@@ -431,7 +431,7 @@ class VRPConnector
     function complexsearch() {
         $url = $this->apiURL . $this->apiKey . "/complexsearch3/";
 
-        $obj = new stdClass();
+        $obj = new \stdClass();
         foreach ($_GET['search'] as $k => $v) {
             $obj->$k = $v;
         }
@@ -456,7 +456,7 @@ class VRPConnector
     }
 
     function savecompare() {
-        $obj = new stdClass();
+        $obj = new \stdClass();
         $obj->compare = $_SESSION['compare'];
         $obj->arrival = $_SESSION['arrival'];
         $obj->depart = $_SESSION['depart'];
@@ -482,7 +482,7 @@ class VRPConnector
             $_SESSION['depart'] = $data->depart;
         }
 
-        $obj = new stdClass();
+        $obj = new \stdClass();
 
         if (isset($_GET['c']['compare'])) {
             $compare = $_GET['c']['compare'];
@@ -532,7 +532,7 @@ class VRPConnector
 
     function loadcompare() {
 
-        $obj = new stdClass();
+        $obj = new \stdClass();
 
         if (isset($_GET['c']['compare'])) {
 
@@ -671,7 +671,7 @@ class VRPConnector
         $TotalCost = $_GET['TotalCost'];
         if (!isset($_GET['package'])) {
             unset($_SESSION['package']);
-            $obj = new stdClass();
+            $obj = new \stdClass();
             $obj->packagecost = "$0.00";
 
             $obj->TotalCost = "$" . number_format($TotalCost, 2);
@@ -679,7 +679,7 @@ class VRPConnector
             return false;
         }
 
-        $currentpackage = new stdClass();
+        $currentpackage = new \stdClass();
         $currentpackage->items = array();
         $grandtotal = 0;
         // ID & QTY
@@ -689,7 +689,7 @@ class VRPConnector
         $name = $_GET['name'];
         foreach ($package as $v):
             $amount = $qty[$v]; // Qty of item.
-            $obj = new stdClass();
+            $obj = new \stdClass();
             $obj->name = $name[$v];
             $obj->qty = $amount;
             $obj->total = $cost[$v] * $amount;
@@ -698,7 +698,7 @@ class VRPConnector
         endforeach;
 
         $TotalCost = $TotalCost + $grandtotal;
-        $obj = new stdClass();
+        $obj = new \stdClass();
         $obj->packagecost = "$" . number_format($grandtotal, 2);
 
         $obj->TotalCost = "$" . number_format($TotalCost, 2);
@@ -770,7 +770,7 @@ class VRPConnector
     }
 
     function custompost($call) {
-        $obj = new stdClass();
+        $obj = new \stdClass();
         foreach ($_POST['obj'] as $k => $v) {
             $obj->$k = $v;
         }
@@ -852,7 +852,7 @@ class VRPConnector
             $items['maxbed'] = (int)$_GET['maxbed'];
         }
 
-        $obj = new stdClass();
+        $obj = new \stdClass();
         $obj->okay = 1;
         if (count($items) != 0) {
             foreach ($items as $k => $v) {
@@ -896,7 +896,7 @@ class VRPConnector
             $items['maxbed'] = (int)$_GET['maxbed'];
         }
 
-        $obj = new stdClass();
+        $obj = new \stdClass();
         $obj->okay = 1;
         if (count($items) != 0) {
             foreach ($items as $k => $v) {
@@ -1035,7 +1035,7 @@ class VRPConnector
                 break;
         }
 
-        $obj = new stdClass();
+        $obj = new \stdClass();
         $obj->okay = 1;
         if (count($items) != 0) {
             foreach ($items as $k => $v) {
