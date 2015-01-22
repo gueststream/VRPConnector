@@ -41,14 +41,14 @@
                     <!-- Photo Gallery -->
                     <div id="photo">
                         <?php
-                            $count = 0;
-                            foreach ($data->photos as $k => $v) {
-                                if($count > 0) { $style = "display:none;"; }
-                        ?>
-                                <img id="full<?=$v->id?>" alt="<?= strip_tags($v->caption); ?>" src="<?= $v->url; ?>" style="width:100%; <?=$style?>"/>
-                        <?php
-                                $count++;
-                            }
+                        $count = 0;
+                        foreach ($data->photos as $k => $v) {
+                            if($count > 0) { $style = "display:none;"; }
+                            ?>
+                            <img id="full<?=$v->id?>" alt="<?= strip_tags($v->caption); ?>" src="<?= $v->url; ?>" style="width:100%; <?=$style?>"/>
+                            <?php
+                            $count++;
+                        }
                         ?>
                     </div>
 
@@ -56,8 +56,8 @@
                         <?php
                         foreach ($data->photos as $k => $v) {
                             ?>
-                                <img class="thumb" id="<?=$v->id?>" alt="<?= strip_tags($v->caption); ?>" src="<?= $v->thumb_url; ?>" style="width:90px; float:left; margin: 3px;"/>
-                            <?php
+                            <img class="thumb" id="<?=$v->id?>" alt="<?= strip_tags($v->caption); ?>" src="<?= $v->thumb_url; ?>" style="width:90px; float:left; margin: 3px;"/>
+                        <?php
                         }
                         ?>
                     </div>
@@ -119,7 +119,7 @@
                             <div id="datespicked">
                                 Select your arrival and departure dates below to reserve this unit.<br><br>
 
-                                <form action="/vrp/book/step1/" method="get" id="bookingform">
+                                <form action="<?=site_url('','https')?>/vrp/book/step1/" method="get" id="bookingform">
                                     <table align="center" width="96%">
                                         <tr>
                                             <td width="40%">Arrival:</td>
@@ -146,14 +146,12 @@
                                         <tr>
                                             <td>
                                                 <input type="hidden" name="obj[PropID]" value="<?= $data->id; ?>">
-                                                <input type="submit" value="Check Availability"
+                                                <input type="button" value="Check Availability"
                                                        class="bookingbutton rounded"
                                                        id="checkbutton">
                                             </td>
                                             <td align="right">
-                                                <a href="/vrp/book/step1/?obj[PropID]=<?= $data->id; ?>"
-                                                   class="bookingbutton rounded"
-                                                   id="booklink">Book Now!</a>
+                                                <input type="submit" value="Book Now!" id="" class="" style=""/>
                                             </td>
 
                                         </tr>
