@@ -658,6 +658,10 @@ class VRPConnector
     }
 
     function processbooking($par = false, $ret = false) {
+        if(isset($_POST['booking']['comments'])) {
+            $_POST['booking']['comments'] = urlencode($_POST['booking']['comments']);
+        }
+
         $fields_string = "obj=" . json_encode($_POST['booking']);
         $results = $this->call('processbooking',$fields_string);
         $res = json_decode($results);
