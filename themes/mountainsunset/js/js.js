@@ -359,7 +359,7 @@ function checkavailability(){
             ratebreakdown(obj);
             jQuery("#checkbutton").fadeTo(500,0.5);
             jQuery(".unitsearch").change(function(){
-                //jQuery("#thetotal,#booklink").hide();
+                //jQuery("#booklink").hide();
                 jQuery("#errormsg").html('').hide();
                 jQuery("#checkbutton").fadeTo(500,1);
             });

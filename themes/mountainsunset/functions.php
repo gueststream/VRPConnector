@@ -16,16 +16,26 @@ class mountainsunset
         );
 
         wp_enqueue_script('VRPjQueryUI');
-        wp_enqueue_script('themeJS', plugins_url('/mountainsunset/js/js.js', dirname(__FILE__)));
+
+        if(file_exists(get_stylesheet_directory() . '/vrp/js/js.js')) {
+            wp_enqueue_script('VRPthemeJS', get_stylesheet_directory_uri() . '/vrp/js/js.js');
+        } else {
+            wp_enqueue_script('VRPthemeJS', plugins_url('/mountainsunset/js/js.js', dirname(__FILE__)));
+        }
+
     }
 
     function add_my_stylesheet() {
         wp_enqueue_style('BootstrapCSS', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css');
         wp_enqueue_style('VRPjQueryUISmoothness', plugins_url('/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.css', dirname(__FILE__)));
 
-        $myStyleUrl = plugins_url(
-            '/mountainsunset/css/css.css', dirname(__FILE__)
-        );
+        if(!file_exists(get_stylesheet_directory() . '/vrp/css/css.css')) {
+            $myStyleUrl = plugins_url(
+                '/mountainsunset/css/css.css', dirname(__FILE__)
+            );
+        } else {
+            $myStyleUrl = get_stylesheet_directory_uri() . '/vrp/css/css.css';
+        }
 
         wp_register_style('themeCSS', $myStyleUrl);
         wp_enqueue_style('themeCSS');

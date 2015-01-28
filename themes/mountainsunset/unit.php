@@ -119,24 +119,33 @@
                             <div id="datespicked">
                                 Select your arrival and departure dates below to reserve this unit.<br><br>
 
-                                <form action="<?=site_url('','https')?>/vrp/book/step1/" method="get" id="bookingform">
+                                <form action="<?=site_url('','https')?>/vrp/book/step1/"
+                                      method="get"
+                                      id="bookingform">
+
                                     <table align="center" width="96%">
                                         <tr>
                                             <td width="40%">Arrival:</td>
-                                            <td><input type="text" id="arrival2" name="obj[Arrival]"
+                                            <td>
+                                                <input type="text" id="arrival2"
+                                                       name="obj[Arrival]"
                                                        class="input unitsearch"
-                                                       value="<?= $_SESSION['arrival']; ?>"></td>
+                                                       value="<?= $_SESSION['arrival']; ?>">
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>Departure:</td>
-                                            <td><input type="text" id="depart2" name="obj[Departure]"
+                                            <td>
+                                                <input type="text" id="depart2"
+                                                       name="obj[Departure]"
                                                        class="input unitsearch"
-                                                       value="<?= $_SESSION['depart']; ?>"></td>
+                                                       value="<?= $_SESSION['depart']; ?>">
+                                            </td>
                                         </tr>
                                         <tr id="errormsg">
                                             <td colspan="2">
-                                                <div></div>
-                                                &nbsp; </td>
+                                                <div></div> &nbsp;
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td colspan="2">
@@ -145,15 +154,21 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <input type="hidden" name="obj[PropID]" value="<?= $data->id; ?>">
-                                                <input type="button" value="Check Availability"
+                                                <input type="hidden"
+                                                       name="obj[PropID]"
+                                                       value="<?= $data->id; ?>">
+                                                <input type="button"
+                                                       value="Check Availability"
                                                        class="bookingbutton rounded"
                                                        id="checkbutton">
                                             </td>
                                             <td align="right">
-                                                <input type="submit" value="Book Now!" id="" class="" style=""/>
+                                                <input type="submit"
+                                                       value="Book Now!"
+                                                       id="booklink"
+                                                       class=""
+                                                       style="display:none;"/>
                                             </td>
-
                                         </tr>
                                     </table>
 
