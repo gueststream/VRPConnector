@@ -8,20 +8,22 @@ namespace Gueststream;
 
 class VRPConnector
 {
-    var $apiKey;                                // Gueststream.net API Key
-    var $apiURL = "https://www.gueststream.net/api/v1/";     // Gueststream.net API Endpoint
-    var $allowCache = true;                     // @todo - Remove this.
-    var $theme = "";                            // Full path to plugin theme folder
-    var $themename = "";                        // Plugin theme name.
-    var $default_theme_name = "mountainsunset"; // Default plugin theme name.
-    var $otheractions = array();                //
-    var $time;                                  // Time (in seconds?) spent making calls to the API
-    var $debug = array();                       // Container for debug data
+    private $apiKey;                                // Gueststream.net API Key
+    private $apiURL = "https://www.gueststream.net/api/v1/";     // Gueststream.net API Endpoint
+    private $allowCache = true;                     // @todo - Remove this.
+    public $theme = "";                            // Full path to plugin theme folder
+    public $themename = "";                        // Plugin theme name.
+    public $default_theme_name = "mountainsunset"; // Default plugin theme name.
+    public $available_themes = ['mountainsunset' => 'Mountain Sunset'];
+    public $otheractions = array();                //
+    public $time;                                  // Time (in seconds?) spent making calls to the API
+    public $debug = array();                       // Container for debug data
 
     /**
      * Class Construct
      */
-    function __construct() {
+    public function __construct()
+    {
         session_start();
         $this->apiKey = get_option('vrpAPI');
         if ($this->apiKey == '') {
@@ -36,10 +38,12 @@ class VRPConnector
     /**
      * Class Destruct w/basic debugging.
      */
-    function __destruct() {
+    public function __destruct()
+    {
         if (!isset($_GET['showdebug'])) {
             return false;
         }
+
         if (!isset($_GET['action'])) {
             return false;
         }
@@ -59,7 +63,8 @@ class VRPConnector
     /**
      * init WordPress Actions, Filters & shortcodes
      */
-    function actions() {
+    public function actions()
+    {
         // Actions
         add_action("init", array($this, "ajax"));
         add_action("init", array($this, "sitemap"));
@@ -86,57 +91,56 @@ class VRPConnector
 
         add_shortcode("vrpUnits", array($this, "vrpUnits"));
         add_shortcode("vrpSearch", array($this, "vrpSearch"));
-
         add_shortcode("vrpSearchForm", array($this, "vrpSearchForm"));
         add_shortcode("vrpAdvancedSearchForm", array($this, "vrpAdvancedSearchForm"));
-
         add_shortcode("vrpComplexes", array($this, "vrpComplexes"));
         add_shortcode("vrpComplexSearch", array($this, "vrpComplexSearch"));
-
         //add_shortcode("vrpAreaList", array($this, "vrpAreaList"));
         //add_shortcode("vrpSpecials", array($this, "vrpSpecials"));
         //add_shortcode("vrpLinks", array($this, "vrpLinks"));
         add_shortcode("vrpCompare", array($this, "vrpCompare"));
-
-        // vrpshort shortcode for legacy support.
         add_shortcode("vrpshort", array($this, "vrpShort"));
     }
 
     /**
      * Set the plugin theme used & include the theme functions file.
      */
-    function setTheme() {
+    public function setTheme()
+    {
         $plugin_theme_Folder = __DIR__ . "/../themes/";
-        $theme = get_option('vrptheme');
+        $theme               = get_option('vrpTheme');
 
         if (!$theme) {
-            $theme = $this->default_theme_name;
+            $theme       = $this->default_theme_name;
+            $this->themename = $this->default_theme_name;
             $this->theme = $plugin_theme_Folder . $this->default_theme_name;
         } else {
-            $this->theme = $plugin_theme_Folder . $theme;
+            $this->theme     = $plugin_theme_Folder . $theme;
             $this->themename = $theme;
         }
         $this->themename = $theme;
 
-        if(file_exists(get_stylesheet_directory() . "/vrp/functions.php")) {
+        if (file_exists(get_stylesheet_directory() . "/vrp/functions.php")) {
             include get_stylesheet_directory() . "/vrp/functions.php";
         } else {
             include $this->theme . "/functions.php";
         }
     }
 
-    function themeActions() {
+    public function themeActions()
+    {
         $theme = new $this->themename;
         if (method_exists($theme, "actions")) {
             $theme->actions();
         }
     }
 
-    function otheractions() {
+    public function otheractions()
+    {
         if (isset($_GET['otherslug']) && $_GET['otherslug'] != '') {
             $theme = $this->themename;
             $theme = new $theme;
-            $func = $theme->otheractions;
+            $func  = $theme->otheractions;
             $func2 = $func[$_GET['otherslug']];
             call_user_method($func2, $theme);
         }
@@ -145,7 +149,8 @@ class VRPConnector
     /**
      * Uses built-in rewrite rules to get pretty URL. (/vrp/)
      */
-    function do_rewrite11() {
+    public function do_rewrite11()
+    {
         add_rewrite_rule('vrp/([^/]+)/?([^/]+)/?$', '?action=$1&slug=$2', 'top');
     }
 
@@ -156,7 +161,8 @@ class VRPConnector
      *
      * @return $vars[]
      */
-    function wp_insertMyRewriteQueryVars($vars) {
+    public function wp_insertMyRewriteQueryVars($vars)
+    {
         array_push($vars, 'action', 'slug', 'other');
         return $vars;
     }
@@ -166,7 +172,8 @@ class VRPConnector
      *
      * @return bool
      */
-    function router() {
+    public function router()
+    {
 
         if (!isset($_GET['action'])) {
             return false;
@@ -184,21 +191,23 @@ class VRPConnector
 
     /**
      * @param $posts
+     *
      * @return array
      */
-    function filterPosts($posts) {
+    public function filterPosts($posts)
+    {
         if (!isset($_GET['action'])) {
             return false;
         }
         $pagetitle = "";
-        $action = $_GET['action'];
+        $action    = $_GET['action'];
 
         switch ($action) {
             case "unit": // If Unit Page.
                 $this->time = microtime(true);
-                $slug = $_GET['slug'];
-                $data2 = $this->call("getunit/" . $slug);
-                $data = json_decode($data2);
+                $slug       = $_GET['slug'];
+                $data2      = $this->call("getunit/" . $slug);
+                $data       = json_decode($data2);
 
                 if (!isset($data->id)) {
                     global $wp_query;
@@ -207,7 +216,7 @@ class VRPConnector
                 $_GET['API'] = "YES";
 
                 $this->time = round((microtime(true) - $this->time), 4);
-                $pagetitle = $data->Name;
+                $pagetitle  = $data->Name;
 
                 if (isset($data->Error)) {
                     $content = $this->loadTheme("error", $data);
@@ -217,14 +226,14 @@ class VRPConnector
                 break;
             case "complex": // If Complex Page.
                 $this->time = microtime(true);
-                $slug = $_GET['slug'];
-                $data2 = $this->call("getcomplex/" . $slug);
-                $data = json_decode($data2);
+                $slug       = $_GET['slug'];
+                $data2      = $this->call("getcomplex/" . $slug);
+                $data       = json_decode($data2);
 
                 $_GET['API'] = "YES";
 
                 $this->time = round((microtime(true) - $this->time), 4);
-                $pagetitle = $data->name;
+                $pagetitle  = $data->name;
 
                 if (isset($data->Error)) {
                     $content = $this->loadTheme("error", $data);
@@ -237,7 +246,7 @@ class VRPConnector
                 $slug = $_GET['slug'];
 
                 $data2 = $this->call("getspecial/" . $slug);
-                $data = json_decode($data2);
+                $data  = json_decode($data2);
                 if (!isset($data->Error)) {
                     $this->cache($action, $slug, $data2);
 
@@ -245,17 +254,17 @@ class VRPConnector
                 }
 
                 $pagetitle = $data->title;
-                $content = $this->loadTheme("specials", $data);
+                $content   = $this->loadTheme("specials", $data);
 
                 break;
             case "search": // If Search Page.
 
                 $this->time = microtime(true);
-                $data = $this->search();
+                $data       = $this->search();
                 //print_r($data);
                 $this->time = round((microtime(true) - $this->time), 4);
-                $time1 = microtime(true);
-                $data = json_decode($data);
+                $time1      = microtime(true);
+                $data       = json_decode($data);
                 //print_r($data);
                 $time2 = round((microtime(true) - $time1), 4);
                 if (isset($_GET['showdebug'])) {
@@ -277,10 +286,10 @@ class VRPConnector
 
             case "complexsearch": // If Search Page.
                 $this->time = microtime(true);
-                $data = $this->complexsearch();
+                $data       = $this->complexsearch();
 
                 $this->time = round((microtime(true) - $this->time), 4);
-                $data = json_decode($data);
+                $data       = json_decode($data);
                 if (isset($data->type)) {
                     $content = $this->loadTheme($data->type, $data);
                 } else {
@@ -298,7 +307,7 @@ class VRPConnector
                 }
 
                 if (isset($_POST['email'])) {
-                    $userinfo = $this->doLogin($_POST['email'], $_POST['password']);
+                    $userinfo             = $this->doLogin($_POST['email'], $_POST['password']);
                     $_SESSION['userinfo'] = $userinfo;
                     if (!isset($userinfo->Error)) {
                         $_GET['slug'] = "step3";
@@ -311,13 +320,13 @@ class VRPConnector
 
                 $data = json_decode($_SESSION['bookingresults']);
                 if ($data->ID != $_GET['obj']['PropID']) {
-                    $data = json_decode($this->checkavailability(false, true));
+                    $data      = json_decode($this->checkavailability(false, true));
                     $data->new = true;
                 }
 
                 $data->thetime = time() - $data->TimeStamp;
                 if ($data->thetime < 500 && $_GET['slug'] != 'confirm') {
-                    $data = json_decode($this->checkavailability(false, true));
+                    $data      = json_decode($this->checkavailability(false, true));
                     $data->new = true;
                 }
 
@@ -329,9 +338,9 @@ class VRPConnector
                     unset($_SESSION['package']);
                 }
 
-                $data->package = new \stdClass;
+                $data->package              = new \stdClass;
                 $data->package->packagecost = "0.00";
-                $data->package->items = array();
+                $data->package->items       = array();
 
                 if (isset($_SESSION['package'])) {
                     $data->package = $_SESSION['package'];
@@ -339,8 +348,8 @@ class VRPConnector
 
                 if ($_GET['slug'] == 'step1a') {
                     if (isset($data->booksettings->HasPackages)) {
-                        $a = date("Y-m-d", strtotime($data->Arrival));
-                        $d = date("Y-m-d", strtotime($data->Departure));
+                        $a              = date("Y-m-d", strtotime($data->Arrival));
+                        $d              = date("Y-m-d", strtotime($data->Departure));
                         $data->packages = json_decode($this->call("getpackages/$a/$d/"));
                     } else {
                         $_GET['slug'] = 'step2';
@@ -353,17 +362,17 @@ class VRPConnector
 
                 if ($_GET['slug'] == 'confirm') {
                     $data->thebooking = json_decode($_SESSION['bresults']);
-                    $pagetitle = "Reservations";
-                    $content = $this->loadTheme("confirm", $data);
+                    $pagetitle        = "Reservations";
+                    $content          = $this->loadTheme("confirm", $data);
                 } else {
                     $pagetitle = "Reservations";
-                    $content = $this->loadTheme("booking", $data);
+                    $content   = $this->loadTheme("booking", $data);
                 }
                 break;
 
             case "xml":
 
-                $content = "";
+                $content   = "";
                 $pagetitle = "";
                 break;
         }
@@ -371,7 +380,8 @@ class VRPConnector
         return array(new DummyResult(0, $pagetitle, $content));
     }
 
-    function villafilter() {
+    public function villafilter()
+    {
         if (!isset($_GET['action'])) {
             return;
         }
@@ -383,7 +393,8 @@ class VRPConnector
         }
     }
 
-    function searchjax() {
+    public function searchjax()
+    {
         if (isset($_GET['search']['arrival'])) {
             $_SESSION['arrival'] = $_GET['search']['arrival'];
         }
@@ -403,7 +414,8 @@ class VRPConnector
         echo $content;
     }
 
-    function search() {
+    public function search()
+    {
         $obj = new \stdClass();
 
         foreach ($_GET['search'] as $k => $v) {
@@ -411,21 +423,21 @@ class VRPConnector
         }
 
         if (isset($_GET['page'])) {
-            $obj->page = (int)$_GET['page'];
+            $obj->page = (int) $_GET['page'];
         } else {
             $obj->page = 1;
         }
 
         if (isset($_GET['show'])) {
-            $obj->limit = (int)$_GET['show'];
+            $obj->limit = (int) $_GET['show'];
         } else {
             $obj->limit = 10;
         }
 
-        if(isset($obj->arrival)) {
+        if (isset($obj->arrival)) {
             if ($obj->arrival == 'Not Sure') {
                 $obj->arrival = '';
-                $obj->depart = '';
+                $obj->depart  = '';
             } else {
                 $obj->arrival = date("m/d/Y", strtotime($obj->arrival));
             }
@@ -433,16 +445,17 @@ class VRPConnector
 
         $search['search'] = json_encode($obj);
 
-        if(isset($_GET['specialsearch'])) {
+        if (isset($_GET['specialsearch'])) {
             // This might only be used by suite-paradise.com but is available
             // To all ISILink based PMS softwares.
             return $this->call('specialsearch', $search);
         }
 
-        return $this->call('search',$search);
+        return $this->call('search', $search);
     }
 
-    function complexsearch() {
+    public function complexsearch()
+    {
         $url = $this->apiURL . $this->apiKey . "/complexsearch3/";
 
         $obj = new \stdClass();
@@ -450,53 +463,55 @@ class VRPConnector
             $obj->$k = $v;
         }
         if (isset($_GET['page'])) {
-            $obj->page = (int)$_GET['page'];
+            $obj->page = (int) $_GET['page'];
         } else {
             $obj->page = 1;
         }
         if (isset($_GET['show'])) {
-            $obj->limit = (int)$_GET['show'];
+            $obj->limit = (int) $_GET['show'];
         } else {
             $obj->limit = 10;
         }
         if ($obj->arrival == 'Not Sure') {
             $obj->arrival = '';
-            $obj->depart = '';
+            $obj->depart  = '';
         }
 
         $search['search'] = json_encode($obj);
-        $results = $this->call('complexsearch3',$search);
+        $results          = $this->call('complexsearch3', $search);
         return $results;
     }
 
-    function savecompare() {
-        $obj = new \stdClass();
-        $obj->compare = $_SESSION['compare'];
-        $obj->arrival = $_SESSION['arrival'];
-        $obj->depart = $_SESSION['depart'];
+    public function savecompare()
+    {
+        $obj              = new \stdClass();
+        $obj->compare     = $_SESSION['compare'];
+        $obj->arrival     = $_SESSION['arrival'];
+        $obj->depart      = $_SESSION['depart'];
         $search['search'] = json_encode($obj);
-        $results = $this->call('savecompare',$search);
+        $results          = $this->call('savecompare', $search);
         return $results;
     }
 
-    function compare() {
+    public function compare()
+    {
         if (isset($_GET['shared'])) {
             $_SESSION['cp'] = 1;
-            $id = (int)$_GET['shared'];
-            $source = "";
+            $id             = (int) $_GET['shared'];
+            $source         = "";
             if (isset($_GET['source'])) {
                 $source = $_GET['source'];
             }
-            $data = json_decode($this->call("getshared/" . $id . "/" . $source));
+            $data                = json_decode($this->call("getshared/" . $id . "/" . $source));
             $_SESSION['compare'] = $data->compare;
             $_SESSION['arrival'] = $data->arrival;
-            $_SESSION['depart'] = $data->depart;
+            $_SESSION['depart']  = $data->depart;
         }
 
         $obj = new \stdClass();
 
         if (isset($_GET['c']['compare'])) {
-            $compare = $_GET['c']['compare'];
+            $compare             = $_GET['c']['compare'];
             $_SESSION['compare'] = $compare;
             if (!is_array($compare)) {
                 return;
@@ -509,13 +524,13 @@ class VRPConnector
         }
 
         if (isset($_GET['c']['arrival'])) {
-            $obj->arrival = $_GET['c']['arrival'];
-            $obj->departure = $_GET['c']['depart'];
+            $obj->arrival        = $_GET['c']['arrival'];
+            $obj->departure      = $_GET['c']['depart'];
             $_SESSION['arrival'] = $obj->arrival;
-            $_SESSION['depart'] = $obj->departure;
+            $_SESSION['depart']  = $obj->departure;
         } else {
             if (isset($_SESSION['arrival'])) {
-                $obj->arrival = $_SESSION['arrival'];
+                $obj->arrival   = $_SESSION['arrival'];
                 $obj->departure = $_SESSION['depart'];
             }
         }
@@ -525,7 +540,7 @@ class VRPConnector
         $url = $this->apiURL . $this->apiKey . "/compare/";
 
         $search['search'] = json_encode($obj);
-        $ch = curl_init();
+        $ch               = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -535,13 +550,14 @@ class VRPConnector
 
         $results = curl_exec($ch);
 
-        $results = json_decode($results);
-        $contents = $this->loadTheme('vrpCompare',$results);
+        $results  = json_decode($results);
+        $contents = $this->loadTheme('vrpCompare', $results);
 
         return $contents;
     }
 
-    function loadcompare() {
+    public function loadcompare()
+    {
 
         $obj = new \stdClass();
 
@@ -562,17 +578,17 @@ class VRPConnector
 
 
         if (isset($_GET['c']['arrival'])) {
-            $obj->arrival = $_GET['c']['arrival'];
-            $obj->departure = $_GET['c']['depart'];
+            $obj->arrival        = $_GET['c']['arrival'];
+            $obj->departure      = $_GET['c']['depart'];
             $_SESSION['arrival'] = $obj->arrival;
-            $_SESSION['depart'] = $obj->departure;
+            $_SESSION['depart']  = $obj->departure;
         } else {
             if (isset($_SESSION['arrival'])) {
-                $obj->arrival = $_SESSION['arrival'];
+                $obj->arrival   = $_SESSION['arrival'];
                 $obj->departure = $_SESSION['depart'];
             }
         }
-        $obj->arrival = date("Y-m-d", strtotime($obj->arrival));
+        $obj->arrival   = date("Y-m-d", strtotime($obj->arrival));
         $obj->departure = date("Y-m-d", strtotime($obj->departure));
         foreach ($compare as $v):
             $arr[] = $v;
@@ -580,9 +596,9 @@ class VRPConnector
         $obj->items = $arr;
 
 
-        $url = $this->apiURL . $this->apiKey . "/compare/";
+        $url              = $this->apiURL . $this->apiKey . "/compare/";
         $search['search'] = json_encode($obj);
-        $ch = curl_init();
+        $ch               = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -605,7 +621,8 @@ class VRPConnector
      *
      * @return string
      */
-    function loadTheme($section, $data) {
+    public function loadTheme($section, $data)
+    {
         $wptheme = get_stylesheet_directory() . "/vrp/$section.php";
 
         if (file_exists($wptheme)) {
@@ -619,7 +636,7 @@ class VRPConnector
             die();
         }
 
-        $this->debug['data'] = $data;
+        $this->debug['data']       = $data;
         $this->debug['theme_file'] = $load;
 
         ob_start();
@@ -629,7 +646,8 @@ class VRPConnector
         return $content;
     }
 
-    function ajax() {
+    public function ajax()
+    {
         if (!isset($_GET['vrpjax'])) {
             return false;
         }
@@ -641,11 +659,12 @@ class VRPConnector
         die();
     }
 
-    function checkavailability($par = false, $ret = false) {
+    public function checkavailability($par = false, $ret = false)
+    {
         set_time_limit(50);
 
         $fields_string = "obj=" . json_encode($_GET['obj']);
-        $results = $this->call('checkavail',$fields_string);
+        $results       = $this->call('checkavail', $fields_string);
 
         if ($ret == true) {
             $_SESSION['bookingresults'] = $results;
@@ -668,25 +687,27 @@ class VRPConnector
         }
     }
 
-    function processbooking($par = false, $ret = false) {
-        if(isset($_POST['booking']['comments'])) {
+    public function processbooking($par = false, $ret = false)
+    {
+        if (isset($_POST['booking']['comments'])) {
             $_POST['booking']['comments'] = urlencode($_POST['booking']['comments']);
         }
 
         $fields_string = "obj=" . json_encode($_POST['booking']);
-        $results = $this->call('processbooking',$fields_string);
-        $res = json_decode($results);
+        $results       = $this->call('processbooking', $fields_string);
+        $res           = json_decode($results);
         if (isset($res->Results)) {
             $_SESSION['bresults'] = json_encode($res->Results);
         }
         echo $results;
     }
 
-    function addtopackage() {
+    public function addtopackage()
+    {
         $TotalCost = $_GET['TotalCost'];
         if (!isset($_GET['package'])) {
             unset($_SESSION['package']);
-            $obj = new \stdClass();
+            $obj              = new \stdClass();
             $obj->packagecost = "$0.00";
 
             $obj->TotalCost = "$" . number_format($TotalCost, 2);
@@ -694,45 +715,48 @@ class VRPConnector
             return false;
         }
 
-        $currentpackage = new \stdClass();
+        $currentpackage        = new \stdClass();
         $currentpackage->items = array();
-        $grandtotal = 0;
+        $grandtotal            = 0;
         // ID & QTY
         $package = $_GET['package'];
-        $qty = $_GET['qty'];
-        $cost = $_GET['cost'];
-        $name = $_GET['name'];
+        $qty     = $_GET['qty'];
+        $cost    = $_GET['cost'];
+        $name    = $_GET['name'];
         foreach ($package as $v):
-            $amount = $qty[$v]; // Qty of item.
-            $obj = new \stdClass();
-            $obj->name = $name[$v];
-            $obj->qty = $amount;
-            $obj->total = $cost[$v] * $amount;
-            $grandtotal = $grandtotal + $obj->total;
+            $amount                    = $qty[$v]; // Qty of item.
+            $obj                       = new \stdClass();
+            $obj->name                 = $name[$v];
+            $obj->qty                  = $amount;
+            $obj->total                = $cost[$v] * $amount;
+            $grandtotal                = $grandtotal + $obj->total;
             $currentpackage->items[$v] = $obj;
         endforeach;
 
-        $TotalCost = $TotalCost + $grandtotal;
-        $obj = new \stdClass();
+        $TotalCost        = $TotalCost + $grandtotal;
+        $obj              = new \stdClass();
         $obj->packagecost = "$" . number_format($grandtotal, 2);
 
         $obj->TotalCost = "$" . number_format($TotalCost, 2);
         echo json_encode($obj);
         $currentpackage->packagecost = $grandtotal;
-        $currentpackage->TotalCost = $TotalCost;
-        $_SESSION['package'] = $currentpackage;
+        $currentpackage->TotalCost   = $TotalCost;
+        $_SESSION['package']         = $currentpackage;
     }
 
-    function getspecial() {
+    public function getspecial()
+    {
         return json_decode($this->call("getonespecial"));
     }
 
-    function getTheSpecial($id) {
+    public function getTheSpecial($id)
+    {
         $data = json_decode($this->call("getspecialbyid/" . $id));
         return $data;
     }
 
-    function sitemap() {
+    public function sitemap()
+    {
         if (!isset($_GET['vrpsitemap'])) {
             return false;
         }
@@ -745,13 +769,15 @@ class VRPConnector
         die();
     }
 
-    function xmlexport() {
+    public function xmlexport()
+    {
         header("Content-type: text/xml");
         echo $this->customcall("generatexml");
         die();
     }
 
-    function robots_mod($output, $public) {
+    public function robots_mod($output, $public)
+    {
         $siteurl = get_option("siteurl");
         $output .= "Sitemap: " . $siteurl . "/?vrpsitemap=1 \n";
         return $output;
@@ -766,9 +792,11 @@ class VRPConnector
      *
      * @param $call
      * @param array $params
+     *
      * @return string
      */
-    function call($call, $params = array()) {
+    public function call($call, $params = array())
+    {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->apiURL . $this->apiKey . "/" . $call);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -780,23 +808,26 @@ class VRPConnector
         return $results;
     }
 
-    function customcall($call) {
+    public function customcall($call)
+    {
         echo $this->call("customcall/$call");
     }
 
-    function custompost($call) {
+    public function custompost($call)
+    {
         $obj = new \stdClass();
         foreach ($_POST['obj'] as $k => $v) {
             $obj->$k = $v;
         }
 
-        $search['search'] = json_encode($obj);
-        $results = $this->call($call, $search);
+        $search['search']       = json_encode($obj);
+        $results                = $this->call($call, $search);
         $this->debug['results'] = $results;
         echo $results;
     }
 
-    function bookSettings($propID) {
+    public function bookSettings($propID)
+    {
         return json_decode($this->call("booksettings/" . $propID));
     }
 
@@ -807,7 +838,8 @@ class VRPConnector
      *
      * @return mixed
      */
-    function searchoptions() {
+    public function searchoptions()
+    {
         return json_decode($this->call("searchoptions"));
     }
 
@@ -815,14 +847,16 @@ class VRPConnector
      * Get a featured unit
      * @ajax
      */
-    function featuredunit() {
+    public function featuredunit()
+    {
         if (isset($_GET['featuredunit'])) {
             echo $this->call("featuredunit");
             die();
         }
     }
 
-    function allSpecials() {
+    public function allSpecials()
+    {
         return json_decode($this->call("allspecials"));
     }
 
@@ -831,8 +865,9 @@ class VRPConnector
      *
      * @ajax
      */
-    function getflipkey() {
-        $id = $_GET['slug'];
+    public function getflipkey()
+    {
+        $id   = $_GET['slug'];
         $call = "getflipkey/?unit_id=$id";
         $data = $this->customcall($call);
         echo "<!DOCTYPE html><html>";
@@ -850,24 +885,26 @@ class VRPConnector
      * [vrpComplexes] Shortcode
      *
      * @param array $items
+     *
      * @return string
      */
-    function vrpComplexes($items = array()) {
+    public function vrpComplexes($items = array())
+    {
         $items['page'] = 1;
 
         if (isset($_GET['page'])) {
-            $items['page'] = (int)$_GET['page'];
+            $items['page'] = (int) $_GET['page'];
         }
 
         if (isset($_GET['beds'])) {
-            $items['beds'] = (int)$_GET['beds'];
+            $items['beds'] = (int) $_GET['beds'];
         }
         if (isset($_GET['minbed'])) {
-            $items['minbed'] = (int)$_GET['minbed'];
-            $items['maxbed'] = (int)$_GET['maxbed'];
+            $items['minbed'] = (int) $_GET['minbed'];
+            $items['maxbed'] = (int) $_GET['maxbed'];
         }
 
-        $obj = new \stdClass();
+        $obj       = new \stdClass();
         $obj->okay = 1;
         if (count($items) != 0) {
             foreach ($items as $k => $v) {
@@ -876,9 +913,9 @@ class VRPConnector
         }
 
         $search['search'] = json_encode($obj);
-        $results = $this->call('allcomplexes', $search);
-        $results = json_decode($results);
-        $content = $this->loadTheme('vrpComplexes', $results);
+        $results          = $this->call('allcomplexes', $search);
+        $results          = json_decode($results);
+        $content          = $this->loadTheme('vrpComplexes', $results);
 
         return $content;
     }
@@ -887,17 +924,19 @@ class VRPConnector
      * [vrpUnits] Shortcode
      *
      * @param array $items
+     *
      * @return string
      */
-    function vrpUnits($items = array()) {
+    public function vrpUnits($items = array())
+    {
         $items['page'] = 1;
 
         if (isset($_GET['page'])) {
-            $items['page'] = (int)$_GET['page'];
+            $items['page'] = (int) $_GET['page'];
         }
 
         if (isset($_GET['beds'])) {
-            $items['beds'] = (int)$_GET['beds'];
+            $items['beds'] = (int) $_GET['beds'];
         }
 
         if (isset($_GET['search'])) {
@@ -907,11 +946,11 @@ class VRPConnector
         }
 
         if (isset($_GET['minbed'])) {
-            $items['minbed'] = (int)$_GET['minbed'];
-            $items['maxbed'] = (int)$_GET['maxbed'];
+            $items['minbed'] = (int) $_GET['minbed'];
+            $items['maxbed'] = (int) $_GET['maxbed'];
         }
 
-        $obj = new \stdClass();
+        $obj       = new \stdClass();
         $obj->okay = 1;
         if (count($items) != 0) {
             foreach ($items as $k => $v) {
@@ -920,9 +959,9 @@ class VRPConnector
         }
 
         $search['search'] = json_encode($obj);
-        $results = $this->call('allunits', $search);
-        $results = json_decode($results);
-        $content = $this->loadTheme('vrpUnits', $results);
+        $results          = $this->call('allunits', $search);
+        $results          = json_decode($results);
+        $content          = $this->loadTheme('vrpUnits', $results);
         return $content;
     }
 
@@ -931,7 +970,8 @@ class VRPConnector
      *
      * @return string
      */
-    function vrpSearchForm() {
+    public function vrpSearchForm()
+    {
         $data = "";
         $page = $this->loadTheme("vrpSearchForm", $data);
         return $page;
@@ -942,7 +982,8 @@ class VRPConnector
      *
      * @return string
      */
-    function vrpAdvancedSearchForm() {
+    public function vrpAdvancedSearchForm()
+    {
         $data = "";
         $page = $this->loadTheme("vrpAdvancedSearchForm", $data);
         return $page;
@@ -952,13 +993,15 @@ class VRPConnector
      * [vrpSearch] Shortcode
      *
      * @param array $arr
+     *
      * @return string
      */
-    function vrpSearch($arr = array()) {
-        $_GET['search'] = $arr;
+    public function vrpSearch($arr = array())
+    {
+        $_GET['search']            = $arr;
         $_GET['search']['showall'] = 1;
-        $data = $this->search();
-        $data = json_decode($data);
+        $data                      = $this->search();
+        $data                      = json_decode($data);
 
         if (isset($data->type)) {
             $content = $this->loadTheme($data->type, $data);
@@ -972,22 +1015,24 @@ class VRPConnector
      * [vrpComplexSearch]
      *
      * @param array $arr
+     *
      * @return string
      */
-    function vrpcomplexsearch($arr = array()) {
+    public function vrpcomplexsearch($arr = array())
+    {
         foreach ($arr as $k => $v):
             if (stristr($v, "|")) {
                 $arr[$k] = explode("|", $v);
             }
         endforeach;
-        $_GET['search'] = $arr;
+        $_GET['search']            = $arr;
         $_GET['search']['showall'] = 1;
 
         $this->time = microtime(true);
-        $data = $this->complexsearch();
+        $data       = $this->complexsearch();
 
         $this->time = round((microtime(true) - $this->time), 4);
-        $data = json_decode($data);
+        $data       = json_decode($data);
         if (isset($data->type)) {
             $content = $this->loadTheme($data->type, $data);
         } else {
@@ -1000,12 +1045,14 @@ class VRPConnector
      * [vrpAreaList] Shortcode
      *
      * @param $arr
+     *
      * @return string
      */
-    function vrpAreaList($arr) {
-        $area = $arr['area'];
-        $r = $this->call("areabymainlocation/$area");
-        $data = json_decode($r);
+    public function vrpAreaList($arr)
+    {
+        $area    = $arr['area'];
+        $r       = $this->call("areabymainlocation/$area");
+        $data    = json_decode($r);
         $content = $this->loadTheme("arealist", $data);
         return $content;
     }
@@ -1014,11 +1061,13 @@ class VRPConnector
      * [vrpSpecials] Shortcode
      *
      * @param array $items
+     *
      * @return string
      *
      * @todo support getOneSpecial
      */
-    function vrpSpecials($items = array()) {
+    public function vrpSpecials($items = array())
+    {
         if (!isset($items['cat'])) {
             $items['cat'] = 1;
         }
@@ -1036,9 +1085,11 @@ class VRPConnector
      * [vrpLinks] Shortcode
      *
      * @param $items
+     *
      * @return string
      */
-    function vrpLinks($items) {
+    public function vrpLinks($items)
+    {
         $items['showall'] = true;
 
         switch ($items['type']) {
@@ -1050,7 +1101,7 @@ class VRPConnector
                 break;
         }
 
-        $obj = new \stdClass();
+        $obj       = new \stdClass();
         $obj->okay = 1;
         if (count($items) != 0) {
             foreach ($items as $k => $v) {
@@ -1059,7 +1110,7 @@ class VRPConnector
         }
 
         $search['search'] = json_encode($obj);
-        $results = json_decode($this->call($call,$search));
+        $results          = json_decode($this->call($call, $search));
 
         $ret = "<ul style='list-style:none'>";
         if ($items['type'] == 'Villa') {
@@ -1080,7 +1131,8 @@ class VRPConnector
      *
      * @return string
      */
-    function vrpCompare() {
+    public function vrpCompare()
+    {
         return $this->compare();
     }
 
@@ -1094,7 +1146,8 @@ class VRPConnector
      *
      * @return string
      */
-    public function vrpShort($params) {
+    public function vrpShort($params)
+    {
         if ($params['type'] == 'resort') {
             $params['type'] = 'Location';
         }
@@ -1104,16 +1157,16 @@ class VRPConnector
             (($params['type'] == 'complex') || $params['type'] == 'View')
         ) {
             $items['attributes'] = true;
-            $items['aname'] = $params['type'];
-            $items['value'] = $params['value'];
+            $items['aname']      = $params['type'];
+            $items['value']      = $params['value'];
         } else {
             $items[$params['type']] = $params['value'];
         }
 
-        $items['sort'] = "Name";
+        $items['sort']  = "Name";
         $items['order'] = "low";
 
-        return $this->loadTheme('vrpShort',$items);
+        return $this->loadTheme('vrpShort', $items);
     }
 
     //
@@ -1123,7 +1176,8 @@ class VRPConnector
     /**
      * Display notice for user to enter their VRPc API key.
      */
-    function notice() {
+    public function notice()
+    {
         $siteurl = get_option('siteurl') . "/wp-admin/admin.php?page=VRPConnector";
         echo "<div class=\"updated fade\"><b>Vacation Rental Platform</b>: <a href=\"$siteurl\">Please enter your API key.</a></div>";
     }
@@ -1131,7 +1185,8 @@ class VRPConnector
     /**
      * Admin nav menu items
      */
-    function setupPage() {
+    public function setupPage()
+    {
         add_menu_page(
             'VRP',
             'VRP',
@@ -1152,8 +1207,8 @@ class VRPConnector
 
         add_submenu_page(
             "vrpmain",
-            'API Key',
-            'API Key',
+            'Settings',
+            'Settings',
             'activate_plugins',
             "VRPConnector",
             array($this, 'settingsPage')
@@ -1163,14 +1218,16 @@ class VRPConnector
     /**
      * Displays the 'VRP Login' admin page.
      */
-    function loadVRP() {
+    public function loadVRP()
+    {
         include __DIR__ . "/../views/login.php";
     }
 
     /**
      * Displays the 'VRP API Code Entry' admin page
      */
-    function settingsPage() {
+    public function settingsPage()
+    {
         include __DIR__ . "/../views/settings.php";
     }
 
@@ -1179,7 +1236,8 @@ class VRPConnector
      *
      * @return mixed
      */
-    function testAPI() {
+    public function testAPI()
+    {
         return json_decode($this->call("testAPI"));
     }
 
@@ -1188,9 +1246,11 @@ class VRPConnector
      *
      * @param $email
      * @param $password
+     *
      * @return array|mixed
      */
-    function doLogin($email, $password) {
+    public function doLogin($email, $password)
+    {
         $url = $this->apiURL . $this->apiKey . "/userlogin/?email=$email&password=$password";
         return json_decode(file_get_contents($url));
     }
@@ -1206,7 +1266,8 @@ class VRPConnector
      * @param string $slug
      * @param        $object [] $object
      */
-    function cache($action, $slug, $object) {
+    public function cache($action, $slug, $object)
+    {
         $folder = ABSPATH . "wp-content/vrpcache/";
         if (!file_exists($folder)) {
             mkdir($folder);
@@ -1229,15 +1290,17 @@ class VRPConnector
      *
      * @param $action
      * @param $slug
+     *
      * @return bool
      */
-    function getCache($action, $slug) {
+    public function getCache($action, $slug)
+    {
         $folder = ABSPATH . "wp-content/vrpcache/";
         $myFile = $action . $slug . ".txt";
 
         if (file_exists($folder . $myFile)) {
             $_GET['file'] = $folder . $myFile;
-            $object = file_get_contents($folder . $myFile);
+            $object       = file_get_contents($folder . $myFile);
 
             if ($object) {
                 $this->data = json_decode($object);
@@ -1255,7 +1318,8 @@ class VRPConnector
      *
      * @param $param [] $param
      */
-    function clearCache($file, $action, $slug) {
+    public function clearCache($file, $action, $slug)
+    {
         @unlink($file);
         $data = $this->call("getunit/" . $slug);
         $this->cache($action, $slug, $data);
