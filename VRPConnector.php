@@ -4,7 +4,7 @@
  * Plugin URI: http://www.gueststream.com/apps-and-tools/vrpconnector/ 
  * Description: Vacation Rental Platform Connector.
  * Author: GuestStream, Inc.
- * Version: 0.04 
+ * Version: 0.05
  * Author URI: http://www.gueststream.com/ 
  */
 
@@ -14,6 +14,6 @@ require __DIR__ . "/lib/calendar.php";
 
 $vrp = new \Gueststream\VRPConnector;
 
-if ( is_admin() ) {
+if (is_admin()) {
     new \Gueststream\PluginUpdater( __FILE__, 'Gueststream-Inc', "VRPConnector" );
 }
