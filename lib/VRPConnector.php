@@ -97,6 +97,9 @@ class VRPConnector
         //add_shortcode("vrpSpecials", array($this, "vrpSpecials"));
         //add_shortcode("vrpLinks", array($this, "vrpLinks"));
         add_shortcode("vrpCompare", array($this, "vrpCompare"));
+
+        // vrpshort shortcode for legacy support.
+        add_shortcode("vrpshort", array($this, "vrpShort"));
     }
 
     /**
@@ -477,9 +480,6 @@ class VRPConnector
     }
 
     function compare() {
-
-        //print_r($_GET['c']);
-
         if (isset($_GET['shared'])) {
             $_SESSION['cp'] = 1;
             $id = (int)$_GET['shared'];
@@ -1133,10 +1133,31 @@ class VRPConnector
      */
     function setupPage() {
         add_menu_page(
-            'VRP', 'VRP', 'edit_pages', "vrpmain", array($this, 'loadVRP'), plugin_dir_url(__FILE__) . "../themes/mountainsunset/images/shack.png"
+            'VRP',
+            'VRP',
+            'edit_pages',
+            "vrpmain",
+            array($this, 'loadVRP'),
+            plugin_dir_url(__FILE__) . "../themes/mountainsunset/images/shack.png"
         );
-        add_submenu_page("vrpmain", 'Manage Units', 'Manage Units', 'edit_pages', "vrpmain", array($this, 'loadVRP'));
-        add_submenu_page("vrpmain", 'API Key', 'API Key', 'activate_plugins', "VRPConnector", array($this, 'settingsPage'));
+
+        add_submenu_page(
+            "vrpmain",
+            'Manage Units',
+            'Manage Units',
+            'edit_pages',
+            "vrpmain",
+            array($this, 'loadVRP')
+        );
+
+        add_submenu_page(
+            "vrpmain",
+            'API Key',
+            'API Key',
+            'activate_plugins',
+            "VRPConnector",
+            array($this, 'settingsPage')
+        );
     }
 
     /**
