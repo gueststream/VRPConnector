@@ -1,17 +1,23 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: Josh Houghtelin <josh@findsomehelp.com>
- * Date: 11/3/14
- * Time: 1:42 PM
- */
+<div class="vrpcontainer_12 vrp100">
+    <div class="vrpgrid_12 alpha omega ">
+        <div class="vrpgrid_12">
+            <a name="unitlistings"></a>
 
-foreach ($data as $k => $v) {
-    $_GET['search'][$k] = $v;
-}
-$_GET['search']['NoComplex'] = 1;
-$_GET['search']['showall'] = 1;
-global $vrp;
-$data = json_decode($vrp->search());
-$isUR = true;
+            <div id="unitsincomplex">
+                Loading Units...
+            </div>
 
+            <form id="jaxform2">
+                <?php foreach ($data as $k => $v) { ?>
+                    <input type="hidden" name="search[<?= $k; ?>]" value="<?= $v; ?>">
+                <?php } ?>
+                <input type="hidden" name="search[NoComplex]" value="1">
+                <input type="hidden" name="search[showall]" value="1">
+                <?php if (isset($_GET['page'])) { ?>
+                    <input type="hidden" name="page" value="<?= $_GET['page']; ?>">
+                <?php } ?>
+            </form>
+        </div>
+    </div>
+    <br style="clear:both;">
+</div>

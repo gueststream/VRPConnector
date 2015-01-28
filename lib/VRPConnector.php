@@ -111,10 +111,15 @@ class VRPConnector
             $this->theme = $plugin_theme_Folder . $this->default_theme_name;
         } else {
             $this->theme = $plugin_theme_Folder . $theme;
+            $this->themename = $theme;
         }
         $this->themename = $theme;
 
-        include $this->theme . "/functions.php";
+        if(file_exists(get_stylesheet_directory() . "/vrp/functions.php")) {
+            include get_stylesheet_directory() . "/vrp/functions.php";
+        } else {
+            include $this->theme . "/functions.php";
+        }
     }
 
     function themeActions() {
@@ -425,7 +430,13 @@ class VRPConnector
 
         $search['search'] = json_encode($obj);
 
-        return $this->call('search', $search);
+        if(isset($_GET['specialsearch'])) {
+            // This might only be used by suite-paradise.com but is available
+            // To all ISILink based PMS softwares.
+            return $this->call('specialsearch', $search);
+        }
+
+        return $this->call('search',$search);
     }
 
     function complexsearch() {
@@ -1071,6 +1082,38 @@ class VRPConnector
      */
     function vrpCompare() {
         return $this->compare();
+    }
+
+    /**
+     * [vrpShort] Shortcode
+     *
+     * This is only here for legacy support.
+     *  Suite-Paradise.com
+     *
+     * @param $params
+     *
+     * @return string
+     */
+    public function vrpShort($params) {
+        if ($params['type'] == 'resort') {
+            $params['type'] = 'Location';
+        }
+
+        if (
+            (isset($params['attribute']) && $params['attribute'] == true) ||
+            (($params['type'] == 'complex') || $params['type'] == 'View')
+        ) {
+            $items['attributes'] = true;
+            $items['aname'] = $params['type'];
+            $items['value'] = $params['value'];
+        } else {
+            $items[$params['type']] = $params['value'];
+        }
+
+        $items['sort'] = "Name";
+        $items['order'] = "low";
+
+        return $this->loadTheme('vrpShort',$items);
     }
 
     //
