@@ -24,10 +24,18 @@ class VRPConnector
      */
     public function __construct()
     {
-        session_start();
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $this->apiKey = get_option('vrpAPI');
+
         if ($this->apiKey == '') {
             add_action('admin_notices', array($this, 'notice'));
+        }
+
+        if(getenv("APP_ENV") == "dev") {
+            $this->apiURL = "http://vrp.dev/api/v1/";
         }
 
         $this->setTheme();
@@ -324,8 +332,7 @@ class VRPConnector
                     $data->new = true;
                 }
 
-                $data->thetime = time() - $data->TimeStamp;
-                if ($data->thetime < 500 && $_GET['slug'] != 'confirm') {
+                if ($_GET['slug'] != 'confirm') {
                     $data      = json_decode($this->checkavailability(false, true));
                     $data->new = true;
                 }
