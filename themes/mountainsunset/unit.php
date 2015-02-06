@@ -24,7 +24,7 @@
                 <li><a href="#overview">Overview</a></li>
                 <?php if (isset($data->reviews[0])) { ?>
                     <li><a href="#reviews">Reviews</a></li>
-                <? } ?>
+                <?php } ?>
                 <li><a href="#calendar">Check Availability</a></li>
                 <li><a href="#gmap">Map</a></li>
             </ul>
