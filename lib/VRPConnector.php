@@ -435,10 +435,11 @@ class VRPConnector
             $obj->page = 1;
         }
 
-        if (isset($_GET['show'])) {
-            $obj->limit = (int) $_GET['show'];
-        } else {
+        if(!isset($obj->limit)) {
             $obj->limit = 10;
+            if (isset($_GET['show'])) {
+                $obj->limit = (int) $_GET['show'];
+            }
         }
 
         if (isset($obj->arrival)) {
