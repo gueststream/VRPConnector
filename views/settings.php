@@ -6,16 +6,16 @@
     <table class="form-table">
         <tr valign="top">
             <th scope="row">API Key:</th>
-            <td><input type="text" name="vrpAPI" value="<?php echo get_option('vrpAPI'); ?>" style="width:400px;"/>
+            <td><input type="text" name="vrpAPI" value="<?php echo esc_attr(get_option('vrpAPI')); ?>" style="width:400px;"/>
             </td>
         </tr>
         <tr valign="top">
             <th scope="row">VRP Username:</th>
-            <td><input type="text" name="vrpUser" value="<?php echo get_option('vrpUser'); ?>"/></td>
+            <td><input type="text" name="vrpUser" value="<?php echo esc_attr(get_option('vrpUser')); ?>"/></td>
         </tr>
         <tr valign="top">
             <th scope="row">VRP Password:</th>
-            <td><input type="password" name="vrpPass" value="<?php echo get_option('vrpPass'); ?>"/></td>
+            <td><input type="password" name="vrpPass" value="<?php echo esc_attr(get_option('vrpPass')); ?>"/></td>
         </tr>
         <tr>
             <th>Theme</th>
@@ -24,7 +24,7 @@
                     <?php foreach ($vrp->available_themes as $name => $displayname) {
                         $sel = "";
                         if ($name == $vrp->themename) {$sel = "SELECTED";} ?>
-                        <option value="<?=$name?>" <?=$sel?>><?=$displayname?></option>
+                        <option value="<?php echo esc_attr($name); ?>" <?php echo esc_attr($sel); ?>><?php echo esc_html($displayname); ?></option>
                         <?php } ?>
                 </select>
             </td>
@@ -41,6 +41,9 @@
 <b>Current Status:</b>
 <?php
 $data = $vrp->testAPI();
+if ( !isset( $data->Status ) ) {
+	$data->Status = false;
+}
 switch ($data->Status) {
     case "Online":
         echo "<span style='color:green;'>Online</span>";
