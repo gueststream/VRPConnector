@@ -1,1 +1,1 @@
-<?=$data->Error;?>
+<?php esc_html($data->Error);?>

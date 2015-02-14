@@ -4,7 +4,7 @@
     <div class="padit">
         If you are a new guest, you can continue your reservation...
         <br><br><br>
-        <a href="/vrp/book/step3/?obj[Arrival]=<?= $data->Arrival; ?>&obj[Departure]=<?= $data->Departure; ?>&obj[PropID]=<?= $_GET['obj']['PropID']; ?>" class="bookingbutton rounded">Continue with Reservation</a>
+        <a href="/vrp/book/step3/?obj[Arrival]=<?php echo esc_attr($data->Arrival); ?>&obj[Departure]=<?php echo esc_attr($data->Departure); ?>&obj[PropID]=<?php echo esc_attr($_GET['obj']['PropID']); ?>" class="bookingbutton rounded">Continue with Reservation</a>
         </br>        </div>
 </div><div class="vrpgrid_6 userbox omega" id="returnbox">
     <h3>Returning Guests</h3>

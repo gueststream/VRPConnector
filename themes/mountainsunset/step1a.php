@@ -1,6 +1,6 @@
 
 <div class="vrpgrid_11" style="float:right; text-align:right;margin-bottom:15px;">
-    <a href="/vrp/book/step3/?obj[Arrival]=<?= $data->Arrival; ?>&obj[Departure]=<?= $data->Departure; ?>&obj[PropID]=<?= $_GET['obj']['PropID']; ?>&obj[Adults]=<?=$_GET['obj']['Adults'];?>" class="btn btn-success success continuebtn">Continue with Reservation</a><br><br>
+    <a href="/vrp/book/step3/?obj[Arrival]=<?php echo esc_attr($data->Arrival); ?>&obj[Departure]=<?php echo esc_attr($data->Departure); ?>&obj[PropID]=<?php echo esc_attr($_GET['obj']['PropID']); ?>&obj[Adults]=<?php echo esc_attr($_GET['obj']['Adults']);?>" class="btn btn-success success continuebtn">Continue with Reservation</a><br><br>
     Add-on Package Total: <b class="addontotal">$0.00</b>
 </div>
 <br><br>
@@ -9,9 +9,9 @@
     ?>
     <div class="packageitem">
         <a href="#" class="expandlink btn btn-primary">Expand +</a>
-        <img src="<?= $v->image; ?>" width="70" height="70" style="border:1px solid #000000">
-        <h3><?= $v->name; ?></h3>
-        <small><?= $v->subtitle; ?></small>
+        <img src="<?php echo esc_url($v->image); ?>" width="70" height="70" style="border:1px solid #000000">
+        <h3><?php echo esc_html($v->name); ?></h3>
+        <small><?php echo esc_html($v->subtitle); ?></small>
         <br style="clear:both;">
         
             <div class="packagechildren" style="display:none">
@@ -21,15 +21,15 @@
                 $cid=  uniqid();
             }
             ?>
-                <h3 style="border-bottom:1px solid #ffffff;"><a href="#" onclick="jQuery('.isopened').slideUp().removeClass('isopened');jQuery('.c_<?=$cid;?>').slideDown().addClass('isopened'); return false;" class="childcatlink"><?= $child->name; ?> <small style="font-size:10px;color:#ffffff;">[Expand]</small></a></h3>
+                <h3 style="border-bottom:1px solid #ffffff;"><a href="#" onclick="jQuery('.isopened').slideUp().removeClass('isopened');jQuery('.c_<?php echo esc_js($cid);?>').slideDown().addClass('isopened'); return false;" class="childcatlink"><?php echo esc_html($child->name); ?> <small style="font-size:10px;color:#ffffff;">[Expand]</small></a></h3>
       
         </table>
         <?php
         
         foreach ($child->types as $type=>$q){
             ?>
-        <div class="c_<?=$cid;?>" style="display:none">
-        <?php if ($type != '0'){ ?> <h3 style="margin-left:10px;font-size:16px;"><?= $type; ?></h3><?php } ?>
+        <div class="c_<?php echo esc_attr($cid);?>" style="display:none">
+        <?php if ($type != '0'){ ?> <h3 style="margin-left:10px;font-size:16px;"><?php echo esc_html($type); ?></h3><?php } ?>
         <?php
             foreach ($q as $p):
         $checked="";
@@ -44,11 +44,11 @@
         }
         ?>
         <table width="100%" style="background:white;border-top:1px dotted #2268AE">
-            <tr><td align="center" width="15%">Add Item<br><input class="addtoit" name="package[]" type="checkbox" value="<?= $p->id; ?>" <?= $checked; ?>></td>
-                <td width="45%"><b><?= $p->name; ?></b><input type="hidden" name="name[<?= $p->id; ?>]" value="<?= $p->name; ?>"><br><small><?= $p->description; ?></small></td>
-                <td width="15%" style="text-align:center;"><small><?= $p->type; ?></small></td>
-                <td align="right"><b>$<?= $p->amount; ?></b> <?=$p->measure;?><input type="hidden" name="cost[<?= $p->id; ?>]" value="<?= $p->amount; ?>"></td>
-                <td><select name="qty[<?= $p->id; ?>]" class="doqty">
+            <tr><td align="center" width="15%">Add Item<br><input class="addtoit" name="package[]" type="checkbox" value="<?php echo esc_attr($p->id); ?>" <?php echo esc_attr($checked); ?>></td>
+                <td width="45%"><b><?php echo esc_html($p->name); ?></b><input type="hidden" name="name[<?php echo esc_attr($p->id); ?>]" value="<?php echo esc_attr($p->name); ?>"><br><small><?php echo esc_html($p->description); ?></small></td>
+                <td width="15%" style="text-align:center;"><small><?php echo esc_html($p->type); ?></small></td>
+                <td align="right"><b>$<?php echo esc_html($p->amount); ?></b> <?php echo esc_html($p->measure);?><input type="hidden" name="cost[<?php echo esc_attr($p->id); ?>]" value="<?php echo esc_attr($p->amount); ?>"></td>
+                <td><select name="qty[<?php echo esc_attr($p->id); ?>]" class="doqty">
                         <?php
                         foreach (range(1, 10) as $r) {
                         $selected="";
@@ -56,7 +56,7 @@
                         $selected="selected=\"selected\"";
                 }
             
-                        ?><option value="<?= $r; ?>" <?=$selected;?>><?= $r; ?></option><?php } ?></select> </td>
+                        ?><option value="<?php echo esc_attr($r); ?>" <?php echo esc_attr($selected);?>><?php echo esc_attr($r); ?></option><?php } ?></select> </td>
             </tr>
         </table>
     <?php endforeach; 
@@ -78,13 +78,13 @@
     <br><br>
     
 <?php endforeach; ?>
-    <input type="hidden" name="TotalCost" value="<?= $data->TotalCost; ?>">
+    <input type="hidden" name="TotalCost" value="<?php echo esc_attr($data->TotalCost); ?>">
     <div class="vrpgrid_11" style="text-align:right;"><br><input type="submit" value="Update" class="ButtonView rounded" style="float:right;display:none; "><br style="clear:both;"></div></form>
 
 <div class="vrpgrid_11" style="float:right;text-align:right;margin-top:10px;">
     Add-on Package Total: <b class="addontotal">$0.00</b>
     <br><br>
-    <a href="/vrp/book/step3/?obj[Arrival]=<?= $data->Arrival; ?>&obj[Departure]=<?= $data->Departure; ?>&obj[PropID]=<?= $_GET['obj']['PropID']; ?>&obj[Adults]=<?=$_GET['obj']['Adults'];?>" class="btn btn-success success continuebtn" style="float:right;" >Continue with Reservation</a>
+    <a href="/vrp/book/step3/?obj[Arrival]=<?php echo esc_attr($data->Arrival); ?>&obj[Departure]=<?php echo esc_attr($data->Departure); ?>&obj[PropID]=<?php echo esc_attr($_GET['obj']['PropID']); ?>&obj[Adults]=<?php echo esc_attr($_GET['obj']['Adults']);?>" class="btn btn-success success continuebtn" style="float:right;" >Continue with Reservation</a>
 </div>
 <style>
     .packageitem{

@@ -5,8 +5,6 @@
  * Date: 10/26/14
  * Time: 6:41 PM
  */
-
-//echo "<pre>"; print_r($data); echo "</pre>";
 ?>
 
 <div class="container">
@@ -21,26 +19,26 @@
             </ul>
 
             <div id="description">
-                <?=$data->description?>
+                <?php echo wp_kses_post($data->description); ?>
             </div>
 
             <div id="photos">
                 <?php foreach($data->photos as $photo) { ?>
-                    <img src="<?=$photo->url?>">
+                    <img src="<?php echo esc_url($photo->url); ?>">
                 <?php } ?>
             </div>
 
             <div id="amenities">
-                <?=$data->amenities?>
+                <?php echo wp_kses_post($data->amenities); ?>
             </div>
 
             <div id="units">
                 <?php foreach($data->units as $unit) { ?>
                 <li>
-                    <a href="/vrp/unit/<?=$unit->page_slug?>">
-                        <h2><?=$unit->Name?></h2>
+                    <a href="/vrp/unit/<?php echo esc_attr($unit->page_slug); ?>">
+                        <h2><?php echo esc_html($unit->Name); ?></h2>
                     </a>
-                    <?=$unit->ShortDescription?>
+                    <?php echo wp_kses_post($unit->ShortDescription); ?>
                 </li>
                 <?php } ?>
             </div>
