@@ -12,21 +12,21 @@ if($data->count == 0) {
 } else {
     ?>
     <div class="row">
-        <?=$data->count?> Results.
+        <?php echo esc_html($data->count); ?> Results.
     </div>
     <?php
     foreach($data->results as $a_unit) {
         ?>
         <div class="row">
             <div class="row">
-                <h2><a href="<?=get_bloginfo('url')?>/vrp/unit/<?=$a_unit->page_slug?>"><?=$a_unit->Name?></a></h2>
+                <h2><a href="<?php echo esc_url(get_bloginfo('url'))?>/vrp/unit/<?php echo esc_url($a_unit->page_slug); ?>"><?php echo esc_html($a_unit->Name); ?></a></h2>
             </div>
             <div class="row">
                 <div class="col-md-2">
-                    <img src="<?=$a_unit->Thumb?>" class="unit_thumbnail" />
+                    <img src="<?php echo esc_url($a_unit->Thumb); ?>" class="unit_thumbnail" />
                 </div>
                 <div class="col-md-10">
-                    <?=$a_unit->ShortDescription?>
+                    <?php echo wp_kses_post($a_unit->ShortDescription); ?>
                 </div>
             </div>
         </div>
@@ -39,11 +39,11 @@ if($data->count == 0) {
         for($i=1;$i<$data->totalpages;$i++){
             if($data->page == $i) {
                 ?>
-                <li><?= $i ?></li>
+                <li><?php echo esc_html($i); ?></li>
                 <?php
             } else {
                 ?>
-                <li><a href="?page=<?= $i ?>"><?= $i ?></a></li>
+                <li><a href="?page=<?php echo esc_attr($i); ?>"><?php echo esc_html($i) ?></a></li>
                 <?php
             }
         }

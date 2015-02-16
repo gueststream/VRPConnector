@@ -8,7 +8,7 @@
                            name="c[arrival]"
                            class="input"
                            id="arrival2"
-                           value="<?= $_SESSION['arrival']; ?>"
+                           value="<?php echo esc_attr($_SESSION['arrival']); ?>"
                         />
                 </td>
                 <td>Departure:</td>
@@ -17,12 +17,12 @@
                            name="c[depart]"
                            class="input"
                            id="depart2"
-                           value="<?= $_SESSION['depart']; ?>"
+                           value="<?php echo esc_attr($_SESSION['depart']); ?>"
                         />
                 </td>
                 <td>
                     <?php foreach ($_GET['c']['compare'] as $v) { ?>
-                        <input type="hidden" name="c[compare][]" value="<?= $v; ?>">
+                        <input type="hidden" name="c[compare][]" value="<?php echo esc_attr($v); ?>">
                     <?php } ?>
 
                     <input type="submit" class="ButtonView" value="Check Availability"></td>
@@ -46,30 +46,30 @@
     <?php foreach ($data->results as $prop){ ?>
         <tr>
             <td>
-                <a href="/vrp/unit/<?= $prop->page_slug; ?>">
-                    <img src="<?= $prop->Thumb; ?>" style="max-width:150px;">
+                <a href="/vrp/unit/<?php echo esc_attr($prop->page_slug); ?>">
+                    <img src="<?php echo esc_url($prop->Thumb); ?>" style="max-width:150px;">
                     <br>
-                    <?= $prop->Name; ?>
+                    <?php echo esc_html($prop->Name); ?>
                 </a>
             </td>
 
             <td>
-                <span><?= $prop->Bedrooms; ?> Beds / <?= $prop->Bathrooms; ?> Baths</span>
+                <span><?php echo esc_html($prop->Bedrooms); ?> Beds / <?php echo esc_html($prop->Bathrooms); ?> Baths</span>
             </td>
 
             <td>
-                <span> <?= $prop->Sleeps; ?></span>
+                <span> <?php echo esc_html($prop->Sleeps); ?></span>
             </td>
 
             <td>
-                <span> <?= $prop->Location; ?></span>
+                <span> <?php echo esc_html($prop->Location); ?></span>
             </td>
 
             <td>
-                <ul class="listsplitter" id="listfor_<?= $prop->id; ?>">
+                <ul class="listsplitter" id="listfor_<?php echo esc_attr($prop->id); ?>">
                     <?php
                     foreach ($prop->attributes as $v):
-                        echo "<li>$v->name</li>";
+                        echo '<li>' . esc_html($v->name) . '</li>';
                     endforeach;
                     ?>
                 </ul>
@@ -80,7 +80,7 @@
                     <?php if ($prop->unavail != '') {
                         echo "Not Available";
                     } else {
-                        ?>$<?= number_format($prop->Rate); ?>
+                        ?>$<?php echo esc_html(number_format($prop->Rate)); ?>
                     <?php } ?>
                 </span>
             </td>

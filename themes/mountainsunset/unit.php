@@ -2,14 +2,14 @@
 
     <div class="row">
         <div class="col-md-2">
-            <img src="<?= $data->photos[0]->thumb_url ?>" style="width:100%">
+            <img src="<?php echo esc_url($data->photos[0]->thumb_url); ?>" style="width:100%">
         </div>
         <div class="col-md-8">
             <div class="row">
-                <?= $data->Name; ?>
+                <?php echo esc_html($data->Name); ?>
             </div>
             <div class="row">
-                <?= $data->Bedrooms; ?> Bedroom(s) | <?= $data->Bathrooms; ?> Bathroom(s) | Sleeps <?= $data->Sleeps; ?>
+                <?php echo esc_html($data->Bedrooms); ?> Bedroom(s) | <?php echo esc_html($data->Bathrooms); ?> Bathroom(s) | Sleeps <?php echo esc_html($data->Sleeps); ?>
             </div>
         </div>
         <div class="col-md-2">
@@ -45,7 +45,7 @@
                         foreach ($data->photos as $k => $v) {
                             if($count > 0) { $style = "display:none;"; }
                             ?>
-                            <img id="full<?=$v->id?>" alt="<?= strip_tags($v->caption); ?>" src="<?= $v->url; ?>" style="width:100%; <?=$style?>"/>
+                            <img id="full<?php echo esc_attr($v->id); ?>" alt="<?php echo esc_attr($v->caption); ?>" src="<?php echo esc_url($v->url); ?>" style="width:100%; <?php echo esc_attr($style); ?>"/>
                             <?php
                             $count++;
                         }
@@ -56,7 +56,7 @@
                         <?php
                         foreach ($data->photos as $k => $v) {
                             ?>
-                            <img class="thumb" id="<?=$v->id?>" alt="<?= strip_tags($v->caption); ?>" src="<?= $v->thumb_url; ?>" style="width:90px; float:left; margin: 3px;"/>
+                            <img class="thumb" id="<?php echo esc_attr($v->id); ?>" alt="<?php echo esc_attr($v->caption); ?>" src="<?php echo esc_url($v->thumb_url); ?>" style="width:90px; float:left; margin: 3px;"/>
                         <?php
                         }
                         ?>
@@ -66,7 +66,7 @@
 
                 <div class="col-md-6">
                     <div id="description">
-                        <p><?php echo nl2br($data->Description); ?></p>
+                        <p><?php echo wp_kses_post(nl2br($data->Description)); ?></p>
                     </div>
 
                     <div id="amenities">
@@ -76,8 +76,8 @@
                             </tr>
                             <?php foreach ($data->attributes as $amen) { ?>
                                 <tr>
-                                    <td class="first"><b><?= $amen->name; ?></b>:</td>
-                                    <td> <?= $amen->value; ?></td>
+                                    <td class="first"><b><?php echo esc_html($amen->name); ?></b>:</td>
+                                    <td> <?php echo esc_html($amen->value); ?></td>
                                 </tr>
                             <?php } ?>
                         </table>
@@ -98,11 +98,11 @@
                         <?php foreach ($data->reviews as $review): ?>
 
                             <tr>
-                                <td class="first" valign="top" align="center"><b><?= $review->name; ?></b></td>
-                                <td><h2 style="background:none;border:none;"><?= $review->title; ?></h2>
-                                    <small><?= $review->rating; ?> out of 5</small>
+                                <td class="first" valign="top" align="center"><b><?php echo esc_html($review->name); ?></b></td>
+                                <td><h2 style="background:none;border:none;"><?php echo esc_html($review->title); ?></h2>
+                                    <small><?php echo esc_html($review->rating); ?> out of 5</small>
                                     <br><br>
-                                    <?= $review->review; ?>
+                                    <?php echo esc_html($review->review); ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?></table>
@@ -119,7 +119,7 @@
                             <div id="datespicked">
                                 Select your arrival and departure dates below to reserve this unit.<br><br>
 
-                                <form action="<?=site_url('','https')?>/vrp/book/step1/"
+                                <form action="<?php echo esc_url(site_url('/vrp/book/step1/','https')); ?>"
                                       method="get"
                                       id="bookingform">
 
@@ -130,7 +130,7 @@
                                                 <input type="text" id="arrival2"
                                                        name="obj[Arrival]"
                                                        class="input unitsearch"
-                                                       value="<?= $_SESSION['arrival']; ?>">
+                                                       value="<?php echo esc_attr($_SESSION['arrival']); ?>">
                                             </td>
                                         </tr>
                                         <tr>
@@ -139,7 +139,7 @@
                                                 <input type="text" id="depart2"
                                                        name="obj[Departure]"
                                                        class="input unitsearch"
-                                                       value="<?= $_SESSION['depart']; ?>">
+                                                       value="<?php echo esc_attr($_SESSION['depart']); ?>">
                                             </td>
                                         </tr>
                                         <tr id="errormsg">
@@ -156,7 +156,7 @@
                                             <td>
                                                 <input type="hidden"
                                                        name="obj[PropID]"
-                                                       value="<?= $data->id; ?>">
+                                                       value="<?php echo esc_attr($data->id); ?>">
                                                 <input type="button"
                                                        value="Check Availability"
                                                        class="bookingbutton rounded"
@@ -179,7 +179,7 @@
 
                     <div class="col-md-6">
                         <div id="availability" style="">
-                            <?php echo vrpCalendar($data->avail); ?>
+                            <?php echo wp_kses_post(vrpCalendar($data->avail)); ?>
                         </div>
                     </div>
                 </div>
@@ -212,9 +212,9 @@
                             <?php foreach ($r as $k => $v) { ?>
                                 <tr>
                                     <td>
-                                        <?= $k; ?>
+                                        <?php echo esc_html($k); ?>
                                     </td>
-                                    <td><?= $v->daily; ?>/nt</td>
+                                    <td><?php echo esc_html($v->daily); ?>/nt</td>
 
                                 </tr>
                             <?php } ?>
@@ -238,7 +238,7 @@
 <script type="text/javascript">
     var geocoder;
     var map;
-    var query = "<?= $data->Address . " " . $data->Address2 . " " . $data->City . " " . $data->State . " " . $data->PostalCode; ?>";
+    var query = "<?php echo esc_js($data->Address) . " " . esc_js($data->Address2) . " " . esc_js($data->City) . " " . esc_js($data->State) . " " . esc_js($data->PostalCode); ?>";
     var image = '<?php bloginfo('template_directory'); ?>/images/mapicon.png';
 
     function initialize() {
@@ -246,7 +246,7 @@
         var myOptions = {
             zoom: 13,
             <?php if(strlen($data->lat) > 0 && strlen($data->long) > 0){ ?>
-            center: new google.maps.LatLng(<?= $data->lat; ?>, <?= $data->long; ?>),
+            center: new google.maps.LatLng(<?php echo esc_js($data->lat); ?>, <?php echo esc_js($data->long); ?>),
             <?php } ?>
             mapTypeId: google.maps.MapTypeId.ROADMAP
         }
@@ -265,7 +265,7 @@
                 var marker = new google.maps.Marker({
                     map: map,
                     position: results[0].geometry.location,
-                    title: "<?= $data->title; ?>",
+                    title: "<?php echo esc_js($data->title); ?>",
                     //icon: image
                 });
             } else {

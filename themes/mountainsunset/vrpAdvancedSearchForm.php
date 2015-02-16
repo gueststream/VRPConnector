@@ -91,20 +91,20 @@ $searchoptions=$vrp->searchoptions();
                         <?php
                         foreach (range(1,40) as $v){ ?>
 
-                            <option value="<?=$v;?>"><?=$v;?></option>
+                            <option value="<?php echo esc_attr($v);?>"><?php echo esc_attr($v);?></option>
                         <?php } ?></select></td></tr>
             <tr><td>Children: </td><td><select name="search[Children]"><option selected="selected" value="">Any</option>
                         <?php
                         foreach (range(1,40) as $v){ ?>
 
-                            <option value="<?=$v;?>"><?=$v;?></option>
+                            <option value="<?php echo esc_attr($v);?>"><?php echo esc_attr($v);?></option>
                         <?php } ?></select></td></tr>
             <tr><td>Bedrooms:</td><td> <select name="search[bedrooms]" style="width:90px;">
                         <option selected="selected" value="">Any</option>
                         <?php
                         foreach (range($searchoptions->minbeds,$searchoptions->maxbeds) as $v){ ?>
 
-                            <option value="<?=$v;?>"><?=$v;?>+</option>
+                            <option value="<?php echo esc_attr($v);?>"><?php echo esc_attr($v);?>+</option>
                         <?php } ?>
 
                     </select></td></tr>
@@ -113,7 +113,7 @@ $searchoptions=$vrp->searchoptions();
                         <?php
                         foreach (range($searchoptions->minbaths,$searchoptions->maxbaths) as $v){ ?>
 
-                            <option value="<?=$v;?>"><?=$v;?>+</option>
+                            <option value="<?php echo esc_attr($v);?>"><?php echo esc_attr($v);?>+</option>
                         <?php } ?>
 
                     </select><input type="hidden" name="search[showmax]" value="1"></td></tr>
@@ -127,7 +127,7 @@ $searchoptions=$vrp->searchoptions();
         <div style="padding:10px;">
             <ul class="advancedlist">
                 <?php foreach ($searchoptions->locations as $v){ ?>
-                    <li><input type="checkbox" name="search[location][]" value="<?=$v;?>" /><label><?=$v;?></label></li>
+                    <li><input type="checkbox" name="search[location][]" value="<?php echo esc_attr($v);?>" /><label><?php echo esc_html($v);?></label></li>
                 <?php } ?>
 
             </ul></div>
@@ -137,7 +137,7 @@ $searchoptions=$vrp->searchoptions();
         </div><div style="padding:10px;">
             <ul class="advancedlist">
                 <?php foreach ($searchoptions->attrs as $v){ ?>
-                    <li><input type="checkbox" name="search[attrs][]" value="<?=$v;?>" /><label><?=$v;?></label></li>
+                    <li><input type="checkbox" name="search[attrs][]" value="<?php echo esc_attr($v);?>" /><label><?php echo esc_html($v);?></label></li>
                 <?php } ?>
 
             </ul></div></div><br style="clear:both;">
