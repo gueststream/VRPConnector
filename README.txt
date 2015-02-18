@@ -54,4 +54,7 @@ To use them simply add them to the page/post content.
 
 * [vrpSearchForm] - Will display an advanced search for users to search your properties.
 * [vrpUnits] - Displays a list of all enabled units
-* [vrpSearch] - Accepts many additional values and displays units according to the values set.
+* [vrpSearch] - Requires additional attributes to display units according to the values set. This short code effectively produces the results of performing an availability search.
+
+More detailed instructions for using shortcodes, theming the VRP pages and using the plugin can be found
+ at the VRPConnector's Wiki page here: https://github.com/Gueststream-Inc/VRPConnector/wiki
