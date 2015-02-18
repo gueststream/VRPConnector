@@ -13,7 +13,7 @@ https://github.com/Gueststream-Inc/VRPConnector/wiki/Installation
 
 ## Example Sites ##
 * http://www.grandcaymanvillas.net
-* http://www.breckenridgeloging.com
+* http://www.breckenridgelodging.com
 * http://www.mauihawaiivacations.com
 * http://www.tellurideluxury.com
 * http://www.suite-paradise.com
