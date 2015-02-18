@@ -159,7 +159,8 @@ class VRPConnector
      */
     public function do_rewrite11()
     {
-        add_rewrite_rule('vrp/([^/]+)/?([^/]+)/?$', '?action=$1&slug=$2', 'top');
+        //add_rewrite_rule('vrp/([^/]+)/?([^/]+)/?$', '?action=$1&slug=$2', 'top');
+        add_rewrite_rule('^vrp/([^/]*)/([^/]*)/?','index.php?action=$matches[1]&slug=$matches[2]','top');
     }
 
     /**
@@ -186,6 +187,7 @@ class VRPConnector
         if (!isset($_GET['action'])) {
             return false;
         }
+
         if ($_GET['action'] == 'xml') {
             $this->xmlexport();
         }

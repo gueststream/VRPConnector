@@ -26,7 +26,7 @@ class mountainsunset
     }
 
     function add_my_stylesheet() {
-        wp_enqueue_style('BootstrapCSS', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css');
+        wp_enqueue_style('BootstrapCSS', plugins_url('/mountainsunset/css/bootstrap.min.css', dirname(__FILE__)));
         wp_enqueue_style('VRPjQueryUISmoothness', plugins_url('/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.css', dirname(__FILE__)));
 
         if(!file_exists(get_stylesheet_directory() . '/vrp/css/css.css')) {
