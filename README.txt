@@ -42,10 +42,16 @@ HomeAway, ISILink, Escapia, Barefoot, RNS.
 Yes, Gueststream.net provides the back-end service of interfacing with many property management software APIs that allows
 you to seamlessly connect your website to your property management software data.
 
+== Screenshots ==
+
+1. Out of the box unit page.
+
 == Changelog ==
 
 = 1.0 =
 * Initial Release
+
+== Upgrade Notice ==
 
 == Shortcodes ==
 
