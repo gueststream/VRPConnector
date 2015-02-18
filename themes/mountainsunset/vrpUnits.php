@@ -5,8 +5,6 @@
  * Time: 1:07 PM
  */
 
-//echo "<pre>"; print_r($data); echo "</pre>";
-
 if($data->count == 0) {
     // No Units to display
 } else {

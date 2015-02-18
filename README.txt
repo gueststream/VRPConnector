@@ -27,7 +27,8 @@ search, sort, compare and book your rental properties right from your website.
 1. Download the ZIP file from https://github.com/Gueststream-Inc/VRPConnector
 1. Extract the contents of the zip file and upload the resulting folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Navigate to Wordpress Admin > VRP > API Key and enter your Gueststream.net API key
+1. Update your permalink settings to custom structure '/%post_id%/%postname%/'
+1. Navigate to Wordpress Admin > Settings > VRP and enter your Gueststream.net API key
 1. Begin adding the available shortcodes to your posts and pages as desired.
 
 == Frequently Asked Questions ==
@@ -48,10 +49,9 @@ you to seamlessly connect your website to your property management software data
 
 == Shortcodes ==
 
-The following shortcodes are available for use throughout your website.  To use them simply add them to the page/post content.
+The following shortcodes are available for use throughout your website.
+To use them simply add them to the page/post content.
 
-* [vrpAdvancedSearch] - Will display an advanced search for users to search your properties.
-* [vrpComplexes] - Will display a list of all your complexes
-* [vrpSpecials] - Displays all available specials
+* [vrpSearchForm] - Will display an advanced search for users to search your properties.
 * [vrpUnits] - Displays a list of all enabled units
 * [vrpSearch] - Accepts many additional values and displays units according to the values set.

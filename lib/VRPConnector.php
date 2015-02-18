@@ -73,6 +73,11 @@ class VRPConnector
      */
     public function actions()
     {
+        if(is_admin()){
+            add_action('admin_menu', array($this, 'setupPage'));
+            add_action('admin_init', array($this, 'registerSettings'));
+        }
+
         // Actions
         add_action("init", array($this, "ajax"));
         add_action("init", array($this, "sitemap"));
@@ -80,9 +85,7 @@ class VRPConnector
         add_action("init", array($this, "otheractions"));
         add_action('init', array($this, "do_rewrite11"));
         add_action('init', array($this, "villafilter"));
-
         add_action('cacheClear', array($this, "clearCache"), 1, 3);
-        add_action('admin_menu', array($this, 'setupPage'));
         add_action('parse_request', array($this, 'router'));
 
         // Filters
@@ -159,8 +162,8 @@ class VRPConnector
      */
     public function do_rewrite11()
     {
-        //add_rewrite_rule('vrp/([^/]+)/?([^/]+)/?$', '?action=$1&slug=$2', 'top');
-        add_rewrite_rule('^vrp/([^/]*)/([^/]*)/?','index.php?action=$matches[1]&slug=$matches[2]','top');
+        add_rewrite_rule('vrp/([^/]+)/?([^/]+)/?$', '?action=$1&slug=$2', 'top');
+        //add_rewrite_rule('^vrp/([^/]*)/([^/]*)/?','index.php?action=$matches[1]&slug=$matches[2]','top');
     }
 
     /**
@@ -939,8 +942,7 @@ class VRPConnector
      */
     public function vrpUnits($items = array())
     {
-        $items['page'] = 1;
-
+        $items['showall'] = 1;
         if (isset($_GET['page'])) {
             $items['page'] = (int) $_GET['page'];
         }
@@ -1197,32 +1199,55 @@ class VRPConnector
      */
     public function setupPage()
     {
-        add_menu_page(
+        add_options_page(
+            "Settings Admin",
             'VRP',
-            'VRP',
-            'edit_pages',
-            "vrpmain",
-            array($this, 'loadVRP'),
-            plugin_dir_url(__FILE__) . "../themes/mountainsunset/images/shack.png"
-        );
-
-        add_submenu_page(
-            "vrpmain",
-            'Manage Units',
-            'Manage Units',
-            'edit_pages',
-            "vrpmain",
-            array($this, 'loadVRP')
-        );
-
-        add_submenu_page(
-            "vrpmain",
-            'Settings',
-            'Settings',
             'activate_plugins',
             "VRPConnector",
             array($this, 'settingsPage')
         );
+    }
+
+    public function registerSettings()
+    {
+        register_setting('VRPConnector','vrpAPI');
+        register_setting('VRPConnector','vrpTheme');
+        add_settings_section('vrpApiKey','VRP API Key',array($this,'apiKeySettingTitleCallback'),'VRPConnector');
+        add_settings_field('vrpApiKey', 'VRP Api Key', array( $this, 'apiKeyCallback' ), 'VRPConnector', 'vrpApiKey');
+        add_settings_section('vrpTheme','VRP Theme Selection',array($this,'vrpThemeSettingTitleCallback'),'VRPConnector');
+        add_settings_field('vrpTheme', 'VRP Theme', array( $this, 'vrpThemeSettingCallback' ), 'VRPConnector', 'vrpTheme');
+    }
+
+    public function apiKeySettingTitleCallback()
+    {
+        echo "<p>Your API Key can be found in the settings section after
+        logging in to <a href='http://www.gueststream.net'>Gueststream.net</a>.</p>
+        <p>Demo API Key: <strong>1533020d1121b9fea8c965cd2c978296</strong>
+        The Demo API Key does not contain bookable units therfor availability searches
+        will not work.
+        </p>
+        ";
+    }
+
+    public function apiKeyCallback()
+    {
+        echo '<input type="text" name="vrpAPI" value="'.get_option('vrpAPI').'" style="width:400px;"/>';
+    }
+
+    public function vrpThemeSettingTitleCallback()
+    {
+
+    }
+
+    public function vrpThemeSettingCallback()
+    {
+        echo '<select name="vrpTheme">';
+        foreach ($this->available_themes as $name => $displayname) {
+            $sel = "";
+            if ($name == $this->themename) {$sel = "SELECTED";}
+            echo '<option value="'.$name.'" '.$sel.'>'.$displayname.'</option>';
+        }
+        echo '</select>';
     }
 
     /**

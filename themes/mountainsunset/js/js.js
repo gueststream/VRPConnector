@@ -58,9 +58,9 @@ jQuery(document).ready(function(){
 
     var dates = jQuery( "#arrival, #depart" ).datepicker({
         minDate: 2,
-        showOn: "both",
-        buttonImage: "/wp-content/plugins/VRPAPI/themes/mountainsunset/images/cal.jpg",
-        buttonImageOnly: true,
+        //showOn: "both",
+        //buttonImage: "/wp-content/plugins/VRPAPI/themes/mountainsunset/images/cal.jpg",
+        //buttonImageOnly: true,
 
         onSelect: function( selectedDate ) {
             var option = this.id == "arrival" ? "minDate" : "30",
