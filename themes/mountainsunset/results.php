@@ -9,7 +9,7 @@
         <div class="row">
             <!-- Total number of results found -->
             <div class="col-md-2">
-                <?php echo $data->count; ?> Results Found
+                <?php echo esc_html($data->count); ?> Results Found
             </div>
 
             <!-- Show # Results / Page selector -->
@@ -34,26 +34,25 @@
             <div class="row">
                 <div class="row">
                     <div class="col-md-10">
-                        <a href="<?php bloginfo('url'); ?>/vrp/unit/<?php echo $a_unit->page_slug; ?>/">
-                            <h2><?php echo $a_unit->Name; ?></h2>
+                        <a href="<?php bloginfo('url'); ?>/vrp/unit/<?php echo esc_attr($a_unit->page_slug); ?>/">
+                            <h2><?php echo esc_html($a_unit->Name); ?></h2>
                         </a>
                     </div>
                     <div class="col-md-2">
-                        <?php echo $a_unit->Bedrooms; ?> Beds /
-                        <?php echo $a_unit->Bathrooms; ?> Baths
+                        <?php echo esc_html($a_unit->Bedrooms); ?> Beds /
+                        <?php echo esc_html($a_unit->Bathrooms); ?> Baths
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <a href="<?php bloginfo('url'); ?>/vrp/unit/<?php echo $a_unit->page_slug; ?>/">
-                            <img src="<?php echo $a_unit->Thumb; ?>" class="vrpresultimg">
+                        <a href="<?php bloginfo('url'); ?>/vrp/unit/<?php echo esc_attr($a_unit->page_slug);?>/">
+                            <img src="<?php echo esc_url($a_unit->Thumb); ?>" class="vrpresultimg">
                         </a>
                     </div>
                     <div class="col-md-6">
-                        <?php echo $a_unit->ShortDescription; ?>
+                        <?php echo wp_kses_post($a_unit->ShortDescription); ?>
                     </div>
                 </div>
-
             </div>
         <?php } ?>
     <?php } ?>

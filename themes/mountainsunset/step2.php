@@ -4,13 +4,9 @@
     <div class="padit">
         If you are a new guest, you can continue your reservation...
         <br><br><br>
-        <a href="/vrp/book/step3/?obj[Arrival]=<?php echo $data->Arrival; ?>&obj[Departure]=<?php echo $data->Departure; ?>&obj[PropID]=<?php echo $_GET['obj']['PropID']; ?>" class="bookingbutton rounded">
-            Continue with Reservation
-        </a>
-        </br>
-    </div>
-</div>
-<div class="vrpgrid_6 userbox omega" id="returnbox">
+        <a href="/vrp/book/step3/?obj[Arrival]=<?php echo esc_attr($data->Arrival); ?>&obj[Departure]=<?php echo esc_attr($data->Departure); ?>&obj[PropID]=<?php echo esc_attr($_GET['obj']['PropID']); ?>" class="bookingbutton rounded">Continue with Reservation</a>
+        </br>        </div>
+</div><div class="vrpgrid_6 userbox omega" id="returnbox">
     <h3>Returning Guests</h3>
     <div class="padit">
         If you are a returning guest, please enter your login information below:

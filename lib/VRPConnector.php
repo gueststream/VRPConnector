@@ -118,7 +118,7 @@ class VRPConnector
      */
     public function setTheme()
     {
-        $plugin_theme_Folder = __DIR__ . "/../themes/";
+        $plugin_theme_Folder = VRP_PATH . 'themes/';
         $theme               = get_option('vrpTheme');
 
         if (!$theme) {
@@ -1190,8 +1190,8 @@ class VRPConnector
      */
     public function notice()
     {
-        $siteurl = get_option('siteurl') . "/wp-admin/admin.php?page=VRPConnector";
-        echo "<div class=\"updated fade\"><b>Vacation Rental Platform</b>: <a href=\"$siteurl\">Please enter your API key.</a></div>";
+        $siteurl = admin_url('admin.php?page=VRPConnector');
+        echo '<div class="updated fade"><b>Vacation Rental Platform</b>: <a href="' . esc_url($siteurl) . '">Please enter your API key.</a></div>';
     }
 
     /**
@@ -1255,7 +1255,7 @@ class VRPConnector
      */
     public function loadVRP()
     {
-        include __DIR__ . "/../views/login.php";
+        include VRP_PATH . 'views/login.php';
     }
 
     /**
@@ -1263,7 +1263,7 @@ class VRPConnector
      */
     public function settingsPage()
     {
-        include __DIR__ . "/../views/settings.php";
+        include VRP_PATH . 'views/settings.php';
     }
 
     /**
@@ -1303,21 +1303,7 @@ class VRPConnector
      */
     public function cache($action, $slug, $object)
     {
-        $folder = ABSPATH . "wp-content/vrpcache/";
-        if (!file_exists($folder)) {
-            mkdir($folder);
-        }
-        $myFile = $action . $slug . ".txt";
-        $fh = fopen($folder . $myFile, 'w') or die("can't open file");
-        fwrite($fh, $object);
-        fclose($fh);
-        date_default_timezone_set('UTC');
-        $obj = json_decode($object);
-        if (!isset($obj->Error)) {
-            wp_schedule_single_event(
-                time() + 800, 'cacheClear', array('file' => $folder . $myFile, 'action' => $action, 'slug' => $slug)
-            );
-        }
+        return; // Removing file cache.
     }
 
     /**
@@ -1330,22 +1316,7 @@ class VRPConnector
      */
     public function getCache($action, $slug)
     {
-        $folder = ABSPATH . "wp-content/vrpcache/";
-        $myFile = $action . $slug . ".txt";
-
-        if (file_exists($folder . $myFile)) {
-            $_GET['file'] = $folder . $myFile;
-            $object       = file_get_contents($folder . $myFile);
-
-            if ($object) {
-                $this->data = json_decode($object);
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+        return false; // Removing file cache.
     }
 
     /**
@@ -1355,9 +1326,7 @@ class VRPConnector
      */
     public function clearCache($file, $action, $slug)
     {
-        @unlink($file);
-        $data = $this->call("getunit/" . $slug);
-        $this->cache($action, $slug, $data);
+       return; // Removing file cache
     }
 
 }
