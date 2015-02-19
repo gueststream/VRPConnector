@@ -2,7 +2,7 @@
     $userinfo = $_SESSION['userinfo'];
 ?>
 <form
-    action="/vrp/book/confirm/?obj[Arrival]=<?php echo $data->Arrival; ?>&obj[Departure]=<?php echo $data->Departure; ?>&obj[PropID]=<?php echo $_GET[ 'obj' ][ 'PropID' ]; ?>"
+    action="/vrp/book/confirm/?obj[Arrival]=<?php echo esc_attr($data->Arrival); ?>&obj[Departure]=<?php echo esc_attr($data->Departure); ?>&obj[PropID]=<?php echo esc_attr($_GET[ 'obj' ][ 'PropID' ]); ?>"
     id="vrpbookform" method="post">
 <div class="userbox" id="guestinfodiv">
 
@@ -13,30 +13,30 @@
             <table class="booktable">
                 <tr id="fnametr">
                     <td><b>First Name*:</b></td>
-                    <td><input type="text" name="booking[fname]" id="fname" value="<?php echo $userinfo->fname; ?>"></td>
+                    <td><input type="text" name="booking[fname]" id="fname" value="<?php echo esc_attr($userinfo->fname); ?>"></td>
                 </tr>
 
                 <tr id="lnametr">
                     <td><b>Last Name*:</b></td>
-                    <td><input type="text" name="booking[lname]" id="lname" value="<?php echo $userinfo->lname; ?>"></td>
+                    <td><input type="text" name="booking[lname]" id="lname" value="<?php echo esc_attr($userinfo->lname); ?>"></td>
                 </tr>
 
                 <tr id="addresstr">
                     <td><b>Address*:</b></td>
-                    <td><input type="text" name="booking[address]" value="<?php echo $userinfo->address; ?>"></td>
+                    <td><input type="text" name="booking[address]" value="<?php echo esc_attr($userinfo->address); ?>"></td>
                 </tr>
                 <tr id="address2tr">
                     <td><b>Address 2:</b></td>
-                    <td><input type="text" name="booking[address2]" value="<?php echo $userinfo->address2; ?>"></td>
+                    <td><input type="text" name="booking[address2]" value="<?php echo esc_attr($userinfo->address2); ?>"></td>
                 </tr>
                 <tr id="citytr">
                     <td><b>City*:</b></td>
-                    <td><input type="text" name="booking[city]" value="<?php echo $userinfo->city; ?>"></td>
+                    <td><input type="text" name="booking[city]" value="<?php echo esc_attr($userinfo->city); ?>"></td>
                 </tr>
 
                 <tr id="regiontr" style="display:none">
                     <td><b>Region*:</b></td>
-                    <td><input type="text" name="booking[region]" id="region" value="<?php echo $userinfo->region; ?>"></td>
+                    <td><input type="text" name="booking[region]" id="region" value="<?php echo esc_attr($userinfo->region); ?>"></td>
                 </tr>
 
 
@@ -50,7 +50,7 @@
                                     $sel = "selected=\"selected\"";
                                 }
                                 ?>
-                                <option value="<?php echo $k; ?>" <?php echo $sel; ?>><?php echo $v; ?></option>
+                                <option value="<?php echo esc_attr($k); ?>" <?php echo esc_attr($sel); ?>><?php echo esc_attr($v); ?></option>
                             <?php
                             endforeach;
                             ?></select></td>
@@ -65,7 +65,7 @@
                                     $sel = "selected=\"selected\"";
                                 }
                                 ?>
-                                <option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+                                <option value="<?php echo esc_attr($k); ?>"><?php echo esc_attr($v); ?></option>
                             <?php
                             endforeach;
                             ?></select>
@@ -87,7 +87,7 @@
                                 $sel = "selected=\"selected\"";
                             }
                             ?>
-                            <option value="<?php echo $k; ?>" <?php echo $sel; ?>><?php echo $v; ?></option>
+                            <option value="<?php echo esc_attr($k); ?>" <?php echo esc_attr($sel); ?>><?php echo esc_attr($v); ?></option>
                         <?php
                         endforeach;
                         ?>
@@ -105,7 +105,7 @@
                                 $sel = "selected=\"selected\"";
                             }
                             ?>
-                            <option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+                            <option value="<?php echo esc_attr($k); ?>"><?php echo esc_attr($v); ?></option>
                         <?php
                         endforeach;
                         ?>
@@ -114,31 +114,31 @@
             </tr>
             <tr id="ziptr">
                 <td><b>Postal Code*:</b></td>
-                <td><input type="text" name="booking[zip]" value="<?php echo $userinfo->zip; ?>"></td>
+                <td><input type="text" name="booking[zip]" value="<?php echo esc_attr($userinfo->zip); ?>"></td>
             </tr>
             <tr id="phonetr">
                 <td><b>Phone*:</b></td>
-                <td><input type="text" name="booking[phone]" value="<?php echo $userinfo->phone; ?>"></td>
+                <td><input type="text" name="booking[phone]" value="<?php echo esc_attr($userinfo->phone); ?>"></td>
             </tr>
             <tr id="wphonetr">
                 <td><b>Work Phone:</b></td>
-                <td><input type="text" name="booking[wphone]" value="<?php echo $userinfo->wphone; ?>"></td>
+                <td><input type="text" name="booking[wphone]" value="<?php echo esc_attr($userinfo->wphone); ?>"></td>
             </tr>
             <?php
             if ($userinfo->id != 0) {
                 ?>
                 <tr id="emailtr">
                     <td><b>Email*:</b></td>
-                    <td><span id="emailaddress"><?php echo $userinfo->email; ?></span><input style="display:none;" type="text"
+                    <td><span id="emailaddress"><?php echo esc_html($userinfo->email); ?></span><input style="display:none;" type="text"
                                                                                       name="booking[email]"
-                                                                                      value="<?php echo $userinfo->email; ?>"
+                                                                                      value="<?php echo esc_attr($userinfo->email); ?>"
                                                                                       id="emailbox"> <span
                             id="changelink">| <a href="#" id="showchange">Change</a></span></td>
                 </tr>
             <?php } else { ?>
                 <tr id="emailtr">
                     <td><b>Email*:</b></td>
-                    <td><input type="text" name="booking[email]" value="<?php echo $userinfo->email; ?>"></td>
+                    <td><input type="text" name="booking[email]" value="<?php echo esc_attr($userinfo->email); ?>"></td>
                 </tr>
             <?php } ?>
 
@@ -152,7 +152,7 @@
                         $adults = $_SESSION[ 'adults' ];
                     }
                     ?>
-                    <input type="hidden" name="booking[adults]" value="<?php echo $adults; ?>"/><?php echo $adults; ?>
+                    <input type="hidden" name="booking[adults]" value="<?php echo esc_attr($adults); ?>"/><?php echo esc_html($adults); ?>
                     <?php
                     if (isset($_GET[ 'obj' ][ 'Children' ])) {
                         $children_count = (int)$_GET[ 'obj' ][ 'Children' ];
@@ -160,7 +160,7 @@
                         $children_count = $_SESSION[ 'children' ];
                     }
                     ?>
-                    <input type="hidden" name="booking['children']" value="<?php echo $children_count; ?>"/>
+                    <input type="hidden" name="booking['children']" value="<?php echo esc_attr($children_count); ?>"/>
                 </td>
             </tr>
 
@@ -168,9 +168,7 @@
         </table>
     </div>
     <br style="clear:both;"></div>
-<div class="vrpgrid_12 alpha omega userbox" style="margin-top:20px; <?php
-echo "display: none";
-?>" id="passwordbox">
+<div class="vrpgrid_12 alpha omega userbox" style="margin-top:20px; <?php echo "display: none";?>" id="passwordbox">
     <h3>Password (optional)</h3>
 
     <div class="padit">
@@ -194,12 +192,12 @@ echo "display: none";
 
         <div class="padit" style="text-align:center;font-size:13px;">
 
-            Travel insurance is available for your trip. ($<?php echo number_format ($data->InsuranceAmount, 2); ?>) <br> Would
+            Travel insurance is available for your trip. ($<?php echo esc_html(number_format($data->InsuranceAmount, 2)); ?>) <br> Would
             you like to purchase the optional travel insurance? <br>
             <br> <input type="radio" name="booking[acceptinsurance]" value="1" checked> Yes <input type="radio"
                                                                                                    name="booking[acceptinsurance]"
                                                                                                    value="0"/> No
-            <input type="hidden" name="booking[InsuranceAmount]" value="<?php echo $data->InsuranceAmount; ?>">
+            <input type="hidden" name="booking[InsuranceAmount]" value="<?php echo esc_attr($data->InsuranceAmount); ?>">
         </div>
     </div>
 <?php } else { ?>
@@ -226,7 +224,7 @@ echo "display: none";
                             <?php
                             foreach ($data->booksettings->Cards as $k => $v):
                                 ?>
-                                <option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+                                <option value="<?php echo esc_attr($k); ?>"><?php echo esc_attr($v); ?></option>
                             <?php endforeach; ?>
 
                         </select></td>
@@ -237,13 +235,11 @@ echo "display: none";
                     <td><b>Expiration*:</b></td>
                     <td><select name="booking[expMonth]">
                             <?php foreach (range (1, 12) as $month): ?>
-
-                                <option value="<?php echo sprintf ("%02d", $month) ?>"><?php echo sprintf ("%02d", $month) ?></option>
+                                <option value="<?php echo esc_attr(sprintf ("%02d", $month)); ?>"><?php echo esc_attr(sprintf ("%02d", $month)); ?></option>
                             <?php endforeach; ?>
                         </select>/<select name="booking[expYear]">
                             <?php foreach (range (date ("Y"), date ("Y") + 10) as $year): ?>
-
-                                <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
+                                <option value="<?php echo esc_attr($year); ?>"><?php echo esc_attr($year); ?></option>
                             <?php endforeach; ?>
 
                         </select></td>
@@ -253,13 +249,11 @@ echo "display: none";
                     <td><b>Expiration*:</b></td>
                     <td><select name="booking[expMonth]">
                             <?php foreach (range (1, 12) as $month): ?>
-
-                                <option value="<?php echo sprintf ("%02d", $month) ?>"><?php echo sprintf ("%02d", $month) ?></option>
+                                <option value="<?php echo esc_attr(sprintf ("%02d", $month)); ?>"><?php echo esc_attr(sprintf ("%02d", $month)); ?></option>
                             <?php endforeach; ?>
                         </select>/<select name="booking[expYear]">
                             <?php foreach (range (date ("y"), date ("y") + 10) as $year): ?>
-
-                                <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
+                                <option value="<?php echo esc_attr($year); ?>"><?php echo esc_attr($year); ?></option>
                             <?php endforeach; ?>
 
                         </select></td>
@@ -298,33 +292,33 @@ echo "display: none";
                 $newrate = $data->prop->ISIRate;
             }
             ?>
-            <input type="hidden" name="booking[newrate]" value="<?php echo $newrate; ?>">
+            <input type="hidden" name="booking[newrate]" value="<?php echo esc_attr($newrate); ?>">
         <?php } ?>
 
 
-        <input type="hidden" name="booking[PropID]" value="<?php echo $data->PropID; ?>">
-        <input type="hidden" name="booking[arrival]" value="<?php echo $data->Arrival; ?>">
-        <input type="hidden" name="booking[depart]" value="<?php echo $data->Departure; ?>">
-        <input type="hidden" name="booking[nights]" value="<?php echo $data->Nights; ?>">
-        <input type="hidden" name="booking[DueToday]" value="<?php echo $data->DueToday; ?>">
-        <input type="hidden" name="booking[TotalCost]" value="<?php echo $data->TotalCost; ?>">
-        <input type="hidden" name="booking[TotalBefore]" value="<?php echo $data->TotalCost - $data->TotalTax; ?>">
-        <input type="hidden" name="booking[TotalTax]" value="<?php echo $data->TotalTax; ?>">
+        <input type="hidden" name="booking[PropID]" value="<?php echo esc_attr($data->PropID); ?>">
+        <input type="hidden" name="booking[arrival]" value="<?php echo esc_attr($data->Arrival); ?>">
+        <input type="hidden" name="booking[depart]" value="<?php echo esc_attr($data->Departure); ?>">
+        <input type="hidden" name="booking[nights]" value="<?php echo esc_attr($data->Nights); ?>">
+        <input type="hidden" name="booking[DueToday]" value="<?php echo esc_attr($data->DueToday); ?>">
+        <input type="hidden" name="booking[TotalCost]" value="<?php echo esc_attr($data->TotalCost); ?>">
+        <input type="hidden" name="booking[TotalBefore]" value="<?php echo esc_attr($data->TotalCost - $data->TotalTax); ?>">
+        <input type="hidden" name="booking[TotalTax]" value="<?php echo esc_attr($data->TotalTax); ?>">
         <?php
         if (isset($data->InsuranceAmount)) {
             $data->TotalCost = $data->TotalCost - $data->InsuranceAmount;
         }
         ?>
-        <input type="hidden" name="booking[TotalCost]" value="<?php echo $data->DueToday; ?>">
+        <input type="hidden" name="booking[TotalCost]" value="<?php echo esc_attr($data->DueToday); ?>">
         <?php if (isset($data->booksettings->HasPackages)
             && (isset($data->package->items) && count ($data->package->items) != 0)
         ) { ?>
-            <input type="hidden" name="booking[packages]" value="<?php echo base64_encode (serialize ($data->package)); ?>">
+            <input type="hidden" name="booking[packages]" value="<?php echo esc_attr(base64_encode (serialize ($data->package))); ?>">
         <?php } ?>
         <?php
         if (isset($data->promocode)) {
             ?>
-            <input type="hidden" name="booking[strPromotionCode]" value="<?php echo $data->promocode; ?>">
+            <input type="hidden" name="booking[strPromotionCode]" value="<?php echo esc_attr($data->promocode); ?>">
         <?php
         }
         ?>
@@ -343,7 +337,7 @@ echo "display: none";
         <h3>Rental Agreement</h3>
     </div>
     <div class="modal-body">
-        <?php echo nl2br ($data->booksettings->Contract); ?>
+        <?php echo wp_kses_post(nl2br ($data->booksettings->Contract)); ?>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
