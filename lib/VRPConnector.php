@@ -34,10 +34,6 @@ class VRPConnector
             add_action('admin_notices', array($this, 'notice'));
         }
 
-        if(getenv("APP_ENV") == "dev") {
-            $this->apiURL = "http://vrp.dev/api/v1/";
-        }
-
         $this->setTheme();
         $this->actions();
         $this->themeActions();
@@ -383,13 +379,12 @@ class VRPConnector
                 break;
 
             case "xml":
-
                 $content   = "";
                 $pagetitle = "";
                 break;
         }
 
-        return array(new DummyResult(0, $pagetitle, $content));
+        return [new DummyResult(0, $pagetitle, $content)];
     }
 
     public function villafilter()
