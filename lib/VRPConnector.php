@@ -34,7 +34,7 @@ class VRPConnector
             add_action('admin_notices', array($this, 'notice'));
         }
 
-        if(getenv("APP_ENV") == "dev") {
+        if(getenv("APP_ENV") == "dev2") {
             $this->apiURL = "http://vrp.dev/api/v1/";
         }
 
@@ -78,7 +78,7 @@ class VRPConnector
         add_action("init", array($this, "sitemap"));
         add_action('init', array($this, "featuredunit"));
         add_action("init", array($this, "otheractions"));
-        add_action('init', array($this, "do_rewrite11"));
+        add_action('init', array($this, "rewrite"));
         add_action('init', array($this, "villafilter"));
 
         add_action('cacheClear', array($this, "clearCache"), 1, 3);
@@ -87,7 +87,7 @@ class VRPConnector
 
         // Filters
         add_filter('robots_txt', array($this, 'robots_mod'), 10, 2);
-        add_filter('query_vars', array($this, 'wp_insertMyRewriteQueryVars'));
+        //add_filter('query_vars', array($this, 'query_vars'),10,1);
         remove_filter('template_redirect', 'redirect_canonical');
 
         if (isset($_GET['action'])) {
@@ -157,9 +157,12 @@ class VRPConnector
     /**
      * Uses built-in rewrite rules to get pretty URL. (/vrp/)
      */
-    public function do_rewrite11()
+    public function rewrite()
     {
-        add_rewrite_rule('vrp/([^/]+)/?([^/]+)/?$', '?action=$1&slug=$2', 'top');
+		add_rewrite_tag('%action%', '([^&]+)');
+		add_rewrite_tag('%slug%', '([^&]+)');
+        add_rewrite_rule('^vrp/([^/]*)/([^/]*)/?', 'index.php?action=$matches[1]&slug=$matches[2]', 'top');
+		
     }
 
     /**
@@ -169,32 +172,31 @@ class VRPConnector
      *
      * @return $vars[]
      */
-    public function wp_insertMyRewriteQueryVars($vars)
+    public function query_vars($vars)
     {
         array_push($vars, 'action', 'slug', 'other');
         return $vars;
     }
 
     /**
-     * Checks to see if dws_slug is active, if so, sets up a page.
+     * Checks to see if VRP slug is active, if so, sets up a page.
      *
      * @return bool
      */
-    public function router()
+    public function router($query)
     {
 
-        if (!isset($_GET['action'])) {
+        if (!isset($query->query_vars['action'])) {
             return false;
         }
-        if ($_GET['action'] == 'xml') {
+        if ($query->query_vars['action'] == 'xml') {
             $this->xmlexport();
         }
 
-        if ($_GET['action'] == 'flipkey') {
+        if ($query->query_vars['action'] == 'flipkey') {
             $this->getflipkey();
         }
-
-        add_filter('the_posts', array($this, "filterPosts"));
+        add_filter('the_posts', array($this, "filterPosts"),1,2);
     }
 
     /**
@@ -202,18 +204,19 @@ class VRPConnector
      *
      * @return array
      */
-    public function filterPosts($posts)
+    public function filterPosts($posts,$query)
     {
-        if (!isset($_GET['action'])) {
+	
+        if (!isset($query->query_vars['action'])) {
             return false;
         }
         $pagetitle = "";
-        $action    = $_GET['action'];
+        $action    = $query->query_vars['action'];
 
         switch ($action) {
             case "unit": // If Unit Page.
                 $this->time = microtime(true);
-                $slug       = $_GET['slug'];
+                $slug       = $query->query_vars['slug'];
                 $data2      = $this->call("getunit/" . $slug);
                 $data       = json_decode($data2);
 
