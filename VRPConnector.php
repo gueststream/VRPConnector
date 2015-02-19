@@ -13,7 +13,3 @@ require __DIR__ . "/lib/DummyResult.php";
 require __DIR__ . "/lib/calendar.php";
 
 $vrp = new \Gueststream\VRPConnector;
-
-if (is_admin()) {
-    new \Gueststream\PluginUpdater( __FILE__, 'Gueststream-Inc', "VRPConnector" );
-}
