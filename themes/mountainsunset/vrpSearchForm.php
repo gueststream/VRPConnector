@@ -73,11 +73,11 @@
 
 
         Check In:<br/>
-        <input type="text" class="input" name="search[arrival]" id="arrival" value="<?= $arrival; ?>">
+        <input type="text" class="input" name="search[arrival]" id="arrival" value="<?php echo $arrival; ?>">
 
 
         Check Out:<br/>
-        <input type="text" class="input" name="search[departure]" id="depart" value="<?= $depart; ?>">
+        <input type="text" class="input" name="search[departure]" id="depart" value="<?php echo $depart; ?>">
 
 
         Type:<br/>
@@ -92,7 +92,9 @@
                     $sel = "";
                 }
                 ?>
-                <option value="<?= $v; ?>" <?= $sel; ?>><?= $v; ?></option>
+                <option value="<?php echo $v; ?>" <?php echo $sel; ?>>
+                    <?php echo $v; ?>
+                </option>
 
             <?php } ?>
         </select>
@@ -108,7 +110,9 @@
                 }
                 ?>
 
-                <option value="<?= $v; ?>" <?= $sel; ?>><?= $v; ?></option>
+                <option value="<?php echo $v; ?>" <?php echo $sel; ?>>
+                    <?php echo $v; ?>
+                </option>
 
             <?php } ?>
 
@@ -125,7 +129,9 @@
                 }
                 ?>
 
-                <option value="<?= $v; ?>" <?= $sel; ?>><?= $v; ?></option>
+                <option value="<?php echo $v; ?>" <?php echo $sel; ?>>
+                    <?php echo $v; ?>
+                </option>
 
             <?php } ?>
 
@@ -142,7 +148,9 @@
                 }
                 ?>
 
-                <option value="<?= $v; ?>" <?= $sel; ?>><?= $v; ?></option>
+                <option value="<?php echo $v; ?>" <?php echo $sel; ?>>
+                    <?php echo $v; ?>
+                </option>
 
             <?php } ?>
 

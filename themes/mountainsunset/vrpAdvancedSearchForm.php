@@ -85,39 +85,79 @@ $searchoptions=$vrp->searchoptions();
             <h4>Search Options</h4>
         </div>
         <table cellspacing="10">
-            <tr><td>Arrival:</td><td><input type="text" name="search[arrival]" id="arrival2" style="width:90px;" value="Not Sure"></td></tr>
-            <tr><td>Departure:</td><td> <input type="text" name="search[departure]" id="depart2" style="width:90px;" value="Not Sure"></td></tr>
-            <tr><td>Adults: </td><td><select name="search[Adults]"><option selected="selected" value="">Any</option>
-                        <?php
-                        foreach (range(1,40) as $v){ ?>
-
-                            <option value="<?=$v;?>"><?=$v;?></option>
-                        <?php } ?></select></td></tr>
-            <tr><td>Children: </td><td><select name="search[Children]"><option selected="selected" value="">Any</option>
-                        <?php
-                        foreach (range(1,40) as $v){ ?>
-
-                            <option value="<?=$v;?>"><?=$v;?></option>
-                        <?php } ?></select></td></tr>
-            <tr><td>Bedrooms:</td><td> <select name="search[bedrooms]" style="width:90px;">
-                        <option selected="selected" value="">Any</option>
-                        <?php
-                        foreach (range($searchoptions->minbeds,$searchoptions->maxbeds) as $v){ ?>
-
-                            <option value="<?=$v;?>"><?=$v;?>+</option>
+            <tr>
+                <td>Arrival:</td>
+                <td>
+                    <input type="text" name="search[arrival]" id="arrival2" style="width:90px;" value="Not Sure">
+                </td>
+            </tr>
+            <tr>
+                <td>Departure:</td>
+                <td>
+                    <input type="text" name="search[departure]" id="depart2" style="width:90px;" value="Not Sure">
+                </td>
+            </tr>
+            <tr>
+                <td>Adults: </td>
+                <td>
+                    <select name="search[Adults]"><option selected="selected" value="">Any</option>
+                        <?php foreach (range(1,40) as $v){ ?>
+                            <option value="<?php echo $v;?>">
+                                <?php echo $v;?>
+                            </option>
                         <?php } ?>
-
-                    </select></td></tr>
-            <tr><td>Bathrooms: </td><td><select name="search[bathrooms]" style="width:90px;">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Children: </td>
+                <td>
+                    <select name="search[Children]">
                         <option selected="selected" value="">Any</option>
-                        <?php
-                        foreach (range($searchoptions->minbaths,$searchoptions->maxbaths) as $v){ ?>
-
-                            <option value="<?=$v;?>"><?=$v;?>+</option>
+                        <?php foreach (range(1,40) as $v){ ?>
+                            <option value="<?php echo $v;?>">
+                                <?php echo $v;?>
+                            </option>
                         <?php } ?>
-
-                    </select><input type="hidden" name="search[showmax]" value="1"></td></tr>
-            <tr><td>Type:</td><td><select name="search[type]"><option value="Villa">Oceanfront Villa</option><option value="Condo">Oceanfront Condo</option></select></td></tr>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Bedrooms:</td>
+                <td>
+                    <select name="search[bedrooms]" style="width:90px;">
+                        <option selected="selected" value="">Any</option>
+                        <?php foreach (range($searchoptions->minbeds,$searchoptions->maxbeds) as $v){ ?>
+                            <option value="<?php echo $v;?>">
+                                <?php echo $v;?>+
+                            </option>
+                        <?php } ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Bathrooms: </td>
+                <td>
+                    <select name="search[bathrooms]" style="width:90px;">
+                        <option selected="selected" value="">Any</option>
+                        <?php foreach (range($searchoptions->minbaths,$searchoptions->maxbaths) as $v){ ?>
+                            <option value="<?php echo $v;?>">
+                                <?php echo $v;?>+
+                            </option>
+                        <?php } ?>
+                    </select>
+                    <input type="hidden" name="search[showmax]" value="1">
+                </td>
+            </tr>
+            <tr>
+                <td>Type:</td>
+                <td>
+                    <select name="search[type]">
+                        <option value="Villa">Oceanfront Villa</option>
+                        <option value="Condo">Oceanfront Condo</option>
+                    </select>
+                </td>
+            </tr>
         </table>
     </div>
     <div class="large-9 columns">
@@ -127,21 +167,35 @@ $searchoptions=$vrp->searchoptions();
         <div style="padding:10px;">
             <ul class="advancedlist">
                 <?php foreach ($searchoptions->locations as $v){ ?>
-                    <li><input type="checkbox" name="search[location][]" value="<?=$v;?>" /><label><?=$v;?></label></li>
+                    <li>
+                        <input type="checkbox" name="search[location][]" value="<?php echo $v;?>" />
+                        <label>
+                            <?php echo $v;?>
+                        </label>
+                    </li>
                 <?php } ?>
 
             </ul></div>
         <br style="clear:both;"><br>
         <div class="ui-widget-header ui-corner-all">
             <h4>Amenities</h4>
-        </div><div style="padding:10px;">
+        </div>
+        <div style="padding:10px;">
             <ul class="advancedlist">
                 <?php foreach ($searchoptions->attrs as $v){ ?>
-                    <li><input type="checkbox" name="search[attrs][]" value="<?=$v;?>" /><label><?=$v;?></label></li>
+                    <li>
+                        <input type="checkbox" name="search[attrs][]" value="<?php echo $v;?>" />
+                        <label>
+                            <?php echo $v;?>
+                        </label>
+                    </li>
                 <?php } ?>
-
-            </ul></div></div><br style="clear:both;">
+            </ul>
+        </div>
+    </div>
+    <br style="clear:both;">
     <input type="hidden" name="show" value="20">
-    <input type="submit" name="propSearch" class="ButtonView"  value="Search"><br>
+    <input type="submit" name="propSearch" class="ButtonView"  value="Search">
+    <br>
 </form>
 <br><br><br>

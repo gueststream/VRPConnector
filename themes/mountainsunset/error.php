@@ -1,1 +1,1 @@
-<?=$data->Error;?>
+<?php echo $data->Error;

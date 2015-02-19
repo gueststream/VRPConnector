@@ -9,12 +9,12 @@
 
             <form id="jaxform2">
                 <?php foreach ($data as $k => $v) { ?>
-                    <input type="hidden" name="search[<?= $k; ?>]" value="<?= $v; ?>">
+                    <input type="hidden" name="search[<?php echo $k; ?>]" value="<?php echo $v; ?>">
                 <?php } ?>
                 <input type="hidden" name="search[NoComplex]" value="1">
                 <input type="hidden" name="search[showall]" value="1">
                 <?php if (isset($_GET['page'])) { ?>
-                    <input type="hidden" name="page" value="<?= $_GET['page']; ?>">
+                    <input type="hidden" name="page" value="<?php echo $_GET['page']; ?>">
                 <?php } ?>
             </form>
         </div>

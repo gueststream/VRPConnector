@@ -21,26 +21,26 @@
             </ul>
 
             <div id="description">
-                <?=$data->description?>
+                <?php echo $data->description; ?>
             </div>
 
             <div id="photos">
                 <?php foreach($data->photos as $photo) { ?>
-                    <img src="<?=$photo->url?>">
+                    <img src="<?php echo $photo->url; ?>">
                 <?php } ?>
             </div>
 
             <div id="amenities">
-                <?=$data->amenities?>
+                <?php echo $data->amenities; ?>
             </div>
 
             <div id="units">
                 <?php foreach($data->units as $unit) { ?>
                 <li>
-                    <a href="/vrp/unit/<?=$unit->page_slug?>">
-                        <h2><?=$unit->Name?></h2>
+                    <a href="/vrp/unit/<?php echo$unit->page_slug?>">
+                        <h2><?php echo $unit->Name; ?></h2>
                     </a>
-                    <?=$unit->ShortDescription?>
+                    <?php echo $unit->ShortDescription; ?>
                 </li>
                 <?php } ?>
             </div>

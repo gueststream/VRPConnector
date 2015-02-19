@@ -64,30 +64,30 @@ if (isset($data->Error)) {
             <table class="table table-striped">
                 <tr>
                     <td><b>Property Name:</b></td>
-                    <td><b><?= $data->Name; ?></b></td>
+                    <td><b><?php echo $data->Name; ?></b></td>
                 </tr>
 
                 <tr>
                     <td>Arrival:</td>
-                    <td><b><?= $data->Arrival; ?></b></td>
+                    <td><b><?php echo $data->Arrival; ?></b></td>
                 </tr>
                 <tr>
                     <td>Departure:</td>
-                    <td><b><?= $data->Departure; ?></b></td>
+                    <td><b><?php echo $data->Departure; ?></b></td>
                 </tr>
                 <tr>
                     <td>Nights:</td>
-                    <td><b><?= $data->Nights; ?></b></td>
+                    <td><b><?php echo $data->Nights; ?></b></td>
                 </tr>
                 <?php
                 if (isset($data->Charges)) {
                     foreach ($data->Charges as $v):
                         ?>
                         <tr>
-                            <td><?= $v->Description; ?>:</td>
+                            <td><?php echo $v->Description; ?>:</td>
                             <td><?php if (isset($v->Type) && $v->Type == 'discount') {
                                     echo "-";
-                                } ?>$<?= number_format($v->Amount, 2); ?></td>
+                                } ?>$<?php echo number_format($v->Amount, 2); ?></td>
                         </tr>
                     <?php
                     endforeach;
@@ -99,18 +99,18 @@ if (isset($data->Error)) {
                 <?php if (isset($data->booksettings->HasPackages)) { ?>
                     <tr>
                         <td>Add-on Package:</td>
-                        <td id="packageinfo">$<?= number_format($data->package->packagecost, 2); ?></td>
+                        <td id="packageinfo">$<?php echo number_format($data->package->packagecost, 2); ?></td>
                     </tr>
                 <?php } ?>
                 <tr>
                     <td>Tax:</td>
-                    <td>$<?= number_format($data->TotalTax, 2); ?></td>
+                    <td>$<?php echo number_format($data->TotalTax, 2); ?></td>
                 </tr>
 
 
                 <tr>
                     <td><b>Reservation Total:</b></td>
-                    <td id="TotalCost">$<?= number_format(
+                    <td id="TotalCost">$<?php echo number_format(
                             ((isset($data->package->TotalCost) ? $data->package->TotalCost : $data->TotalCost)
                                 - $data->InsuranceAmount), 2
                         ); ?></td>
@@ -123,11 +123,11 @@ if (isset($data->Error)) {
                 <table class="table table-striped">
                     <tr>
                         <td>Optional Travel Insurance:</td>
-                        <td>$<?= number_format($data->InsuranceAmount, 2); ?></td>
+                        <td>$<?php echo number_format($data->InsuranceAmount, 2); ?></td>
                     </tr>
                     <tr>
                         <td><b>Reservation Total with Insurance:</b></td>
-                        <td>$<?= number_format(
+                        <td>$<?php echo number_format(
                                 (isset($data->package->TotalCost) ? $data->package->TotalCost : $data->TotalCost), 2
                             ); ?></td>
                     </tr>
@@ -142,11 +142,11 @@ if (isset($data->Error)) {
 
     </div>
     <div class="alert alert-info" style='text-align:center'>
-        You are booking <?= $data->Name; ?> for <?= $data->Nights; ?> nights for
+        You are booking <?php echo $data->Name; ?> for <?php echo $data->Nights; ?> nights for
         <a href="#myModal2" data-toggle="modal">
             <span id="TotalCost2">
                 <?php if (isset($data->package) && isset($data->InsuranceAmount)): ?>
-                $<?= number_format(
+                $<?php echo number_format(
                     ((isset($data->package->TotalCost) ? $data->package->TotalCost : $data->TotalCost)
                         - $data->InsuranceAmount), 2
                 ); ?>

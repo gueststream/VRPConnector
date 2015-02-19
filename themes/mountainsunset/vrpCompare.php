@@ -8,7 +8,7 @@
                            name="c[arrival]"
                            class="input"
                            id="arrival2"
-                           value="<?= $_SESSION['arrival']; ?>"
+                           value="<?php echo $_SESSION['arrival']; ?>"
                         />
                 </td>
                 <td>Departure:</td>
@@ -17,12 +17,12 @@
                            name="c[depart]"
                            class="input"
                            id="depart2"
-                           value="<?= $_SESSION['depart']; ?>"
+                           value="<?php echo $_SESSION['depart']; ?>"
                         />
                 </td>
                 <td>
                     <?php foreach ($_GET['c']['compare'] as $v) { ?>
-                        <input type="hidden" name="c[compare][]" value="<?= $v; ?>">
+                        <input type="hidden" name="c[compare][]" value="<?php echo $v; ?>">
                     <?php } ?>
 
                     <input type="submit" class="ButtonView" value="Check Availability"></td>
@@ -46,27 +46,27 @@
     <?php foreach ($data->results as $prop){ ?>
         <tr>
             <td>
-                <a href="/vrp/unit/<?= $prop->page_slug; ?>">
-                    <img src="<?= $prop->Thumb; ?>" style="max-width:150px;">
+                <a href="/vrp/unit/<?php echo $prop->page_slug; ?>">
+                    <img src="<?php echo $prop->Thumb; ?>" style="max-width:150px;">
                     <br>
-                    <?= $prop->Name; ?>
+                    <?php echo $prop->Name; ?>
                 </a>
             </td>
 
             <td>
-                <span><?= $prop->Bedrooms; ?> Beds / <?= $prop->Bathrooms; ?> Baths</span>
+                <span><?php echo $prop->Bedrooms; ?> Beds / <?php echo $prop->Bathrooms; ?> Baths</span>
             </td>
 
             <td>
-                <span> <?= $prop->Sleeps; ?></span>
+                <span> <?php echo $prop->Sleeps; ?></span>
             </td>
 
             <td>
-                <span> <?= $prop->Location; ?></span>
+                <span> <?php echo $prop->Location; ?></span>
             </td>
 
             <td>
-                <ul class="listsplitter" id="listfor_<?= $prop->id; ?>">
+                <ul class="listsplitter" id="listfor_<?php echo $prop->id; ?>">
                     <?php
                     foreach ($prop->attributes as $v):
                         echo "<li>$v->name</li>";
@@ -79,8 +79,8 @@
                 <span>
                     <?php if ($prop->unavail != '') {
                         echo "Not Available";
-                    } else {
-                        ?>$<?= number_format($prop->Rate); ?>
+                    } else { ?>
+                        $<?php echo number_format($prop->Rate); ?>
                     <?php } ?>
                 </span>
             </td>

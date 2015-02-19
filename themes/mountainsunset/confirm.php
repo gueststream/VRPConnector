@@ -1,8 +1,8 @@
 <div class="userbox" >
     <h3>Congratulations!</h3>
     <div class="padit">
-        <b>Reservation Confirmation Number:</b> <?=$data->thebooking->BookingNumber;?><br><br>
-        You have successfully booked <b><?=$data->Name;?></b> from <b><?= $data->Arrival; ?></b> for <b><?= floor($data->Nights); ?></b> nights.
+        <b>Reservation Confirmation Number:</b> <?php echo $data->thebooking->BookingNumber;?><br><br>
+        You have successfully booked <b><?php echo $data->Name;?></b> from <b><?php echo  $data->Arrival; ?></b> for <b><?php echo  floor($data->Nights); ?></b> nights.
         <br /><br />
         You will receive an email confirmation shortly with additional information.
     </div>
