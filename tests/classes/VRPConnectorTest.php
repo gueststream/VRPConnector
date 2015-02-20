@@ -7,5 +7,8 @@
  */
 
 class VRPConnectorTest extends PHPUnit_Framework_TestCase {
-
+    public function testWillPass()
+    {
+        $this->assertTrue(true);
+    }
 }
