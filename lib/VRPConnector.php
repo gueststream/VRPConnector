@@ -53,14 +53,14 @@ class VRPConnector
         }
 
         echo "<div style='position:absolute;left:0;width:100%;background:white;color:black;'>";
-        echo "API Time Spent: " . $this->time . "<br/>";
+        echo "API Time Spent: " . esc_html($this->time) . "<br/>";
         echo "GET VARIABLES:<br><pre>";
         print_r($_GET);
         echo "</pre>";
         echo "Debug VARIABLES:<br><pre>";
         print_r($this->debug);
         echo "</pre>";
-        echo "Post Type: " . $wp->query_vars["post_type"];
+        echo "Post Type: " . esc_html($wp->query_vars["post_type"]);
         echo "</div>";
     }
 
@@ -280,7 +280,7 @@ class VRPConnector
                     /* echo "<pre>";
                       print_r($data->results);
                       echo "</pre>"; */
-                    echo " <!-- Vacation Rental Platform : $time2 -->. ";
+                    echo ' <!-- Vacation Rental Platform : ' . esc_attr($time2) . ' -->. ';
                 }
 
                 if (isset($data->type)) {
@@ -681,14 +681,14 @@ class VRPConnector
 
         if ($par != false) {
             $_SESSION['bookingresults'] = $results;
-            echo $results;
+            echo wp_kses_post($results);
             return false;
         }
 
         $res = json_decode($results);
 
         if (isset($res->Error)) {
-            echo $res->Error;
+            echo esc_html($res->Error);
         } else {
             $_SESSION['bookingresults'] = $results;
             echo "1";
@@ -707,7 +707,7 @@ class VRPConnector
         if (isset($res->Results)) {
             $_SESSION['bresults'] = json_encode($res->Results);
         }
-        echo $results;
+        echo wp_kses_post($results);
     }
 
     public function addtopackage()
