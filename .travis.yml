@@ -1,14 +1,14 @@
 language: php
 
 php:
-    - 5.3
+   # - 5.3
     - 5.4
 
 env:
     - WP_VERSION=latest WP_MULTISITE=0
-    - WP_VERSION=latest WP_MULTISITE=1
-    - WP_VERSION=3.8 WP_MULTISITE=0
-    - WP_VERSION=3.8 WP_MULTISITE=1
+    #- WP_VERSION=latest WP_MULTISITE=1
+    #- WP_VERSION=3.8 WP_MULTISITE=0
+    #- WP_VERSION=3.8 WP_MULTISITE=1
 
 before_script:
     - code_path=$(pwd)
@@ -26,6 +26,7 @@ before_script:
     - scripts/phpcs --config-set installed_paths ../wordpress-coding-standards
 # After CodeSniffer install you should refresh your path.
     - phpenv rehash
+    - cd $code_path
     - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION 
 
 script: 
