@@ -9,7 +9,7 @@
  * Author URI: http://www.gueststream.com/ 
  */
 if ( !isset( $_SESSION ) ) {
-	session_start();
+	@session_start();
 }
 /** Constants needed throughout plugin: * */
 define( 'VRP_URL', plugin_dir_url( __FILE__ ) );

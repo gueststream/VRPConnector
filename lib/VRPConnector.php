@@ -36,7 +36,12 @@ class VRPConnector
         $this->actions();
         $this->themeActions();
     }
-
+	/**
+	 * Use the demo API key.
+	 */
+	function __load_demo_key(){
+		$this->apiKey='1533020d1121b9fea8c965cd2c978296';
+	}
     /**
      * Class Destruct w/basic debugging.
      */
