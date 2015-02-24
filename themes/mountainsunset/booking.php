@@ -5,27 +5,29 @@ if (isset($data->Error)) {
 } elseif (!isset($data->Charges)) {
     echo "We're sorry, this property is not available at for the dates requested. <a href='/'>Please try again.</a><br><br>";
 } else {
+global $wp_query;
+$query=$wp_query;
     ?>
     <div id="progressbar" class="vrpcontainer_12 vrp100">
         <div class="vrpgrid_1 ">&nbsp; </div>
         <?php if (isset($data->booksettings->HasPackages)) { ?>
             <div class="vrpgrid_2 passed padit alpha omega">1. Select <br> Unit</div>
             <div class="vrpgrid_2 padit alpha omega <?php
-            if ($_GET['slug'] == 'step1a' || $_GET['slug'] == 'step2' || $_GET['slug'] == 'step3'
-                || $_GET['slug'] == 'confirm'
+            if ($query->query_vars['slug'] == 'step1a' || $query->query_vars['slug'] == 'step2' || $query->query_vars['slug'] == 'step3'
+                || $query->query_vars['slug'] == 'confirm'
             ) {
                 echo "passed";
             }
             ?>">2. Optional Add-ons
             </div>
             <div class="vrpgrid_2 padit alpha omega <?php
-            if ($_GET['slug'] == 'step2' || $_GET['slug'] == 'step3' || $_GET['slug'] == 'confirm') {
+            if ($query->query_vars['slug'] == 'step2' || $query->query_vars['slug'] == 'step3' || $query->query_vars['slug'] == 'confirm') {
                 echo "passed";
             }
             ?>">3. Guest <br> Info
             </div>
             <div class="vrpgrid_2 padit alpha omega <?php
-            if ($_GET['slug'] == 'confirm') {
+            if ($query->query_vars['slug'] == 'confirm') {
                 echo "passed";
             }
             ?>">4. Confirm<br>Booking
@@ -33,13 +35,13 @@ if (isset($data->Error)) {
         <?php } else { ?>
             <div class="vrpgrid_3 passed padit alpha omega">1. Select <br>Unit</div>
             <div class="vrpgrid_3 padit alpha omega <?php
-            if ($_GET['slug'] == 'step2' || $_GET['slug'] == 'step3' || $_GET['slug'] == 'confirm') {
+            if ($query->query_vars['slug'] == 'step2' || $query->query_vars['slug'] == 'step3' || $query->query_vars['slug'] == 'confirm') {
                 echo "passed";
             }
             ?>">2. Guest <br>Info
             </div>
             <div class="vrpgrid_3 padit alpha omega <?php
-            if ($_GET['slug'] == 'confirm') {
+            if ($query->query_vars['slug'] == 'confirm') {
                 echo "passed";
             }
             ?>">3. Confirm<br>Booking
@@ -176,12 +178,12 @@ if (isset($data->Error)) {
 
     <div class="">
         <?php
-        if(file_exists(get_stylesheet_directory(). $_GET['slug'].'.php')) {
-            include(get_stylesheet_directory() . $_GET['slug'] . '.php');
-        } else if (file_exists(__DIR__ . '/'. $_GET['slug'] . ".php")) {
-            include $_GET['slug'] . ".php";
+        if(file_exists(get_stylesheet_directory(). $query->query_vars['slug'].'.php')) {
+            include(get_stylesheet_directory() . $query->query_vars['slug'] . '.php');
+        } else if (file_exists(__DIR__ . '/'. $query->query_vars['slug'] . ".php")) {
+            include $query->query_vars['slug'] . ".php";
         } else {
-            echo esc_html($_GET['slug'] . '.php does not exist.');
+            echo esc_html($query->query_vars['slug'] . '.php does not exist.');
         }
         ?>
 

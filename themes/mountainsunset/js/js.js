@@ -262,7 +262,7 @@ jQuery(document).ready(function(){
         jQuery("#vrploadinggif").show();
         jQuery("span.vrpmsg").remove();
         jQuery(".badfields").removeClass("badfields");
-        jQuery("#comments").val(jQuery("#comments").val() + ' MauiHawaiiVacations.com');
+        jQuery("#comments").val(jQuery("#comments").val());
         jQuery.post("/?vrpjax=1&act=processbooking",jQuery(this).serialize(),function(data){
             console.log(data);
             var obj=jQuery.parseJSON(data);

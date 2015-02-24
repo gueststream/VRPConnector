@@ -24,7 +24,7 @@ class VRPConnector
      */
     public function __construct()
     {
-        if (session_status() == PHP_SESSION_NONE) {
+        if (!isset($_SESSION)) {
             session_start();
         }
 
@@ -309,8 +309,8 @@ class VRPConnector
                 break;
 
             case "book":
-
-                if ($_GET['slug'] == 'dobooking') {
+	
+                if ($query->query_vars['slug'] == 'dobooking') {
                     if (isset($_SESSION['package'])) {
                         $_POST['booking']['packages'] = $_SESSION['package'];
                     }
@@ -320,7 +320,7 @@ class VRPConnector
                     $userinfo             = $this->doLogin($_POST['email'], $_POST['password']);
                     $_SESSION['userinfo'] = $userinfo;
                     if (!isset($userinfo->Error)) {
-                        $_GET['slug'] = "step3";
+                        $query->query_vars['slug'] = "step3";
                     }
                 }
 
@@ -334,7 +334,7 @@ class VRPConnector
                     $data->new = true;
                 }
 
-                if ($_GET['slug'] != 'confirm') {
+                if ($query->query_vars['slug'] != 'confirm') {
                     $data      = json_decode($this->checkavailability(false, true));
                     $data->new = true;
                 }
@@ -343,7 +343,7 @@ class VRPConnector
                 //if ($_GET['slug']=='step2'){
                 $data->booksettings = $this->bookSettings($data->PropID);
 
-                if ($_GET['slug'] == 'step1') {
+                if ($query->query_vars['slug'] == 'step1') {
                     unset($_SESSION['package']);
                 }
 
@@ -355,21 +355,21 @@ class VRPConnector
                     $data->package = $_SESSION['package'];
                 }
 
-                if ($_GET['slug'] == 'step1a') {
+                if ($query->query_vars['slug'] == 'step1a') {
                     if (isset($data->booksettings->HasPackages)) {
                         $a              = date("Y-m-d", strtotime($data->Arrival));
                         $d              = date("Y-m-d", strtotime($data->Departure));
                         $data->packages = json_decode($this->call("getpackages/$a/$d/"));
                     } else {
-                        $_GET['slug'] = 'step2';
+                        $query->query_vars['slug'] = 'step2';
                     }
                 }
 
-                if ($_GET['slug'] == 'step3') {
+                if ($query->query_vars['slug'] == 'step3') {
                     $data->form = json_decode($this->call("bookingform/"));
                 }
 
-                if ($_GET['slug'] == 'confirm') {
+                if ($query->query_vars['slug'] == 'confirm') {
                     $data->thebooking = json_decode($_SESSION['bresults']);
                     $pagetitle        = "Reservations";
                     $content          = $this->loadTheme("confirm", $data);
