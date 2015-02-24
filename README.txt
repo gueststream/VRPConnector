@@ -44,11 +44,15 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 0.06 =
+* Added [vrpFeaturedUnit] short code support.
 
-= 1.0 =
+= 0.01 =
 * Initial Release
 
 == Upgrade Notice ==
+= 0.07 =
+* Added [vrpFeaturedUnit] shortcode support.
 
 == Shortcodes ==
 

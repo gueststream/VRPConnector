@@ -107,6 +107,7 @@ class VRPConnector
         //add_shortcode("vrpLinks", array($this, "vrpLinks"));
         add_shortcode("vrpCompare", array($this, "vrpCompare"));
         add_shortcode("vrpshort", array($this, "vrpShort"));
+        add_shortcode("vrpFeaturedUnit", array($this, "vrpFeaturedUnit"));
     }
 
     /**
@@ -1174,6 +1175,37 @@ class VRPConnector
         $items['order'] = "low";
 
         return $this->loadTheme('vrpShort', $items);
+    }
+
+    public function vrpFeaturedUnit($params = [])
+    {
+        if(empty($params)) {
+            // No Params = Get one random featured unit
+            $data = json_decode($this->call("featuredunit"));
+            return $this->loadTheme("vrpFeaturedUnit",$data);
+        }
+
+        if(count($params) == 1 && isset($params['show'])) {
+            // 'show' param = get multiple random featured units
+            $data = json_decode($this->call("getfeaturedunits/".$params['show']));
+            return $this->loadTheme("vrpFeaturedUnits",$data);
+        }
+
+        if(isset($params['field']) && isset($params['value'])) {
+            // if Field AND Value exist find a custom featured unit
+            if(isset($params['show'])) {
+                // Returning Multiple units
+                $params['num'] = $params['show'];
+                unset($params['show']);
+                $data = json_decode($this->call("getfeaturedbyoption",$params));
+                return $this->loadTheme("vrpFeaturedUnits",$data);
+            }
+            // Returning a single unit
+            $params['num'] = 1;
+            $data = json_decode($this->call("getfeaturedbyoption",$params));
+            return $this->loadTheme("vrpFeaturedUnit",$data);
+        }
+
     }
 
     //
