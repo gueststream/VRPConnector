@@ -28,5 +28,6 @@
         <exclude name="Generic.WhiteSpace.DisallowSpaceIndent" />
         <exclude name="WordPress.NamingConventions.ValidFunctionName" />
         <exclude name="WordPress.PHP.YodaConditions" />
+        <exclude name="WordPress.VIP" />
     </rule>
 </ruleset>
