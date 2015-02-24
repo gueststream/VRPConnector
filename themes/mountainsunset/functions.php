@@ -22,9 +22,11 @@ class mountainsunset
         } else {
             wp_enqueue_script('VRPthemeJS', plugins_url('/mountainsunset/js/js.js', dirname(__FILE__)));
         }
-		if (isset($_GET['action'])){
-			if ('unit' == $_GET['action']){
-				wp_enqueue_script('google-maps','http://maps.googleapis.com/maps/api/js?sensor=true');
+		global $wp_query;
+
+		if (isset($wp_query->query_vars['action'])) {
+			if ('unit' == $wp_query->query_vars['action']){
+				wp_enqueue_script('googlemaps','http://maps.googleapis.com/maps/api/js?sensor=true');
 			}
 		}
 
