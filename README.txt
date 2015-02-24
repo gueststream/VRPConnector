@@ -12,8 +12,8 @@ Vacation Rental Platform Connector allows you to display and book your vacation 
 == Description ==
 
 The Vacation Rental Property Connector plugin by Gueststream, Inc. allows you to sync all of your vacation rental
-properties from a wide variety of property management software to your website allowing potential guests to
-search, sort, compare and book your rental properties right from your website.
+properties from HomeAway, Escapia, ISILink, Barefoot, RNS, VRMGR, RTR and other property management software to your website 
+allowing potential guests to search, sort, compare and book your rental properties right from your website.
 
 = Example Sites =
 * http://www.grandcaymanvillas.net
@@ -21,11 +21,8 @@ search, sort, compare and book your rental properties right from your website.
 * http://www.mauihawaiivacations.com
 * http://www.tellurideluxury.com
 
-
 == Installation ==
-
-1. Download the ZIP file from https://github.com/Gueststream-Inc/VRPConnector
-1. Extract the contents of the zip file and upload the resulting folder to the `/wp-content/plugins/` directory
+1. Install the plugin from the WordPress.org Plugin Directory here https://wordpress.org/plugins/vrpconnector/
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Update your permalink settings to custom structure '/%post_id%/%postname%/'
 1. Navigate to Wordpress Admin > Settings > VRP and enter your Gueststream.net API key
