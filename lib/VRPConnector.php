@@ -24,9 +24,7 @@ class VRPConnector
      */
     public function __construct()
     {
-        if (!isset($_SESSION)) {
-            session_start();
-        }
+
 
         $this->apiKey = get_option('vrpAPI');
 
