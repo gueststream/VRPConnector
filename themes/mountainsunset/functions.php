@@ -372,13 +372,12 @@ function vrpCalendar($r, $totalMonths = 3) {
     //print_r($final_date);
     //echo "</pre>";
     $today = strtotime(date("Y") . "-" . date("m") . "-01");
-    $calendar = new Calendar(date('Y-m-d'));
+    $calendar = new \Gueststream\Calendar(date('Y-m-d'));
     $calendar->link_days = 0;
     $calendar->highlighted_dates = $final_date;
     $calendar->arrival_dates = $arrivals;
     $calendar->depart_dates = $departs;
-    if (isset($_GET["debug"])) {
-    }
+
     /*  $nextyear = date("Y", mktime(0, 0, 0, date("m") + 1, date("d"), date("Y")));
       $nextmonth = date("m", mktime(0, 0, 0, date("m") + 1, date("d"), date("Y")));
       $nextyear2 = date("Y", mktime(0, 0, 0, date("m") + 2, date("d"), date("Y")));

@@ -17,7 +17,7 @@ class DummyResult
     public $comment_count = 0;
     public $post_parent = 450;
 
-    function __construct($ID, $title, $content)
+    public function __construct($ID, $title, $content)
     {
         $this->ID = $ID;
         $this->post_title = $title;

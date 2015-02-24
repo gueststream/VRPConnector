@@ -5,5 +5,7 @@
 error_log
 
 # IDE
-tags
 .idea/
+
+# Test results
+tests/report/
