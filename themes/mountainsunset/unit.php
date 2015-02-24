@@ -240,9 +240,7 @@
         var myOptions = {
             zoom: 13,
             <?php if(strlen($data->lat) > 0 && strlen($data->long) > 0){ ?>
-                                        <?php echo esc_html($k); ?>
-                                    </td>
-                                    <td><?php echo esc_html($v->daily); ?>/nt</td>
+center: new google.maps.LatLng(<?php echo esc_js($data->lat); ?>, <?php echo esc_js($data->long); ?>),
 
             <?php } ?>
             mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -278,4 +276,4 @@
 
 </script>
 
-            center: new google.maps.LatLng(<?php echo esc_js($data->lat); ?>, <?php echo esc_js($data->long); ?>),
+            

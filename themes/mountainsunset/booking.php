@@ -108,10 +108,7 @@ if (isset($data->Error)) {
                 <tr>
                     <td><b>Reservation Total:</b></td>
                     <td id="TotalCost">
-                        $<?php echo esc_html(number_format(
-                            ((isset($data->package->TotalCost) ? $data->package->TotalCost : $data->TotalCost)
-                                - $data->InsuranceAmount), 2
-                        )); ?>
+                        $<?php echo esc_html(number_format(((isset($data->package->TotalCost) ? $data->package->TotalCost : $data->TotalCost) - $data->InsuranceAmount), 2)); ?>
                     </td>
                 </tr>
             </table>
@@ -125,9 +122,7 @@ if (isset($data->Error)) {
                     </tr>
                     <tr>
                         <td><b>Reservation Total with Insurance:</b></td>
-                        <td>$<?php echo esc_html(number_format(
-                                (isset($data->package->TotalCost) ? $data->package->TotalCost : $data->TotalCost), 2
-                            )); ?></td>
+                        <td>$<?php echo esc_html(number_format((isset($data->package->TotalCost) ? $data->package->TotalCost : $data->TotalCost), 2)); ?></td>
                     </tr>
                 </table>
             <?php } ?>
