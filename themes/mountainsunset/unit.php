@@ -228,7 +228,7 @@
 
 
 <!-- GOOGLE MAPS SCRIPT -->
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
+
 <script type="text/javascript">
     var geocoder;
     var map;
