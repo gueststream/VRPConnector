@@ -818,7 +818,7 @@ class VRPConnector
 
     public function customcall($call)
     {
-        echo $this->call("customcall/$call");
+        echo wp_kses($this->call("customcall/$call"));
     }
 
     public function custompost($call)
@@ -831,7 +831,7 @@ class VRPConnector
         $search['search']       = json_encode($obj);
         $results                = $this->call($call, $search);
         $this->debug['results'] = $results;
-        echo $results;
+        echo wp_kses($results);
     }
 
     public function bookSettings($propID)
@@ -858,7 +858,8 @@ class VRPConnector
     public function featuredunit()
     {
         if (isset($_GET['featuredunit'])) {
-            echo $this->call("featuredunit");
+            $featured_unit=json_decode($this->call("featuredunit"));
+			wp_send_json($featured_unit);
             die();
         }
     }
@@ -880,7 +881,7 @@ class VRPConnector
         $data = $this->customcall($call);
         echo "<!DOCTYPE html><html>";
         echo "<body>";
-        echo $data;
+        echo wp_kses_post($data);
         echo "</body></html>";
         die();
     }
