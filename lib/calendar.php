@@ -18,16 +18,16 @@ class Calendar
     var $year;
     var $month;
     var $day;
-    var $week_start_on = FALSE;
+    var $week_start_on = false;
     var $week_start = 7; // sunday
-    var $link_days = TRUE;
+    var $link_days = true;
     var $link_to;
     var $formatted_link_to;
-    var $mark_today = TRUE;
+    var $mark_today = true;
     var $today_date_class = 'today';
-    var $mark_selected = TRUE;
+    var $mark_selected = true;
     var $selected_date_class = 'selected';
-    var $mark_passed = TRUE;
+    var $mark_passed = true;
     var $passed_date_class = 'passed';
     var $highlighted_dates;
     var $default_highlighted_class = 'highlighted';
@@ -38,7 +38,7 @@ class Calendar
 
     /* CONSTRUCTOR */
 
-    function Calendar($date = NULL, $year = NULL, $month = NULL)
+    function Calendar($date = null, $year = null, $month = null)
     {
         $self = htmlspecialchars($_SERVER['PHP_SELF']);
         $this->link_to = $self;
@@ -77,12 +77,12 @@ class Calendar
         return $day_of_week;
     }
 
-    function output_calendar($year = NULL, $month = NULL, $calendar_class = 'calendar')
+    function output_calendar($year = null, $month = null, $calendar_class = 'calendar')
     {
         if (isset($_GET["debug"])) {
         }
 
-        if ($this->week_start_on !== FALSE) {
+        if ($this->week_start_on !== false) {
             echo "The property week_start_on is replaced due to a bug present in version before 2.6. of this class! Use the property week_start instead!";
             exit;
         }
@@ -158,15 +158,15 @@ class Calendar
             $day_date = $year . "-" . $month . "-" . $day;
 
             //-------------------------- compare day and add classes for matches
-            if ($this->mark_today == TRUE && $day_date == date("Y-m-d")) {
+            if ($this->mark_today == true && $day_date == date("Y-m-d")) {
                 $classes[] = $this->today_date_class;
             }
 
-            if ($this->mark_selected == TRUE && $day_date == $this->date) {
+            if ($this->mark_selected == true && $day_date == $this->date) {
                 $classes[] = $this->selected_date_class;
             }
 
-            if ($this->mark_passed == TRUE && $day_date < date("Y-m-d")) {
+            if ($this->mark_passed == true && $day_date < date("Y-m-d")) {
                 $classes[] = $this->passed_date_class;
             }
 

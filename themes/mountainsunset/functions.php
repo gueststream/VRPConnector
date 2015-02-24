@@ -84,24 +84,24 @@ function vrp_pagination($totalpages, $page = 1) {
         $startrange = 1;
     }
     if ($startrange > 1) {
-        echo "<li><a href='?$pageurl" . "show=$show&page=1'>1</a></li>";
+        echo '<li><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=1">1</a></li>';
 
     }
 
     foreach (range($startrange, $totalrange) as $p) {
         if ($page == $p) {
-            echo "<li class='active'><a href='?$pageurl" . "show=$show&page=$p'>$p</a></li>";
+            echo '<li class="active"><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">$p</a></li>';
         } else {
-            echo "<li><a href='?$pageurl" . "show=$show&page=$p'>$p</a></li>";
+            echo '<li><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">$p</a></li>';
         }
     }
     if ($totalpages > 5) {
-        echo "<li><a href='?$pageurl" . "show=$show&page=$totalpages'>Last</a></li>";
+        echo '<li><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($totalpages) . '">Last</a></li>';
     }
 
     if ($page < $totalpages) {
         $p = $page + 1;
-        echo "<li><a href='?$pageurl" . "show=$show&page=$p'>Next</a></li>";
+        echo '<li><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">Next</a></li>';
     }
     echo "</ul>";
 }
@@ -125,12 +125,12 @@ function vrp_paginationmobile($totalpages, $page = 1) {
 
     if ($page > 1) {
         $p = $page - 1;
-        echo "<a href='?$pageurl" . "show=$show&page=$p' data-icon='arrow-l' data-role='button'>Prev</a>";
+        echo '<a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) .'" data-icon="arrow-l" data-role="button">Prev</a>';
     }
 
     if ($page < $totalpages) {
         $p = $page + 1;
-        echo "<a href='?$pageurl" . "show=$show&page=$p' data-icon='arrow-r' data-role='button'>Next</a>";
+        echo '<a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) .'" data-icon="arrow-r" data-role="button">Next</a>';
     }
 }
 
@@ -141,7 +141,7 @@ function vrp_pagination2($totalpages, $page = 1) {
       rtrim($fields_string, '&'); */
     $beds = "";
     if (isset($_GET['beds'])) {
-        $beds = (int)$_GET['beds'];
+        $beds = (int) $_GET['beds'];
         $beds = "&beds=" . $beds;
     }
 
@@ -162,18 +162,18 @@ function vrp_pagination2($totalpages, $page = 1) {
     echo "<ul class='vrp-pagination'>";
     if ($page > 1) {
         $p = $page - 1;
-        echo "<li><a href='?$pageurl" . "page=$p" . $beds . "'>Prev</a></li>";
+        echo '<li><a href="?' . esc_attr($pageurl) . 'page=' . esc_attr($p) . esc_attr($beds) . '">Prev</a></li>';
     }
     foreach (range(1, $totalpages) as $p) {
         if ($page == $p) {
-            echo "<li role='button' class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only'><span class='ui-button-text'><b class='chosenone'>$p</b></span></li>";
+            echo '<li role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text"><b class="chosenone">' . esc_attr($p) . '</b></span></li>';
         } else {
-            echo "<li><a href='?$pageurl" . "page=$p" . $beds . "'>$p</a></li>";
+            echo '<li><a href="?' . esc_attr($pageurl) . 'page=' . esc_attr($p) . esc_attr($beds) . '">' . esc_attr($p) . '</a></li>';
         }
     }
     if ($page < $totalpages) {
         $p = $page + 1;
-        echo "<li><a href='?$pageurl" . "page=$p" . $beds . "'>Next</a></li>";
+        echo '<li><a href="? ' . esc_attr($pageurl) . 'page=' . esc_attr($p) . esc_attr($beds) . '">Next</a></li>';
     }
     echo "</ul>";
 }
@@ -227,13 +227,13 @@ function vrpsortlinks($unit) {
                 $other = "high";
             }
 
-            echo "<li><a href='?$pageurl" . "search[sort]=$s&show=$show&search[order]=$order' selected='selected'>$s ($other to $order)</a></li>";
-            echo "<li><a href='?$pageurl" . "search[sort]=$s&show=$show&search[order]=$order'>$s ($order to $other)</a></li>";
+            echo '<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=' . esc_attr($order) . '" selected="selected">' . esc_attr($s) . '(' . esc_attr($other) . ' to ' . esc_attr($order) . ')</a></li>';
+            echo '<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=' . esc_attr($order) .'">' . esc_attr($s) . '(' . esc_attr($order) . 'to' . esc_attr($other) . ')</a></li>';
             continue;
         }
 
-        echo "<li><a href='?$pageurl" . "search[sort]=$s&show=$show&search[order]=low'>$s (low to high)</a></li>";
-        echo "<li><a href='?$pageurl" . "search[sort]=$s&show=$show&search[order]=high'>$s (high to low)</a></li>";
+        echo '<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=low">' . esc_attr($s) . '(low to high)</a></li>';
+        echo '<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=high">' . esc_attr($s) . '(high to low)</a></li>';
     }
     // echo "</select>";
 }
@@ -292,13 +292,13 @@ function vrpsortlinks2($unit) {
                 $other = "high";
             }
 
-            echo "<option value='?$pageurl" . "search[sort]=$s&show=$show&search[order]=$order' selected='selected'>$val ($other to $order)</option>";
-            echo "<option value='?$pageurl" . "search[sort]=$s&show=$show&search[order]=$order'>$val ($order to $other)</option>";
+            echo '<option value="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=' . esc_attr($order) . '" selected="selected">' . esc_attr($val) . '(' . esc_attr($other) . ' to ' .  esc_attr($order) . ')</option>';
+            echo '<option value="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=' . esc_attr($order) .'">' . esc_attr($val) . '(' . esc_attr($order) . ' to ' . esc_attr($other) . ')</option>';
             continue;
         }
 
-        echo "<option value='?$pageurl" . "search[sort]=$s&show=$show&search[order]=low'>$val (low to high)</option>";
-        echo "<option value='?$pageurl" . "search[sort]=$s&show=$show&search[order]=high'>$val (high to low)</option>";
+        echo '<option value="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=low">' . esc_attr($val) . '(low to high)</option>';
+        echo '<option value="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=high">' . esc_attr($val) . '(high to low)</option>';
     }
     echo "</select>";
 }
@@ -313,16 +313,16 @@ function vrp_resultsperpage() {
     $pageurl = $fields_string;
 
     if (isset($_GET['show'])) {
-        $show = (int)$_GET['show'];
+        $show = (int) $_GET['show'];
     } else {
         $show = 10;
     }
     echo "<ul class='vrpshowing'>";
     foreach (array(10, 20, 30) as $v) {
         if ($show == $v) {
-            echo "<li><a href='?$pageurl&show=10'><b>$v</b></a></li>";
+            echo '<li><a href="?' . esc_attr($pageurl) . '&show=10"><b>' . esc_attr($v) . '</b></a></li>';
         } else {
-            echo "<li><a href='?$pageurl&show=$v'>$v</a></li>";
+            echo '<li><a href="?' . esc_attr($pageurl) . '&show=' . esc_attr($v) . '">' . esc_attr($v) . '</a></li>';
         }
     }
     echo "</ul>";

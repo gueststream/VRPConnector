@@ -147,7 +147,7 @@
                 <td>
                     <?php
                     if (isset($_GET[ 'obj' ][ 'Adults' ])) {
-                        $adults = (int)$_GET[ 'obj' ][ 'Adults' ];
+                        $adults = (int) $_GET[ 'obj' ][ 'Adults' ];
                     } else {
                         $adults = $_SESSION[ 'adults' ];
                     }
@@ -155,7 +155,7 @@
                     <input type="hidden" name="booking[adults]" value="<?php echo esc_attr($adults); ?>"/><?php echo esc_html($adults); ?>
                     <?php
                     if (isset($_GET[ 'obj' ][ 'Children' ])) {
-                        $children_count = (int)$_GET[ 'obj' ][ 'Children' ];
+                        $children_count = (int) $_GET[ 'obj' ][ 'Children' ];
                     } else {
                         $children_count = $_SESSION[ 'children' ];
                     }
