@@ -642,7 +642,7 @@ class VRPConnector
 
         if (isset($_GET['printme'])) {
             include $this->theme . "/print.php";
-            die('');
+            exit;
         }
 
         $this->debug['data']       = $data;
@@ -665,7 +665,7 @@ class VRPConnector
         if (method_exists($this, $act)) {
             $this->$act($par);
         }
-        die('');
+        exit;
     }
 
     public function checkavailability($par = false, $ret = false)
@@ -775,14 +775,14 @@ class VRPConnector
         $content = ob_get_contents();
         ob_end_clean();
         echo wp_kses_post($content);
-        die('');
+        exit;
     }
 
     public function xmlexport()
     {
         header("Content-type: text/xml");
         echo wp_kses($this->customcall("generatexml"));
-        die('');
+        exit;
     }
 
     public function robots_mod($output, $public)
@@ -861,7 +861,7 @@ class VRPConnector
         if (isset($_GET['featuredunit'])) {
             $featured_unit=json_decode($this->call("featuredunit"));
 			wp_send_json($featured_unit);
-            die('');
+            exit;
         }
     }
 
@@ -884,7 +884,7 @@ class VRPConnector
         echo "<body>";
         echo wp_kses_post($data);
         echo "</body></html>";
-        die('');
+        exit;
 	}
 
     //
