@@ -418,7 +418,7 @@ class VRPConnector
         include TEMPLATEPATH . "/vrp/unitsresults.php";
         $content = ob_get_contents();
         ob_end_clean();
-        echo $content;
+        echo wp_kses_post($content);
     }
 
     public function search()
@@ -773,14 +773,14 @@ class VRPConnector
         include "xml.php";
         $content = ob_get_contents();
         ob_end_clean();
-        echo $content;
+        echo wp_kses_post($content);
         die();
     }
 
     public function xmlexport()
     {
         header("Content-type: text/xml");
-        echo $this->customcall("generatexml");
+        echo wp_kses($this->customcall("generatexml"));
         die();
     }
 
@@ -1226,7 +1226,7 @@ class VRPConnector
 
     public function apiKeyCallback()
     {
-        echo '<input type="text" name="vrpAPI" value="'.get_option('vrpAPI').'" style="width:400px;"/>';
+        echo '<input type="text" name="vrpAPI" value="'.esc_attr(get_option('vrpAPI')).'" style="width:400px;"/>';
     }
 
     public function vrpThemeSettingTitleCallback()
@@ -1240,7 +1240,7 @@ class VRPConnector
         foreach ($this->available_themes as $name => $displayname) {
             $sel = "";
             if ($name == $this->themename) {$sel = "SELECTED";}
-            echo '<option value="'.$name.'" '.$sel.'>'.$displayname.'</option>';
+            echo '<option value="'. esc_attr($name).'" '.esc_attr($sel).'>'.esc_attr($displayname).'</option>';
         }
         echo '</select>';
     }

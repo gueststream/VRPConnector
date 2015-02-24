@@ -70,7 +70,7 @@ function vrp_pagination($totalpages, $page = 1) {
     echo "<ul>";
     if ($page > 1) {
         $p = $page - 1;
-        echo "<li><a href='?$pageurl" . "show=$show&page=$p'>Prev</a></li>";
+        echo '<li><a href="?' . esc_attr($pageurl)  . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">Prev</a></li>';
     }
 
     if ($totalpages > 5) {

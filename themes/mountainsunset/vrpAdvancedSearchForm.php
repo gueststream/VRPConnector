@@ -128,8 +128,8 @@ $searchoptions=$vrp->searchoptions();
                     <select name="search[bathrooms]" style="width:90px;">
                         <option selected="selected" value="">Any</option>
                         <?php foreach (range($searchoptions->minbaths,$searchoptions->maxbaths) as $v){ ?>
-                            <option value="<?php echo $v;?>">
-                                <?php echo $v;?>+
+                            <option value="<?php echo esc_attr($v);?>">
+                                <?php echo esc_attr($v);?>+
                             </option>
                         <?php } ?>
                     </select>
