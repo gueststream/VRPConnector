@@ -17,10 +17,15 @@
  * $data['Photo']
  * $data['Thumb']
  */
+if(is_array($data)) {
+    foreach($data as $unit) {
+        ?>
+        <a href="/vrp/unit/<?php echo $unit->page_slug; ?>"
+           Title="<?php echo $unit->Name; ?>"
+            >
+            <img src="<?php echo $unit->Photo; ?>">
+        </a>
+    <?php
+    }
+}
 ?>
-
-<a href="/vrp/unit/<?php echo $data->page_slug; ?>"
-   Title="<?php echo $data->Name; ?>"
-    >
-    <img src="<?php echo $data->Photo; ?>">
-</a>

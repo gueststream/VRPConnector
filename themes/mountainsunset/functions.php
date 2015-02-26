@@ -392,7 +392,7 @@ function vrpCalendar($r, $totalMonths = 3)
     //print_r($final_date);
     //echo "</pre>";
     $today = strtotime(date("Y") . "-" . date("m") . "-01");
-    $calendar = new Calendar(date('Y-m-d'));
+    $calendar = new \Gueststream\Calendar(date('Y-m-d'));
     $calendar->link_days = 0;
     $calendar->highlighted_dates = $final_date;
     $calendar->arrival_dates = $arrivals;
