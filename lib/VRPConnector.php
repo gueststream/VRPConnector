@@ -86,7 +86,10 @@ class VRPConnector
         add_action('init', array($this, "villafilter"));
         add_action('cacheClear', array($this, "clearCache"), 1, 3);
         add_action('parse_request', array($this, 'router'));
-
+		add_action('update_option_vrpApiKey',array($this,'flush_rewrites'),10,2);
+		add_action('update_option_vrpAPI',array($this,'flush_rewrites'),10,2);
+		
+		
         // Filters
         add_filter('robots_txt', array($this, 'robots_mod'), 10, 2);
         //add_filter('query_vars', array($this, 'query_vars'),10,1);
@@ -166,6 +169,10 @@ class VRPConnector
         add_rewrite_rule('^vrp/([^/]*)/([^/]*)/?', 'index.php?action=$matches[1]&slug=$matches[2]', 'top');
 		
     }
+	
+	function flush_rewrites($old,$new){
+		flush_rewrite_rules();
+	}
 
     /**
      * Sets up action and slug as query variable.
@@ -1249,7 +1256,7 @@ class VRPConnector
         }
         echo '</select>';
     }
-
+	
     /**
      * Displays the 'VRP Login' admin page.
      */

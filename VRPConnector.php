@@ -20,3 +20,16 @@ require __DIR__ . "/lib/DummyResult.php";
 require __DIR__ . "/lib/calendar.php";
 
 $vrp = new \Gueststream\VRPConnector;
+
+		
+//Activation:
+register_activation_hook( __FILE__, 'vrp_flush_rewrites' );
+register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
+
+/**
+ * Flush rewrite rules upon activation/deactivation.
+ */
+function vrp_flush_rewrites() {
+	\Gueststream\VRPConnector::rewrite();
+	flush_rewrite_rules();
+}
