@@ -174,7 +174,7 @@ class Calendar
 
             if (is_array($this->highlighted_dates)) {
                 if (in_array($day_date, $this->highlighted_dates)) {
-                    if (in_array($day_date, $this->depart_dates)) {
+                    if (in_array($day_date, $this->depart_dates) && !in_array($day_date, $this->arrival_dates)) {
                         $classes[] = $this->depart_class;
                     } elseif (in_array($day_date, $this->arrival_dates)) {
                         $classes[] = $this->arrival_class;
