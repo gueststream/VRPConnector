@@ -73,11 +73,11 @@
 
 
         Check In:<br/>
-        <input type="text" class="input" name="search[arrival]" id="arrival" value="<?php echo $arrival; ?>">
+        <input type="text" class="input" name="search[arrival]" id="arrival" value="<?php echo esc_attr($arrival); ?>">
 
 
         Check Out:<br/>
-        <input type="text" class="input" name="search[departure]" id="depart" value="<?php echo $depart; ?>">
+        <input type="text" class="input" name="search[departure]" id="depart" value="<?php echo esc_attr($depart); ?>">
 
 
         Type:<br/>
@@ -92,9 +92,7 @@
                     $sel = "";
                 }
                 ?>
-                <option value="<?php echo $v; ?>" <?php echo $sel; ?>>
-                    <?php echo $v; ?>
-                </option>
+                <option value="<?php echo esc_attr($v); ?>" <?php echo esc_html($sel); ?>><?php echo esc_attr($v); ?></option>
 
             <?php } ?>
         </select>
@@ -110,9 +108,7 @@
                 }
                 ?>
 
-                <option value="<?php echo $v; ?>" <?php echo $sel; ?>>
-                    <?php echo $v; ?>
-                </option>
+                <option value="<?php echo esc_attr($v); ?>" <?php echo esc_html($sel); ?>><?php echo esc_attr($v); ?></option>
 
             <?php } ?>
 
@@ -129,9 +125,7 @@
                 }
                 ?>
 
-                <option value="<?php echo $v; ?>" <?php echo $sel; ?>>
-                    <?php echo $v; ?>
-                </option>
+                <option value="<?php echo esc_attr($v); ?>" <?php echo esc_html($sel); ?>><?php echo esc_attr($v); ?></option>
 
             <?php } ?>
 
@@ -148,9 +142,7 @@
                 }
                 ?>
 
-                <option value="<?php echo $v; ?>" <?php echo $sel; ?>>
-                    <?php echo $v; ?>
-                </option>
+                <option value="<?php echo esc_attr($v); ?>" <?php echo esc_html($sel); ?>><?php echo esc_attr($v); ?></option>
 
             <?php } ?>
 
