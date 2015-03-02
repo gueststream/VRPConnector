@@ -34,7 +34,7 @@
             <div class="row">
                 <div class="row">
                     <div class="col-md-10">
-                        <a href="<?php bloginfo('url'); ?>/vrp/unit/<?php echo esc_attr($a_unit->page_slug); ?>/">
+                        <a href="<?php bloginfo('url'); ?>/vrp/unit/<?php echo $a_unit->page_slug; ?>/">
                             <h2><?php echo esc_html($a_unit->Name); ?></h2>
                         </a>
                     </div>

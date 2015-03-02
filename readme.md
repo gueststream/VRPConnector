@@ -1,4 +1,3 @@
-![Travis CI Build Status](https://travis-ci.org/gueststream/VRPConnector.svg?branch=bestpractices)
 ### VRPConnector ###
 The Vacation Rental Platform Connector plugin allows you to market and book your vacation rental properties 
 on your WordPress website.

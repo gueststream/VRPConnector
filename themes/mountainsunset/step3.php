@@ -1,9 +1,10 @@
 <?php
+if (!isset($_SESSION['userinfo'])){
+	$_SESSION['userinfo']='';
+}
     $userinfo = $_SESSION['userinfo'];
 ?>
-<form
-    action="/vrp/book/confirm/?obj[Arrival]=<?php echo esc_attr($data->Arrival); ?>&obj[Departure]=<?php echo esc_attr($data->Departure); ?>&obj[PropID]=<?php echo esc_attr($_GET[ 'obj' ][ 'PropID' ]); ?>"
-    id="vrpbookform" method="post">
+<form action="/vrp/book/confirm/?obj[Arrival]=<?php echo esc_attr($data->Arrival); ?>&obj[Departure]=<?php echo esc_attr($data->Departure); ?>&obj[PropID]=<?php echo esc_attr($_GET[ 'obj' ][ 'PropID' ]); ?>" id="vrpbookform" method="post">
 <div class="userbox" id="guestinfodiv">
 
     <h3>Guest Information</h3>
@@ -129,10 +130,7 @@
                 ?>
                 <tr id="emailtr">
                     <td><b>Email*:</b></td>
-                    <td><span id="emailaddress"><?php echo esc_html($userinfo->email); ?></span><input style="display:none;" type="text"
-                                                                                      name="booking[email]"
-                                                                                      value="<?php echo esc_attr($userinfo->email); ?>"
-                                                                                      id="emailbox"> <span
+                    <td><span id="emailaddress"><?php echo esc_html($userinfo->email); ?></span><input style="display:none;" type="text" name="booking[email]" value="<?php echo esc_attr($userinfo->email); ?>" id="emailbox"> <span
                             id="changelink">| <a href="#" id="showchange">Change</a></span></td>
                 </tr>
             <?php } else { ?>
@@ -147,7 +145,7 @@
                 <td>
                     <?php
                     if (isset($_GET[ 'obj' ][ 'Adults' ])) {
-                        $adults = (int)$_GET[ 'obj' ][ 'Adults' ];
+                        $adults = (int) $_GET[ 'obj' ][ 'Adults' ];
                     } else {
                         $adults = $_SESSION[ 'adults' ];
                     }
@@ -155,8 +153,11 @@
                     <input type="hidden" name="booking[adults]" value="<?php echo esc_attr($adults); ?>"/><?php echo esc_html($adults); ?>
                     <?php
                     if (isset($_GET[ 'obj' ][ 'Children' ])) {
-                        $children_count = (int)$_GET[ 'obj' ][ 'Children' ];
+                        $children_count = (int) $_GET[ 'obj' ][ 'Children' ];
                     } else {
+						if(!isset($_SESSION['children'])){
+							$_SESSION['children']=0;
+						}
                         $children_count = $_SESSION[ 'children' ];
                     }
                     ?>
@@ -194,9 +195,7 @@
 
             Travel insurance is available for your trip. ($<?php echo esc_html(number_format($data->InsuranceAmount, 2)); ?>) <br> Would
             you like to purchase the optional travel insurance? <br>
-            <br> <input type="radio" name="booking[acceptinsurance]" value="1" checked> Yes <input type="radio"
-                                                                                                   name="booking[acceptinsurance]"
-                                                                                                   value="0"/> No
+            <br> <input type="radio" name="booking[acceptinsurance]" value="1" checked> Yes <input type="radio" name="booking[acceptinsurance]"  value="0"/> No
             <input type="hidden" name="booking[InsuranceAmount]" value="<?php echo esc_attr($data->InsuranceAmount); ?>">
         </div>
     </div>
@@ -275,8 +274,7 @@
 </div>
 <div class="" style="margin-top:20px; text-align:center">
     <div style="margin:0 auto;width:80%">
-        By clicking the "Book This Property Now" you are agreeing to the <a href="/reservation-policies/"
-                                                                            target="_blank"><b>terms and conditions</b></a>.
+        By clicking the "Book This Property Now" you are agreeing to the <a href="/reservation-policies/" target="_blank"><b>terms and conditions</b></a>.
         <br><br>
         <?php if (isset($data->ratecalc)) { ?>
             <input type="hidden" name="booking[ratecalc]" value="1">
