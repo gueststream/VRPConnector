@@ -30,6 +30,6 @@ register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
  * Flush rewrite rules upon activation/deactivation.
  */
 function vrp_flush_rewrites() {
-	\Gueststream\VRPConnector::rewrite();
+	\Gueststream\VRPConnector::rewrite_activate();
 	flush_rewrite_rules();
 }
