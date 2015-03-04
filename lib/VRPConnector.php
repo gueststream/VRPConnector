@@ -822,15 +822,20 @@ class VRPConnector
      */
     public function call($call, $params = array())
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->apiURL . $this->apiKey . "/" . $call);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        $results = curl_exec($ch);
-        curl_close($ch);
-        return $results;
+		$cache_key	 = md5( $call . implode( '_', $params ) );
+		$results	 = wp_cache_get( $cache_key, 'vrp' );
+		if ( false == $results ) {
+			$ch		 = curl_init();
+			curl_setopt( $ch, CURLOPT_URL, $this->apiURL . $this->apiKey . "/" . $call );
+			curl_setopt( $ch, CURLOPT_POST, 1 );
+			curl_setopt( $ch, CURLOPT_POSTFIELDS, $params );
+			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+			curl_setopt( $ch, CURLOPT_HEADER, 0 );
+			$results = curl_exec( $ch );
+			curl_close( $ch );
+			wp_cache_set( $cache_key, $results, 'vrp', 300 ); // 5 Minutes.
+		}
+		return $results;
     }
 
     public function customcall($call)
