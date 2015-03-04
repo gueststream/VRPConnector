@@ -84,7 +84,6 @@ class VRPConnector
         add_action('init', array($this, 'otheractions'));
         add_action('init', array($this, 'rewrite'));
         add_action('init', array($this, 'villafilter'));
-        add_action('cacheClear', array($this, 'clearCache'), 1, 3);
         add_action('parse_request', array($this, 'router'));
 		add_action('update_option_vrpApiKey',array($this,'flush_rewrites'),10,2);
 		add_action('update_option_vrpAPI',array($this,'flush_rewrites'),10,2);
@@ -271,12 +270,6 @@ class VRPConnector
 
                 $data2 = $this->call("getspecial/" . $slug);
                 $data  = json_decode($data2);
-                if (!isset($data->Error)) {
-                    $this->cache($action, $slug, $data2);
-
-                    $_GET['API'] = "YES";
-                }
-
                 $pagetitle = $data->title;
                 $content   = $this->loadTheme("specials", $data);
 
@@ -1308,44 +1301,6 @@ class VRPConnector
         return json_decode(file_get_contents($url));
     }
 
-    //
-    // File Caching Methods
-    //
-
-    /**
-     * store cache item.
-     *
-     * @param string $action
-     * @param string $slug
-     * @param        $object [] $object
-     */
-    public function cache($action, $slug, $object)
-    {
-        return; // Removing file cache.
-    }
-
-    /**
-     * get Cached item
-     *
-     * @param $action
-     * @param $slug
-     *
-     * @return bool
-     */
-    public function getCache($action, $slug)
-    {
-        return false; // Removing file cache.
-    }
-
-    /**
-     * Removes cached file.
-     *
-     * @param $param [] $param
-     */
-    public function clearCache($file, $action, $slug)
-    {
-       return; // Removing file cache
-    }
 	/**
 	 * Checks to see if the page loaded is a VRP page.
 	 * Formally $_GET['action'].
