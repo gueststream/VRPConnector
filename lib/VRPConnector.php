@@ -1263,13 +1263,9 @@ class VRPConnector
 
     public function apiKeySettingTitleCallback()
     {
-        echo "<p>Your API Key can be found in the settings section after
-        logging in to <a href='http://www.gueststream.net'>Gueststream.net</a>.</p>
-        <p>Demo API Key: <strong>1533020d1121b9fea8c965cd2c978296</strong>
-        The Demo API Key does not contain bookable units therfor availability searches
-        will not work.
-        </p>
-        ";
+        echo "<p>Your API Key can be found in the settings section after logging in to <a href='http://www.gueststream.net'>Gueststream.net</a>.</p>
+        <p>Don't have an account? <a href='http://www.gueststream.com/apps-and-tools/vrpconnector-sign-up-page/'>Click Here</a> to learn more about getting a <a href='http://www.gueststream.net'>Gueststream.net</a> account.</p>
+        <p>Demo API Key: <strong>1533020d1121b9fea8c965cd2c978296</strong> The Demo API Key does not contain bookable units therfor availability searches will not work.</p>";
     }
 
     public function apiKeyCallback()
