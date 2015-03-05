@@ -18,7 +18,7 @@ class VRPConnector
     public $otheractions = array();                //
     public $time;                                  // Time (in seconds?) spent making calls to the API
     public $debug = array();                       // Container for debug data
-
+	public $action = false; // VRP Action 
     /**
      * Class Construct
      */
@@ -51,7 +51,7 @@ class VRPConnector
             return false;
         }
 
-        if (!isset($_GET['action'])) {
+        if (!$this->is_vrp_page()) {
             return false;
         }
 
@@ -78,27 +78,21 @@ class VRPConnector
         }
 
         // Actions
-        add_action("init", array($this, "ajax"));
-        add_action("init", array($this, "sitemap"));
-        add_action('init', array($this, "featuredunit"));
-        add_action("init", array($this, "otheractions"));
-        add_action('init', array($this, "rewrite"));
-        add_action('init', array($this, "villafilter"));
-        add_action('cacheClear', array($this, "clearCache"), 1, 3);
+        add_action('init', array($this, 'ajax'));
+        add_action('init', array($this, 'sitemap'));
+        add_action('init', array($this, 'featuredunit'));
+        add_action('init', array($this, 'otheractions'));
+        add_action('init', array($this, 'rewrite'));
+        add_action('init', array($this, 'villafilter'));
+        add_action('cacheClear', array($this, 'clearCache'), 1, 3);
         add_action('parse_request', array($this, 'router'));
 		add_action('update_option_vrpApiKey',array($this,'flush_rewrites'),10,2);
 		add_action('update_option_vrpAPI',array($this,'flush_rewrites'),10,2);
-		
-		
-        // Filters
-        add_filter('robots_txt', array($this, 'robots_mod'), 10, 2);
-        //add_filter('query_vars', array($this, 'query_vars'),10,1);
-        remove_filter('template_redirect', 'redirect_canonical');
+		add_action( 'wp', array( $this, 'remove_filters' ) );
 
-        if (isset($_GET['action'])) {
-            remove_filter('the_content', 'wptexturize');
-            remove_filter('the_content', 'wpautop');
-        }
+		// Filters
+        add_filter('robots_txt', array($this, 'robots_mod'), 10, 2);
+        remove_filter('template_redirect', 'redirect_canonical');
 
         // Shortcodes
 
@@ -171,6 +165,16 @@ class VRPConnector
 		
     }
 	
+	/**
+	 * Only on activation.
+	 */
+	static function rewrite_activate()
+	{
+		add_rewrite_tag('%action%', '([^&]+)');
+		add_rewrite_tag('%slug%', '([^&]+)');
+        add_rewrite_rule('^vrp/([^/]*)/([^/]*)/?', 'index.php?action=$matches[1]&slug=$matches[2]', 'top');
+		
+	}
 	function flush_rewrites($old,$new){
 		flush_rewrite_rules();
 	}
@@ -401,13 +405,15 @@ class VRPConnector
 
     public function villafilter()
     {
-        if (!isset($_GET['action'])) {
+        if (!$this->is_vrp_page()) {
             return;
         }
 
-        if ($_GET['action'] == 'complexsearch') {
+        if ('complexsearch' == $this->action) {
             if ($_GET['search']['type'] == 'Villa') {
-                $_GET['action'] = 'search';
+                $this->action = 'search';
+				global $wp_query;
+				$wp_query->query_vars['action']=$this->action;
             }
         }
     }
@@ -1367,5 +1373,27 @@ class VRPConnector
     {
        return; // Removing file cache
     }
-
+	/**
+	 * Checks to see if the page loaded is a VRP page.
+	 * Formally $_GET['action'].
+	 * @global WP_Query $wp_query
+	 * @return bool
+	 */
+	public function is_vrp_page()
+	{
+		global $wp_query;
+		if (isset($wp_query->query_vars['action'])){ // Is VRP page.
+			$this->action=$wp_query->query_vars['action'];
+			return true;
+		}
+		return false;
+	}
+	
+	public function remove_filters()
+	{
+		 if ( $this->is_vrp_page() ) {
+			remove_filter( 'the_content', 'wptexturize' );
+			remove_filter( 'the_content', 'wpautop' );
+		}
+	}
 }
