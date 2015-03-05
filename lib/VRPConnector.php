@@ -818,14 +818,11 @@ class VRPConnector
 		$cache_key	 = md5( $call . implode( '_', $params ) );
 		$results	 = wp_cache_get( $cache_key, 'vrp' );
 		if ( false == $results ) {
-			$ch		 = curl_init();
-			curl_setopt( $ch, CURLOPT_URL, $this->apiURL . $this->apiKey . "/" . $call );
-			curl_setopt( $ch, CURLOPT_POST, 1 );
-			curl_setopt( $ch, CURLOPT_POSTFIELDS, $params );
-			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-			curl_setopt( $ch, CURLOPT_HEADER, 0 );
-			$results = curl_exec( $ch );
-			curl_close( $ch );
+			$url	 = $this->apiURL . $this->apiKey . '/' . $call;
+			$args	 = array(
+				'body' => $params
+			);
+			$results = wp_remote_retrieve_body( wp_remote_post( $url, $args ) );
 			wp_cache_set( $cache_key, $results, 'vrp', 300 ); // 5 Minutes.
 		}
 		return $results;
@@ -1298,7 +1295,7 @@ class VRPConnector
     public function doLogin($email, $password)
     {
         $url = $this->apiURL . $this->apiKey . "/userlogin/?email=$email&password=$password";
-        return json_decode(file_get_contents($url));
+        return json_decode(  wp_remote_retrieve_body( wp_remote_get($url)));
     }
 
 	/**
