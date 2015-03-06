@@ -354,6 +354,7 @@ jQuery(document).ready(function(){
                 jQuery.get('/vrp/favorites/remove',{unit: unit_id}).done(function () {
                     fav_button.html('Add to Favorites');
                     fav_button.data('isFavorite',false);
+                    jQuery('#favorite_'+unit_id).hide();
                 });
             } else {
                 // Add unit to favorites.

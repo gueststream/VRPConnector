@@ -30,6 +30,10 @@
             </div>
         </div>
 
+        <div class="row">
+            <a href="<?php echo site_url() . "/vrp/favorites/show";?>">View Favorites</a>
+        </div>
+
         <?php foreach($data->results as $a_unit) { ?>
             <div class="row">
                 <div class="row">

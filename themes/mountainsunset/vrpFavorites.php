@@ -40,13 +40,13 @@
         <th>Max #</th>
         <th>Location</th>
         <th>Amenities</th>
-        <th>Rate Estimate</th>
+        <th>Availability</th>
         <th>Action</th>
     </tr>
     </thead>
     <tbody>
     <?php foreach ($data->results as $prop) { ?>
-        <tr>
+        <tr id="favorite_<?php echo $prop->id?>">
             <td>
                 <a href="/vrp/unit/<?php echo esc_attr($prop->page_slug); ?>">
                     <img src="<?php echo esc_url($prop->Thumb); ?>" style="max-width:150px;">
@@ -87,9 +87,9 @@
                 <span>
                     <?php if ($prop->unavail != '') {
                         echo "Not Available";
-                    } else { ?>
-                        $<?php echo esc_html(number_format($prop->Rate)); ?>
-                    <?php } ?>
+                    } else {
+                        echo "Available";
+                    } ?>
                 </span>
             </td>
             <td>
