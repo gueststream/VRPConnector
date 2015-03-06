@@ -29,10 +29,12 @@ if (!isset($_SESSION['depart'])) {
         <div id="tabs">
             <ul>
                 <li><a href="#overview">Overview</a></li>
+                <li><a href="#amenities">Amenities</a></li>
                 <?php if (isset($data->reviews[0])) { ?>
                     <li><a href="#reviews">Reviews</a></li>
                 <?php } ?>
-                <li><a href="#calendar">Check Availability</a></li>
+                <li><a href="#calendar">Book</a></li>
+                <li><a href="#rates">Rates</a></li>
                 <?php if (isset($data->lat) && isset($data->long)) { ?>
                     <li><a href="#gmap" id="gmaplink">Map</a></li>
                 <?php } ?>
@@ -62,17 +64,15 @@ if (!isset($_SESSION['depart'])) {
                         </div>
 
                         <div id="gallery">
-                            <?php
-                            foreach ($data->photos as $k => $v) {
-                                ?>
-                                <img class="thumb" id="<?php echo esc_attr($v->id); ?>"
+                            <?php foreach ($data->photos as $k => $v) { ?>
+                                <img class="thumb"
+                                     id="<?php echo esc_attr($v->id); ?>"
                                      alt="<?php echo esc_attr($v->caption); ?>"
                                      src="<?php echo esc_url($v->thumb_url); ?>"
-                                     style="width:90px; float:left; margin: 3px;"/>
-                            <?php
-                            }
-                            ?>
+                                     style="height:60px; float:left; margin: 3px;"/>
+                            <?php } ?>
                         </div>
+                        <br style="clear:both;" class="clearfix">
                     </div>
                 </div>
                 <div class="row">
@@ -80,27 +80,27 @@ if (!isset($_SESSION['depart'])) {
                         <div id="description">
                             <p><?php echo wp_kses_post(nl2br($data->Description)); ?></p>
                         </div>
-
-                        <div id="amenities">
-                            <table class="amenTable" cellspacing="0">
-                                <tr>
-                                    <td colspan="2" class="heading"><h4>Amenities</h4></td>
-                                </tr>
-                                <?php foreach ($data->attributes as $amen) { ?>
-
-                                    <tr>
-                                        <td class="first">
-                                            <b><?php echo esc_html($amen->name); ?></b>:
-                                        </td>
-                                        <td> <?php echo esc_html($amen->value); ?></td>
-                                    </tr>
-
-                                <?php } ?>
-                            </table>
-                        </div>
                     </div>
                 </div>
                 <div class="clearfix"></div>
+            </div>
+
+            <div id="amenities">
+                <table class="amenTable" cellspacing="0">
+                    <tr>
+                        <td colspan="2" class="heading"><h4>Amenities</h4></td>
+                    </tr>
+                    <?php foreach ($data->attributes as $amen) { ?>
+
+                        <tr>
+                            <td class="first">
+                                <b><?php echo esc_html($amen->name); ?></b>:
+                            </td>
+                            <td> <?php echo esc_html($amen->value); ?></td>
+                        </tr>
+
+                    <?php } ?>
+                </table>
             </div>
 
             <!-- REVIEWS TAB -->
@@ -189,9 +189,11 @@ if (!isset($_SESSION['depart'])) {
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <h4>Seasonal Rates</h4>
+            </div>
 
+            <div id="rates">
+                <div class="row">
+                    <h3>Seasonal Rates</h3>
                     <div id="rates">
                         <?php
                         $r = array();
@@ -238,6 +240,8 @@ if (!isset($_SESSION['depart'])) {
             <div id="gmap">
                 <div id="map" style="width:100%;height:500px;"></div>
             </div>
+
+
 
         </div>
     </div>

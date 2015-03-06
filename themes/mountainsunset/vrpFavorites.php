@@ -11,6 +11,8 @@
                            value="<?php echo esc_attr($_SESSION['arrival']); ?>"
                         />
                 </td>
+            </tr>
+            <tr>
                 <td>Departure:</td>
                 <td>
                     <input type="text"
@@ -20,12 +22,14 @@
                            value="<?php echo esc_attr($_SESSION['depart']); ?>"
                         />
                 </td>
-                <td>
+            </tr>
+            <tr>
+                <td colspan="2">
                     <?php foreach ($_GET['favorites'] as $v) { ?>
                         <input type="hidden" name="favorites[]" value="<?php echo esc_attr($v); ?>">
                     <?php } ?>
-
-                    <input type="submit" class="ButtonView" value="Check Availability"></td>
+                    <input type="submit" class="ButtonView" value="Check Availability">
+                </td>
             </tr>
         </table>
     </form>
@@ -37,20 +41,19 @@
         <th>Property</th>
         <th>Beds</th>
         <th>Baths</th>
-        <th>Max #</th>
-        <th>Location</th>
-        <th>Amenities</th>
+        <!--        <th>Max #</th>-->
+        <!--        <th>Location</th>-->
+        <!--        <th>Amenities</th>-->
         <th>Availability</th>
         <th>Action</th>
     </tr>
     </thead>
     <tbody>
     <?php foreach ($data->results as $prop) { ?>
-        <tr id="favorite_<?php echo $prop->id?>">
+        <tr id="favorite_<?php echo $prop->id ?>">
             <td>
                 <a href="/vrp/unit/<?php echo esc_attr($prop->page_slug); ?>">
                     <img src="<?php echo esc_url($prop->Thumb); ?>" style="max-width:150px;">
-                    <br>
                     <?php echo esc_html($prop->Name); ?>
                 </a>
             </td>
@@ -67,21 +70,21 @@
                 </span>
             </td>
 
-            <td>
-                <span> <?php echo esc_html($prop->Sleeps); ?></span>
-            </td>
+            <!--            <td>-->
+            <!--                <span> --><?php //echo esc_html($prop->Sleeps); ?><!--</span>-->
+            <!--            </td>-->
 
-            <td>
-                <span> <?php echo esc_html($prop->Location); ?></span>
-            </td>
+            <!--            <td>-->
+            <!--                <span> --><?php //echo esc_html($prop->Location); ?><!--</span>-->
+            <!--            </td>-->
 
-            <td>
-                <ul class="listsplitter" id="listfor_<?php echo esc_attr($prop->id); ?>">
-                    <?php foreach ($prop->attributes as $v) {
-                        echo '<li>' . esc_html($v->name) . '</li>';
-                    } ?>
-                </ul>
-            </td>
+            <!--            <td>-->
+            <!--                <ul class="listsplitter" id="listfor_--><?php //echo esc_attr($prop->id); ?><!--">-->
+            <!--                    --><?php //foreach ($prop->attributes as $v) {
+            //                        echo '<li>' . esc_html($v->name) . '</li>';
+            //                    } ?>
+            <!--                </ul>-->
+            <!--            </td>-->
 
             <td>
                 <span>

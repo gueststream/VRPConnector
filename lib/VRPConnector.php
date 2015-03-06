@@ -845,7 +845,7 @@ class VRPConnector
                 return $this->loadTheme('vrpFavoritesEmpty');
             }
 
-            $url_string = site_url() . "/vrp/favorites/show&";
+            $url_string = site_url() . "/vrp/favorites/show?";
             foreach($this->favorites as $unit_id) {
                 $url_string .= "&favorites[]=".$unit_id;
             }
