@@ -35,6 +35,13 @@ class mountainsunset
 			}
 		}
 
+        $script_vars = [
+            'site_url' => site_url(),
+            'stylesheet_dir_url' => get_stylesheet_directory_uri(),
+            'plugin_url' => plugins_url('',dirname(dirname(__FILE__)))
+        ];
+        wp_localize_script('VRPthemeJS','url_paths',$script_vars);
+
     }
 
     function add_my_stylesheet()

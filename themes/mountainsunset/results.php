@@ -51,6 +51,7 @@
                     </div>
                     <div class="col-md-6">
                         <?php echo wp_kses_post($a_unit->ShortDescription); ?>
+                        <button class="vrp-favorite-button" data-unit="<?php echo $a_unit->id; ?>"></button>
                     </div>
                 </div>
             </div>

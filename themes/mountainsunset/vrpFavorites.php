@@ -5,7 +5,7 @@
                 <td>Arrival:</td>
                 <td>
                     <input type="text"
-                           name="c[arrival]"
+                           name="arrival"
                            class="input"
                            id="arrival2"
                            value="<?php echo esc_attr($_SESSION['arrival']); ?>"
@@ -14,15 +14,15 @@
                 <td>Departure:</td>
                 <td>
                     <input type="text"
-                           name="c[depart]"
+                           name="depart"
                            class="input"
                            id="depart2"
                            value="<?php echo esc_attr($_SESSION['depart']); ?>"
                         />
                 </td>
                 <td>
-                    <?php foreach ($_GET['c']['compare'] as $v) { ?>
-                        <input type="hidden" name="c[compare][]" value="<?php echo esc_attr($v); ?>">
+                    <?php foreach ($_GET['favorites'] as $v) { ?>
+                        <input type="hidden" name="favorites[]" value="<?php echo esc_attr($v); ?>">
                     <?php } ?>
 
                     <input type="submit" class="ButtonView" value="Check Availability"></td>
@@ -33,17 +33,19 @@
 
 <table style="margin-top:50px;">
     <thead>
-        <tr>
-            <th>Property</th>
-            <th>Beds/Baths</th>
-            <th>Max #</th>
-            <th>Location</th>
-            <th>Amenities</th>
-            <th>Rate Estimate</th>
-        </tr>
+    <tr>
+        <th>Property</th>
+        <th>Beds</th>
+        <th>Baths</th>
+        <th>Max #</th>
+        <th>Location</th>
+        <th>Amenities</th>
+        <th>Rate Estimate</th>
+        <th>Action</th>
+    </tr>
     </thead>
     <tbody>
-    <?php foreach ($data->results as $prop){ ?>
+    <?php foreach ($data->results as $prop) { ?>
         <tr>
             <td>
                 <a href="/vrp/unit/<?php echo esc_attr($prop->page_slug); ?>">
@@ -54,7 +56,15 @@
             </td>
 
             <td>
-                <span><?php echo esc_html($prop->Bedrooms); ?> Beds / <?php echo esc_html($prop->Bathrooms); ?> Baths</span>
+                <span>
+                    <?php echo esc_html($prop->Bedrooms); ?>
+                </span>
+            </td>
+
+            <td>
+                </span>
+                <?php echo esc_html($prop->Bathrooms); ?>
+                </span>
             </td>
 
             <td>
@@ -67,11 +77,9 @@
 
             <td>
                 <ul class="listsplitter" id="listfor_<?php echo esc_attr($prop->id); ?>">
-                    <?php
-                    foreach ($prop->attributes as $v):
+                    <?php foreach ($prop->attributes as $v) {
                         echo '<li>' . esc_html($v->name) . '</li>';
-                    endforeach;
-                    ?>
+                    } ?>
                 </ul>
             </td>
 
@@ -79,12 +87,15 @@
                 <span>
                     <?php if ($prop->unavail != '') {
                         echo "Not Available";
-                    } else {
-                        ?>$<?php echo esc_html(number_format($prop->Rate)); ?>
+                    } else { ?>
+                        $<?php echo esc_html(number_format($prop->Rate)); ?>
                     <?php } ?>
                 </span>
             </td>
-            </tr>
+            <td>
+                <button class="vrp-favorite-button" data-unit="<?php echo $prop->id ?>"></button>
+            </td>
+        </tr>
     <?php } ?>
     </tbody>
 </table>
@@ -92,6 +103,6 @@
 <div class="clear"></div>
 <div style="text-align:right;">
     <small>
-     * Highest Rate Shown. Not based on occupancy.
+        * Highest Rate Shown. Not based on occupancy.
     </small>
 </div>

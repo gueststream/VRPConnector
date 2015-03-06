@@ -88,10 +88,8 @@ jQuery(document).ready(function(){
     var dates2 = jQuery( "#arrival2, #depart2" ).datepicker({
         minDate: 2,
         showOn: "both",
-        buttonImage: "/wp-content/plugins/VRPAPI/themes/mountainsunset/images/cal.jpg",
+        buttonImage: url_paths.plugin_url + "/themes/mountainsunset/images/cal.jpg",
         buttonImageOnly: true,
-
-
         onSelect: function( selectedDate ) {
             var option = this.id == "arrival2" ? "minDate" : "30",
                 instance = jQuery( this ).data( "datepicker" ),
@@ -104,7 +102,6 @@ jQuery(document).ready(function(){
                 var arrivalDate=jQuery("#arrival2").datepicker("getDate");
                 var departureDate=jQuery("#depart2").datepicker("getDate");
                 var oneDay = 1000*60*60*24;
-
             }
         }
     });
@@ -196,7 +193,6 @@ jQuery(document).ready(function(){
     }
 
     if (jQuery("#packagesform").length > 0){
-
         jQuery.get("/?vrpjax=1&act=addtopackage",jQuery("#packagesform").serialize(),function(data){
             var obj=jQuery.parseJSON(data);
             jQuery("#packageinfo,.addontotal").html(obj.packagecost).fadeIn(1000);
@@ -227,25 +223,21 @@ jQuery(document).ready(function(){
     });
 
     jQuery("#country").change(function(){
-
         if (jQuery(this).val() == 'CA' || jQuery(this).val() == 'US' || jQuery(this).val() == 'other'){
             if (jQuery(this).val() == 'CA'){
                 jQuery("#state").val('');
-
                 jQuery("#provincetr").effect("highlight", {}, 2000);
                 jQuery("#othertr,#regiontr,#statetr").hide();
             }
+
             if (jQuery(this).val() == 'US'){
                 jQuery("#province,#region").val('');
                 jQuery("#statetr").effect("highlight", {}, 2000);
-
                 jQuery("#othertr,#regiontr,#provincetr").hide();
             }
 
             if (jQuery(this).val() == 'other'){
                 jQuery("#province,#state").val('');
-
-
                 jQuery("#provincetr,#statetr").hide();
                 jQuery("#othertr,#regiontr").effect("highlight", {}, 2000);
             }
@@ -271,9 +263,8 @@ jQuery(document).ready(function(){
                 jQuery("#bookingbuttonvrp").show();
                 jQuery("#vrploadinggif").hide();
                 jQuery.each(obj.Bad,function(k,v){
-                    //  alert(k);
                     jQuery("#" + k + "tr td:last").append('<span class="vrpmsg alert alert-error">' + v + '</span>');
-                    oldcolor=jQuery("#" + k + "tr").css("color");
+                    var oldcolor=jQuery("#" + k + "tr").css("color");
                     jQuery("#" + k + "tr").addClass("badfields");
                     jQuery("#" + k).change(function(){
                         jQuery("#" + k + "tr").removeClass("badfields");
@@ -308,13 +299,11 @@ jQuery(document).ready(function(){
 
     jQuery(".compareit").click(function(){
         var id=jQuery(this).attr("rel");
-
         jQuery("#comparison").load("/?addcompare=1&id=" + id,function(){
             jQuery("#comparecount").load("/?comparecount=1");
         });
         jQuery("#cpr_" + id).show();
         jQuery("#cpc_" + id).hide();
-
         return false;
     });
 
@@ -331,14 +320,54 @@ jQuery(document).ready(function(){
     });
 
     jQuery("#sharethecompare").click(function(){
-
         jQuery('#sharingcompare').load("/?savecompare=1",function(d){
             jQuery(this).slideDown();
         });
-
-
         return false;
     });
+
+    if(jQuery('.vrp-favorite-button').length) {
+        jQuery.getJSON('/vrp/favorites/json').done(function (data) {
+            console.log(data);
+            jQuery('.vrp-favorite-button').each(function () {
+                var fav_button = jQuery(this);
+                var unit_id = fav_button.data('unit');
+                var is_favorite = jQuery.inArray(unit_id,data);
+
+                if(is_favorite != -1) {
+                    fav_button.html('Remove from Favorites');
+                    fav_button.data('isFavorite',true);
+                } else {
+                    fav_button.html('Add to Favorites');
+                    fav_button.data('isFavorite',false);
+                }
+
+                fav_button.show();
+            });
+        });
+
+        jQuery('.vrp-favorite-button').on('click',function () {
+            var fav_button = jQuery(this);
+            var unit_id = fav_button.data('unit');
+            if(fav_button.data('isFavorite') == true) {
+                // Remove existing favorite
+                jQuery.get('/vrp/favorites/remove',{unit: unit_id}).done(function () {
+                    fav_button.html('Add to Favorites');
+                    fav_button.data('isFavorite',false);
+                });
+            } else {
+                // Add unit to favorites.
+                jQuery.get('/vrp/favorites/add',{unit: unit_id}).done(function () {
+                    fav_button.html('Remove from Favorites');
+                    fav_button.data('isFavorite',true);
+                });
+            }
+        });
+    }
+
+    //alert(url_paths.site_url);
+    //alert(url_paths.stylesheet_dir_url);
+    //alert(url_paths.plugin_url);
 });
 
 function checkavailability(){
