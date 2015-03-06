@@ -30,6 +30,10 @@
             </div>
         </div>
 
+        <div class="row">
+            <a href="<?php echo site_url() . "/vrp/favorites/show";?>">View Favorites</a>
+        </div>
+
         <?php foreach($data->results as $a_unit) { ?>
             <div class="row">
                 <div class="row">
@@ -51,6 +55,7 @@
                     </div>
                     <div class="col-md-6">
                         <?php echo wp_kses_post($a_unit->ShortDescription); ?>
+                        <button class="vrp-favorite-button" data-unit="<?php echo $a_unit->id; ?>"></button>
                     </div>
                 </div>
             </div>
