@@ -527,8 +527,7 @@ class VRPConnector
             $obj->departure      = $c['depart'];
             $_SESSION['arrival'] = $obj->arrival;
             $_SESSION['depart']  = $obj->departure;
-        } else {
-            if (isset($_SESSION['arrival'])) {
+        } elseif (isset($_SESSION['arrival'])) {
                 $obj->arrival   = $_SESSION['arrival'];
                 $obj->departure = $_SESSION['depart'];
             }
@@ -581,8 +580,7 @@ class VRPConnector
             $obj->departure      = $c['depart'];
             $_SESSION['arrival'] = $obj->arrival;
             $_SESSION['depart']  = $obj->departure;
-        } else {
-            if (isset($_SESSION['arrival'])) {
+        } elseif (isset($_SESSION['arrival'])) {
                 $obj->arrival   = $_SESSION['arrival'];
                 $obj->departure = $_SESSION['depart'];
             }
