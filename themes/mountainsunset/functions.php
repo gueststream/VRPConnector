@@ -82,8 +82,8 @@ function vrp_pagination($totalpages, $page = 1) {
 function vrp_page_links($page,$pageurl,$show,$totalpages){
 	    echo "<ul>";
     if ($page > 1) {
-        $p = $page - 1;
-        echo '<li><a href="?' . esc_attr($pageurl)  . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">Prev</a></li>';
+        $p_num = $page - 1;
+        echo '<li><a href="?' . esc_attr($pageurl)  . 'show=' . esc_attr($show) . '&page=' . esc_attr($p_num) . '">Prev</a></li>';
     }
 
     if ($totalpages > 5) {
@@ -103,9 +103,9 @@ function vrp_page_links($page,$pageurl,$show,$totalpages){
 
     foreach (range($startrange, $totalrange) as $p) {
         if ($page == $p) {
-            echo '<li class="active"><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">' . esc_attr($p) . '</a></li>';
+            echo '<li class="active"><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p_num) . '">' . esc_attr($p_num) . '</a></li>';
         } else {
-            echo '<li><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">' . esc_attr($p) . '</a></li>';
+            echo '<li><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p_num) . '">' . esc_attr($p_num) . '</a></li>';
         }
     }
     if ($totalpages > 5) {
@@ -233,17 +233,16 @@ function vrpsortlinks($unit) {
     // echo "</select>";
 	vrp_sort_ul($sortoptions, $show, $order);
 }
-function vrp_sort_ul($sortoptions,$show,$order){
+function vrp_sort_ul($sortoptions,$show,$order,$sort){
 	foreach ($sortoptions as $s) {
 
         if ($sort == $s) {
+			$order = "low";
+            $other = "high";
             if ($order == "low") {
                 $order = "high";
                 $other = "low";
-            } else {
-                $order = "low";
-                $other = "high";
-            }
+            } 
 
             echo '<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=' . esc_attr($order) . '" selected="selected">' . esc_attr($s) . '(' . esc_attr($other) . ' to ' . esc_attr($order) . ')</a></li>';
             echo '<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=' . esc_attr($order) .'">' . esc_attr($s) . '(' . esc_attr($order) . 'to' . esc_attr($other) . ')</a></li>';
@@ -364,7 +363,7 @@ function daysTo($from, $to, $round = true) {
     $to = strtotime($to);
     $diff = $to - $from;
     $days = $diff / 86400;
-    return $round == true ? floor($days) : round($days, 2);
+    return $round === true ? floor($days) : round($days, 2);
 }
 
 function vrpCalendar($r, $totalMonths = 3) {
