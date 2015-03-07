@@ -3,8 +3,9 @@ if (!isset($_SESSION['userinfo'])){
 	$_SESSION['userinfo']='';
 }
     $userinfo = $_SESSION['userinfo'];
+$obj=filter_input(INPUT_GET,'obj',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
 ?>
-<form action="/vrp/book/confirm/?obj[Arrival]=<?php echo esc_attr($data->Arrival); ?>&obj[Departure]=<?php echo esc_attr($data->Departure); ?>&obj[PropID]=<?php echo esc_attr($_GET[ 'obj' ][ 'PropID' ]); ?>" id="vrpbookform" method="post">
+<form action="/vrp/book/confirm/?obj[Arrival]=<?php echo esc_attr($data->Arrival); ?>&obj[Departure]=<?php echo esc_attr($data->Departure); ?>&obj[PropID]=<?php echo esc_attr($obj[ 'PropID' ]); ?>" id="vrpbookform" method="post">
 <div class="userbox" id="guestinfodiv">
 
     <h3>Guest Information</h3>
@@ -144,16 +145,16 @@ if (!isset($_SESSION['userinfo'])){
                 <td><b>Occupants:</b></td>
                 <td>
                     <?php
-                    if (isset($_GET[ 'obj' ][ 'Adults' ])) {
-                        $adults = (int) $_GET[ 'obj' ][ 'Adults' ];
+                    if (isset($obj[ 'Adults' ])) {
+                        $adults = (int) $obj[ 'Adults' ];
                     } else {
                         $adults = $_SESSION[ 'adults' ];
                     }
                     ?>
                     <input type="hidden" name="booking[adults]" value="<?php echo esc_attr($adults); ?>"/><?php echo esc_html($adults); ?>
                     <?php
-                    if (isset($_GET[ 'obj' ][ 'Children' ])) {
-                        $children_count = (int) $_GET[ 'obj' ][ 'Children' ];
+                    if (isset($obj[ 'Children' ])) {
+                        $children_count = (int) $obj[ 'Children' ];
                     } else {
 						if(!isset($_SESSION['children'])){
 							$_SESSION['children']=0;

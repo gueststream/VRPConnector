@@ -40,7 +40,7 @@ class Calendar
 
     function Calendar($date = null, $year = null, $month = null)
     {
-        $self = htmlspecialchars($_SERVER['PHP_SELF']);
+        $self = htmlspecialchars(filter_input(INPUT_SERVER,'PHP_SELF',FILTER_SANITIZE_STRING)); 
         $this->link_to = $self;
 
         if (is_null($year) || is_null($month)) {
@@ -79,7 +79,7 @@ class Calendar
 
     function output_calendar($year = null, $month = null, $calendar_class = 'calendar')
     {
-        if (isset($_GET["debug"])) {
+        if (filter_input(INPUT_GET,'debug',FILTER_SANITIZE_STRING)) {
         }
 
         if ($this->week_start_on !== false) {

@@ -51,7 +51,8 @@ class mountainsunset
 
 function vrp_pagination($totalpages, $page = 1) {
     $fields_string = "";
-    foreach ($_GET['search'] as $key => $value) {
+	$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+    foreach ($search as $key => $value) {
         if (is_array($value)) {
             foreach ($value as $v):
                 $fields_string .= 'search[' . $key . '][]=' . $v . '&';
@@ -63,9 +64,9 @@ function vrp_pagination($totalpages, $page = 1) {
     rtrim($fields_string, '&');
     $pageurl = $fields_string;
     $_SESSION['pageurl'] = $pageurl;
-
-    if (isset($_GET['show'])) {
-        $show = $_GET['show'];
+	$show=filter_input(INPUT_GET,'show',FILTER_SANITIZE_NUMBER_INT);
+    if ($show) {
+        $show = $show;
     } else {
         $show = 10;
     }
@@ -115,15 +116,15 @@ function vrp_pagination($totalpages, $page = 1) {
 
 function vrp_paginationmobile($totalpages, $page = 1) {
     $fields_string = "";
-    foreach ($_GET['search'] as $key => $value) {
+	$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+    foreach ($search as $key => $value) {
         $fields_string .= 'search[' . $key . ']=' . $value . '&';
     }
     rtrim($fields_string, '&');
     $pageurl = $fields_string;
     $_SESSION['pageurl'] = $pageurl;
-    if (isset($_GET['show'])) {
-        $show = $_GET['show'];
-    } else {
+	$show=filter_input(INPUT_GET,'show',FILTER_SANITIZE_NUMBER_INT);
+    if (!$show) {
         $show = 5;
     }
     if ($totalpages == 1) {
@@ -147,19 +148,20 @@ function vrp_pagination2($totalpages, $page = 1) {
       }
       rtrim($fields_string, '&'); */
     $beds = "";
-    if (isset($_GET['beds'])) {
-        $beds = (int) $_GET['beds'];
+	$beds=filter_input(INPUT_GET,'beds',FILTER_SANITIZE_NUMBER_INT);
+    if ($beds) {
+        $beds = (int) $beds;
         $beds = "&beds=" . $beds;
     }
-
-    if (isset($_GET['minbed'])) {
-        $minbed = $_GET['minbed'];
-        $maxbed = $_GET['maxbed'];
+	$minbed=filter_input(INPUT_GET,'minbed',FILTER_SANITIZE_NUMBER_INT);
+    if ($minbed) {
+        $maxbed = filter_input(INPUT_GET,'maxbed',FILTER_SANITIZE_NUMBER_INT);
         $beds = "&minbed=" . $minbed . "&maxbed=" . $maxbed;
     }
     $pageurl = "";
-    if (isset($_GET['search'])) {
-        foreach ($_GET['search'] as $k => $v):
+	$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+    if ($search) {
+        foreach ($search as $k => $v):
             $pageurl .= "search[$k]=$v&";
         endforeach;
     }
@@ -186,15 +188,15 @@ function vrp_pagination2($totalpages, $page = 1) {
 }
 
 function vrpsortlinks($unit) {
-
-    if (isset($_GET['search']['order'])) {
-        $order = $_GET['search']['order'];
+	$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+    if (isset($search['order'])) {
+        $order = $search['order'];
     } else {
         $order = "low";
     }
 
     $fields_string = "";
-    foreach ($_GET['search'] as $key => $value) {
+    foreach ($search as $key => $value) {
         if ($key == 'sort') {
             continue;
         }
@@ -213,14 +215,13 @@ function vrpsortlinks($unit) {
         $sortoptions[] = "Rate";
     }
     // echo "<select class='vrpsorter ui-widget ui-state-default' style='font-size:11px;'><option></option>";
-    if (isset($_GET['search']['sort'])) {
-        $sort = $_GET['search']['sort'];
+    if (isset($search['sort'])) {
+        $sort = $search['sort'];
     } else {
         $sort = "";
     }
-    if (isset($_GET['show'])) {
-        $show = $_GET['show'];
-    } else {
+	$show=filter_input(INPUT_GET,'show',FILTER_SANITIZE_NUMBER_INT);
+    if (!$show) {
         $show = 10;
     }
     foreach ($sortoptions as $s) {
@@ -246,15 +247,15 @@ function vrpsortlinks($unit) {
 }
 
 function vrpsortlinks2($unit) {
-
-    if (isset($_GET['search']['order'])) {
-        $order = $_GET['search']['order'];
+	$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+    if (isset($search['order'])) {
+        $order = $search['order'];
     } else {
         $order = "low";
     }
 
     $fields_string = "";
-    foreach ($_GET['search'] as $key => $value) {
+    foreach ($search as $key => $value) {
         if ($key == 'sort') {
             continue;
         }
@@ -265,12 +266,14 @@ function vrpsortlinks2($unit) {
     }
     rtrim($fields_string, '&');
     $pageurl = $fields_string;
-    if (isset($_GET['beds'])) {
-        $pageurl .= "beds=" . $_GET['beds'] . "&";
+	$beds=filter_input(INPUT_GET,'beds',FILTER_SANITIZE_NUMBER_INT);
+    if ($beds) {
+        $pageurl .= "beds=" . $beds . "&";
     }
-
-    if (isset($_GET['minbed'])) {
-        $pageurl .= "minbed=" . $_GET['minbed'] . "&maxbed=" . $_GET['maxbed'] . "&";
+	$minbed=filter_input(INPUT_GET,'minbed',FILTER_SANITIZE_NUMBER_INT);
+    if ($minbed) {
+		$maxbed=filter_input(INPUT_GET,'maxbed',FILTER_SANITIZE_NUMBER_INT);
+        $pageurl .= "minbed=" . $minbed . "&maxbed=" . $maxbed . "&";
     }
     $sortoptions = array("Bedrooms" => "Bedrooms", "minrate" => "Minimum Rate", "maxrate" => "Maximum Rate");
 
@@ -278,14 +281,13 @@ function vrpsortlinks2($unit) {
         $sortoptions[] = "Rate";
     }
     echo "<select class='vrpsorter ui-widget ui-state-default' style='font-size:11px;'>";
-    if (isset($_GET['search']['sort'])) {
-        $sort = $_GET['search']['sort'];
+    if (isset($search['sort'])) {
+        $sort = $search['sort'];
     } else {
         $sort = "";
     }
-    if (isset($_GET['show'])) {
-        $show = $_GET['show'];
-    } else {
+	$show=filter_input(INPUT_GET,'show',FILTER_SANITIZE_NUMBER_INT);
+    if (!$show) {
         $show = 10;
     }
     foreach ($sortoptions as $s => $val) {
@@ -312,16 +314,15 @@ function vrpsortlinks2($unit) {
 
 function vrp_resultsperpage() {
     $fields_string = "";
-    foreach ($_GET['search'] as $key => $value) {
+	$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+    foreach ($search as $key => $value) {
         $fields_string .= 'search[' . $key . ']=' . $value . '&';
     }
 
     rtrim($fields_string, '&');
     $pageurl = $fields_string;
-
-    if (isset($_GET['show'])) {
-        $show = (int) $_GET['show'];
-    } else {
+	$show=filter_input(INPUT_GET,'show',FILTER_SANITIZE_NUMBER_INT);
+    if (!$show) {
         $show = 10;
     }
     echo "<ul class='vrpshowing'>";
@@ -384,7 +385,7 @@ function vrpCalendar($r, $totalMonths = 3) {
     $calendar->highlighted_dates = $final_date;
     $calendar->arrival_dates = $arrivals;
     $calendar->depart_dates = $departs;
-    if (isset($_GET["debug"])) {
+    if (filter_input(INPUT_GET,'debug',FILTER_SANITIZE_STRING)) {
     }
     /*  $nextyear = date("Y", mktime(0, 0, 0, date("m") + 1, date("d"), date("Y")));
       $nextmonth = date("m", mktime(0, 0, 0, date("m") + 1, date("d"), date("Y")));

@@ -5,20 +5,20 @@
  * Date: 10/23/14
  * Time: 1:35 PM
  */
-
-if (isset($_GET['search']['arrival'])){
-    $_SESSION['arrival']=$_GET['search']['arrival'];
+$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+if (isset($search['arrival'])){
+    $_SESSION['arrival']=$search['arrival'];
 }
-if (isset($_GET['search']['Adults'])){
-    $_SESSION['adults']=$_GET['search']['Adults'];
-
-}
-if (isset($_GET['search']['Children'])){
-    $_SESSION['children']=$_GET['search']['Children'];
+if (isset($search['Adults'])){
+    $_SESSION['adults']=$search['Adults'];
 
 }
-if (isset($_GET['search']['departure'])){
-    $_SESSION['depart']=$_GET['search']['departure'];
+if (isset($search['Children'])){
+    $_SESSION['children']=$search['Children'];
+
+}
+if (isset($search['departure'])){
+    $_SESSION['depart']=$search['departure'];
 }
 
 $arrival="";
@@ -34,8 +34,8 @@ if (isset($_SESSION['depart'])){
     $depart=date('m/d/Y',strtotime("+9 Days"));
 }
 $type="";
-if (isset($_GET['search']['type'])){
-    $_SESSION['type']=$_GET['search']['type'];
+if (isset($search['type'])){
+    $_SESSION['type']=$search['type'];
 }
 
 if (isset($_SESSION['type'])){
@@ -43,8 +43,8 @@ if (isset($_SESSION['type'])){
 }
 
 $sleeps="";
-if (isset($_GET['search']['sleeps'])){
-    $_SESSION['sleeps']=$_GET['search']['sleeps'];
+if (isset($search['sleeps'])){
+    $_SESSION['sleeps']=$search['sleeps'];
 }
 
 if (isset($_SESSION['sleeps'])){
@@ -59,16 +59,16 @@ if (isset($_SESSION['children'])){
 }
 
 $location="";
-if (isset($_GET['search']['location'])){
-    $_SESSION['location']=$_GET['search']['location'];
+if (isset($search['location'])){
+    $_SESSION['location']=$search['location'];
 }
 
 if (isset($_SESSION['location'])){
     $location=$_SESSION['location'];
 }
 $bedrooms="";
-if (isset($_GET['search']['bedrooms'])){
-    $_SESSION['bedrooms']=$_GET['search']['bedrooms'];
+if (isset($search['bedrooms'])){
+    $_SESSION['bedrooms']=$search['bedrooms'];
 }
 
 if (isset($_SESSION['bedrooms'])){

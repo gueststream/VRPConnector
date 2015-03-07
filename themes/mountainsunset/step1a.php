@@ -1,5 +1,8 @@
+<?php
+$obj=filter_input(INPUT_GET,'obj',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+?>
 <div class="vrpgrid_11" style="float:right; text-align:right;margin-bottom:15px;">
-    <a href="/vrp/book/step3/?obj[Arrival]=<?php echo esc_attr($data->Arrival); ?>&obj[Departure]=<?php echo esc_attr($data->Departure); ?>&obj[PropID]=<?php echo esc_attr($_GET['obj']['PropID']); ?>&obj[Adults]=<?php echo esc_attr($_GET['obj']['Adults']);?>" class="btn btn-success success continuebtn">Continue with Reservation</a><br><br>
+    <a href="/vrp/book/step3/?obj[Arrival]=<?php echo esc_attr($data->Arrival); ?>&obj[Departure]=<?php echo esc_attr($data->Departure); ?>&obj[PropID]=<?php echo esc_attr($obj['PropID']); ?>&obj[Adults]=<?php echo esc_attr($obj['Adults']);?>" class="btn btn-success success continuebtn">Continue with Reservation</a><br><br>
     Add-on Package Total: <b class="addontotal">$0.00</b>
 </div>
 <br><br>
@@ -82,7 +85,7 @@
 <div class="vrpgrid_11" style="float:right;text-align:right;margin-top:10px;">
     Add-on Package Total: <b class="addontotal">$0.00</b>
     <br><br>
-    <a href="/vrp/book/step3/?obj[Arrival]=<?php echo esc_attr($data->Arrival); ?>&obj[Departure]=<?php echo esc_attr($data->Departure); ?>&obj[PropID]=<?php echo esc_attr($_GET['obj']['PropID']); ?>&obj[Adults]=<?php echo esc_attr($_GET['obj']['Adults']);?>" class="btn btn-success success continuebtn" style="float:right;" >Continue with Reservation</a>
+    <a href="/vrp/book/step3/?obj[Arrival]=<?php echo esc_attr($data->Arrival); ?>&obj[Departure]=<?php echo esc_attr($data->Departure); ?>&obj[PropID]=<?php echo esc_attr($obj['PropID']); ?>&obj[Adults]=<?php echo esc_attr($obj['Adults']);?>" class="btn btn-success success continuebtn" style="float:right;" >Continue with Reservation</a>
 </div>
 <style>
     .packageitem {

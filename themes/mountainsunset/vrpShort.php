@@ -13,8 +13,10 @@
                 <?php } ?>
                 <input type="hidden" name="search[NoComplex]" value="1">
                 <input type="hidden" name="search[showall]" value="1">
-                <?php if (isset($_GET['page'])) { ?>
-                    <input type="hidden" name="page" value="<?php echo esc_attr($_GET['page']); ?>">
+                <?php 
+				$page=filter_input(INPUT_GET,'page',FILTER_SANITIZE_NUMBER_INT);
+				if ($page) { ?>
+                    <input type="hidden" name="page" value="<?php echo esc_attr($page); ?>">
                 <?php } ?>
             </form>
         </div>

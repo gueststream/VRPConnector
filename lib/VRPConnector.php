@@ -42,30 +42,7 @@ class VRPConnector
 	function __load_demo_key(){
 		$this->apiKey='1533020d1121b9fea8c965cd2c978296';
 	}
-    /**
-     * Class Destruct w/basic debugging.
-     */
-    public function __destruct()
-    {
-        if (!isset($_GET['showdebug'])) {
-            return false;
-        }
 
-        if (!$this->is_vrp_page()) {
-            return false;
-        }
-
-        echo "<div style='position:absolute;left:0;width:100%;background:white;color:black;'>";
-        echo "API Time Spent: " . esc_html($this->time) . "<br/>";
-        echo "GET VARIABLES:<br><pre>";
-        print_r($_GET);
-        echo "</pre>";
-        echo "Debug VARIABLES:<br><pre>";
-        print_r($this->debug);
-        echo "</pre>";
-        echo "Post Type: " . esc_html($wp->query_vars["post_type"]);
-        echo "</div>";
-    }
 
     /**
      * init WordPress Actions, Filters & shortcodes
@@ -143,11 +120,12 @@ class VRPConnector
 
     public function otheractions()
     {
-        if (isset($_GET['otherslug']) && $_GET['otherslug'] != '') {
+		$otherslug=filter_input(INPUT_GET,'otherslug',FILTER_SANITIZE_STRING);
+        if ($otherslug) {
             $theme = $this->themename;
             $theme = new $theme;
             $func  = $theme->otheractions;
-            $func2 = $func[$_GET['otherslug']];
+            $func2 = $func[$otherslug];
             call_user_method($func2, $theme);
         }
     }
@@ -249,7 +227,7 @@ class VRPConnector
                 break;
             case "complex": // If Complex Page.
                 $this->time = microtime(true);
-                $slug       = $_GET['slug'];
+                $slug       = $query->query_vars['slug'];
                 $data2      = $this->call("getcomplex/" . $slug);
                 $data       = json_decode($data2);
 
@@ -266,7 +244,7 @@ class VRPConnector
                 break;
             case "special": // If Special Page.
 
-                $slug = $_GET['slug'];
+                $slug = $query->query_vars['slug'];
 
                 $data2 = $this->call("getspecial/" . $slug);
                 $data  = json_decode($data2);
@@ -284,12 +262,7 @@ class VRPConnector
                 $data       = json_decode($data);
                 //print_r($data);
                 $time2 = round((microtime(true) - $time1), 4);
-                if (isset($_GET['showdebug'])) {
-                    /* echo "<pre>";
-                      print_r($data->results);
-                      echo "</pre>"; */
-                    echo ' <!-- Vacation Rental Platform : ' . esc_attr($time2) . ' -->. ';
-                }
+
 
                 if (isset($data->type)) {
                     $content = $this->loadTheme($data->type, $data);
@@ -322,21 +295,22 @@ class VRPConnector
                         $_POST['booking']['packages'] = $_SESSION['package'];
                     }
                 }
-
-                if (isset($_POST['email'])) {
-                    $userinfo             = $this->doLogin($_POST['email'], $_POST['password']);
+				$email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_EMAIL);
+                if ($email) {
+                    $userinfo             = $this->doLogin($email, filter_input(INPUT_POST,'password',FILTER_SANITIZE_STRING));
                     $_SESSION['userinfo'] = $userinfo;
                     if (!isset($userinfo->Error)) {
                         $query->query_vars['slug'] = "step3";
                     }
                 }
-
-                if (isset($_POST['booking'])) {
-                    $_SESSION['userinfo'] = $_POST['booking'];
+				$bookingarr=filter_input(INPUT_POST,'booking',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+                if ($bookingarr) {
+                    $_SESSION['userinfo'] = $bookingarr;
                 }
 
                 $data = json_decode($_SESSION['bookingresults']);
-                if ($data->ID != $_GET['obj']['PropID']) {
+				$obj=filter_input(INPUT_POST,'obj',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);;
+                if ($data->ID != $obj['PropID']) {
                     $data      = json_decode($this->checkavailability(false, true));
                     $data->new = true;
                 }
@@ -346,7 +320,7 @@ class VRPConnector
                     $data->new = true;
                 }
 
-                $data->PropID = $_GET['obj']['PropID'];
+                $data->PropID = $obj['PropID'];
                 //if ($_GET['slug']=='step2'){
                 $data->booksettings = $this->bookSettings($data->PropID);
 
@@ -402,7 +376,8 @@ class VRPConnector
         }
 
         if ('complexsearch' == $this->action) {
-            if ($_GET['search']['type'] == 'Villa') {
+			$search=filter_input(INPUT_POST,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+            if ($search['type'] == 'Villa') {
                 $this->action = 'search';
 				global $wp_query;
 				$wp_query->query_vars['action']=$this->action;
@@ -412,12 +387,13 @@ class VRPConnector
 
     public function searchjax()
     {
-        if (isset($_GET['search']['arrival'])) {
-            $_SESSION['arrival'] = $_GET['search']['arrival'];
+		$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+        if (isset($search['arrival'])) {
+            $_SESSION['arrival'] = $search['arrival'];
         }
 
-        if (isset($_GET['search']['departure'])) {
-            $_SESSION['depart'] = $_GET['search']['departure'];
+        if (isset($search['departure'])) {
+            $_SESSION['depart'] = $search['departure'];
         }
 
         ob_start();
@@ -434,21 +410,21 @@ class VRPConnector
     public function search()
     {
         $obj = new \stdClass();
-
-        foreach ($_GET['search'] as $k => $v) {
+		$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+        foreach ($search as $k => $v) {
             $obj->$k = $v;
         }
-
-        if (isset($_GET['page'])) {
-            $obj->page = (int) $_GET['page'];
+		$page=filter_input(INPUT_GET,'page',FILTER_SANITIZE_NUMBER_INT);
+        if ($page) {
+            $obj->page = (int) $page;
         } else {
             $obj->page = 1;
         }
-
+		$show=filter_input(INPUT_GET,'show',FILTER_SANITIZE_NUMBER_INT);
         if(!isset($obj->limit)) {
             $obj->limit = 10;
-            if (isset($_GET['show'])) {
-                $obj->limit = (int) $_GET['show'];
+            if ($show) {
+                $obj->limit = (int) $show;
             }
         }
 
@@ -463,7 +439,7 @@ class VRPConnector
 
         $search['search'] = json_encode($obj);
 
-        if (isset($_GET['specialsearch'])) {
+        if (filter_input(INPUT_GET,'specialsearch',FILTER_SANITIZE_STRING)) {
             // This might only be used by suite-paradise.com but is available
             // To all ISILink based PMS softwares.
             return $this->call('specialsearch', $search);
@@ -474,19 +450,22 @@ class VRPConnector
 
     public function complexsearch()
     {
+		$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+		$page=filter_input(INPUT_GET,'page',FILTER_SANITIZE_NUMBER_INT);
+		$show=filter_input(INPUT_GET,'show',FILTER_SANITIZE_NUMBER_INT);
         $url = $this->apiURL . $this->apiKey . "/complexsearch3/";
 
         $obj = new \stdClass();
-        foreach ($_GET['search'] as $k => $v) {
+        foreach ($search as $k => $v) {
             $obj->$k = $v;
         }
-        if (isset($_GET['page'])) {
-            $obj->page = (int) $_GET['page'];
+        if ($page) {
+            $obj->page = (int) $page;
         } else {
             $obj->page = 1;
         }
-        if (isset($_GET['show'])) {
-            $obj->limit = (int) $_GET['show'];
+        if ($show) {
+            $obj->limit = (int) $show;
         } else {
             $obj->limit = 10;
         }
@@ -513,12 +492,14 @@ class VRPConnector
 
     public function compare()
     {
-        if (isset($_GET['shared'])) {
+		$shared=filter_input(INPUT_GET,'shared',FILTER_SANITIZE_NUMBER_INT);
+        if ($shared) {
             $_SESSION['cp'] = 1;
-            $id             = (int) $_GET['shared'];
+            $id             = (int) $shared;
             $source         = "";
-            if (isset($_GET['source'])) {
-                $source = $_GET['source'];
+			$source_get=filter_input(INPUT_GET,'source',FILTER_SANITIZE_STRING);
+            if ($source_get) {
+                $source = $source_get;
             }
             $data                = json_decode($this->call("getshared/" . $id . "/" . $source));
             $_SESSION['compare'] = $data->compare;
@@ -527,9 +508,9 @@ class VRPConnector
         }
 
         $obj = new \stdClass();
-
-        if (isset($_GET['c']['compare'])) {
-            $compare             = $_GET['c']['compare'];
+		$c=filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+        if (isset($c['compare'])) {
+            $compare             = $c['compare'];
             $_SESSION['compare'] = $compare;
             if (!is_array($compare)) {
                 return;
@@ -541,9 +522,9 @@ class VRPConnector
             }
         }
 
-        if (isset($_GET['c']['arrival'])) {
-            $obj->arrival        = $_GET['c']['arrival'];
-            $obj->departure      = $_GET['c']['depart'];
+        if (isset($c['arrival'])) {
+            $obj->arrival        = $c['arrival'];
+            $obj->departure      = $c['depart'];
             $_SESSION['arrival'] = $obj->arrival;
             $_SESSION['depart']  = $obj->departure;
         } else {
@@ -578,10 +559,10 @@ class VRPConnector
     {
 
         $obj = new \stdClass();
+		$c=filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+        if (isset($c['compare'])) {
 
-        if (isset($_GET['c']['compare'])) {
-
-            $compare = $_GET['c']['compare'];
+            $compare = $c['compare'];
 
             if (!is_array($compare)) {
                 return;
@@ -595,9 +576,9 @@ class VRPConnector
         }
 
 
-        if (isset($_GET['c']['arrival'])) {
-            $obj->arrival        = $_GET['c']['arrival'];
-            $obj->departure      = $_GET['c']['depart'];
+        if (isset($c['arrival'])) {
+            $obj->arrival        = $c['arrival'];
+            $obj->departure      = $c['depart'];
             $_SESSION['arrival'] = $obj->arrival;
             $_SESSION['depart']  = $obj->departure;
         } else {
@@ -649,7 +630,7 @@ class VRPConnector
             $load = $this->theme . "/" . $section . ".php";
         }
 
-        if (isset($_GET['printme'])) {
+        if (filter_input(INPUT_GET,'printme',FILTER_SANITIZE_STRING)) {
             include $this->theme . "/print.php";
             exit;
         }
@@ -666,11 +647,11 @@ class VRPConnector
 
     public function ajax()
     {
-        if (!isset($_GET['vrpjax'])) {
+        if (!filter_input(INPUT_GET,'vrpjax',FILTER_SANITIZE_STRING)) {
             return false;
         }
-        $act = $_GET['act'];
-        $par = $_GET['par'];
+        $act = filter_input(INPUT_GET,'act',FILTER_SANITIZE_STRING);
+        $par = filter_input(INPUT_GET,'par',FILTER_SANITIZE_STRING);
         if (method_exists($this, $act)) {
             $this->$act($par);
         }
@@ -680,8 +661,8 @@ class VRPConnector
     public function checkavailability($par = false, $ret = false)
     {
         set_time_limit(50);
-
-        $fields_string = "obj=" . json_encode($_GET['obj']);
+		$obj=filter_input(INPUT_GET,'obj',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+        $fields_string = "obj=" . json_encode($obj);
         $results       = $this->call('checkavail', $fields_string);
 
         if ($ret == true) {
@@ -707,11 +688,13 @@ class VRPConnector
 
     public function processbooking($par = false, $ret = false)
     {
-        if (isset($_POST['booking']['comments'])) {
-            $_POST['booking']['comments'] = urlencode($_POST['booking']['comments']);
+		$booking=filter_input(INPUT_POST,'booking',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+		
+        if (isset($booking['comments'])) {
+            $booking['comments'] = urlencode($booking['comments']);
         }
 
-        $fields_string = "obj=" . json_encode($_POST['booking']);
+        $fields_string = "obj=" . json_encode($booking);
         $results       = $this->call('processbooking', $fields_string);
         $res           = json_decode($results);
         if (isset($res->Results)) {
@@ -722,8 +705,9 @@ class VRPConnector
 
     public function addtopackage()
     {
-        $TotalCost = $_GET['TotalCost'];
-        if (!isset($_GET['package'])) {
+		$TotalCost=filter_input(INPUT_GET,'TotalCost',FILTER_SANITIZE_STRING);
+		$package = filter_input(INPUT_GET,'package',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+        if (!$package) {
             unset($_SESSION['package']);
             $obj              = new \stdClass();
             $obj->packagecost = "$0.00";
@@ -737,10 +721,10 @@ class VRPConnector
         $currentpackage->items = array();
         $grandtotal            = 0;
         // ID & QTY
-        $package = $_GET['package'];
-        $qty     = $_GET['qty'];
-        $cost    = $_GET['cost'];
-        $name    = $_GET['name'];
+        
+        $qty     = filter_input(INPUT_GET,'qty',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+        $cost    = filter_input(INPUT_GET,'cost',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+        $name    = filter_input(INPUT_GET,'name',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
         foreach ($package as $v):
             $amount                    = $qty[$v]; // Qty of item.
             $obj                       = new \stdClass();
@@ -775,7 +759,7 @@ class VRPConnector
 
     public function sitemap()
     {
-        if (!isset($_GET['vrpsitemap'])) {
+        if (!filter_input(INPUT_GET,'vrpsitemap',FILTER_SANITIZE_STRING)) {
             return false;
         }
         $data = json_decode($this->call("allvrppages"));
@@ -838,8 +822,9 @@ class VRPConnector
 
     public function custompost($call)
     {
+		$obj=filter_input(INPUT_POST,'obj',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
         $obj = new \stdClass();
-        foreach ($_POST['obj'] as $k => $v) {
+        foreach ($obj as $k => $v) {
             $obj->$k = $v;
         }
 
@@ -891,7 +876,7 @@ class VRPConnector
      */
     public function getflipkey()
     {
-        $id   = $_GET['slug'];
+        $id   = filter_input(INPUT_GET,'slug',FILTER_SANITIZE_STRING);
         $call = "getflipkey/?unit_id=$id";
         $data = $this->customcall($call);
         echo "<!DOCTYPE html><html>";
@@ -915,17 +900,18 @@ class VRPConnector
     public function vrpComplexes($items = array())
     {
         $items['page'] = 1;
-
-        if (isset($_GET['page'])) {
-            $items['page'] = (int) $_GET['page'];
+		$page=filter_input(INPUT_GET,'page',FILTER_SANITIZE_NUMBER_INT);
+        if ($page) {
+            $items['page'] = (int) $page;
         }
-
-        if (isset($_GET['beds'])) {
-            $items['beds'] = (int) $_GET['beds'];
+		$beds=filter_input(INPUT_GET,'beds',FILTER_SANITIZE_NUMBER_INT);
+        if ($beds) {
+            $items['beds'] = (int) $beds;
         }
-        if (isset($_GET['minbed'])) {
-            $items['minbed'] = (int) $_GET['minbed'];
-            $items['maxbed'] = (int) $_GET['maxbed'];
+		$minbed=filter_input(INPUT_GET,'minbed',FILTER_SANITIZE_NUMBER_INT);
+        if ($minbed) {
+            $items['minbed'] = (int) $minbed;
+            $items['maxbed'] = (int) filter_input(INPUT_GET,'maxbed',FILTER_SANITIZE_NUMBER_INT);
         }
 
         $obj       = new \stdClass();
@@ -954,23 +940,24 @@ class VRPConnector
     public function vrpUnits($items = array())
     {
         $items['showall'] = 1;
-        if (isset($_GET['page'])) {
-            $items['page'] = (int) $_GET['page'];
+		$page=filter_input(INPUT_GET,'page',FILTER_SANITIZE_NUMBER_INT);
+        if ($page) {
+            $items['page'] = (int) $page;
         }
-
-        if (isset($_GET['beds'])) {
-            $items['beds'] = (int) $_GET['beds'];
+		$beds=filter_input(INPUT_GET,'beds',FILTER_SANITIZE_NUMBER_INT);
+        if ($beds) {
+            $items['beds'] = (int) $beds;
         }
-
-        if (isset($_GET['search'])) {
-            foreach ($_GET['search'] as $k => $v):
+		$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+        if ($search) {
+            foreach ($search as $k => $v):
                 $items[$k] = $v;
             endforeach;
         }
-
-        if (isset($_GET['minbed'])) {
-            $items['minbed'] = (int) $_GET['minbed'];
-            $items['maxbed'] = (int) $_GET['maxbed'];
+		$minbed=filter_input(INPUT_GET,'minbed',FILTER_SANITIZE_NUMBER_INT);
+        if ($minbed) {
+            $items['minbed'] = (int) $minbed;
+            $items['maxbed'] = filter_input(INPUT_GET,'maxbed',FILTER_SANITIZE_NUMBER_INT);
         }
 
         $obj       = new \stdClass();
