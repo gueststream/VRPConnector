@@ -74,8 +74,13 @@ function vrp_pagination($totalpages, $page = 1) {
     if ($totalpages == 1) {
         return;
     }
+	
+	vrp_page_links($page, $pageurl, $show, $totalpages);
 
-    echo "<ul>";
+}
+
+function vrp_page_links($page,$pageurl,$show,$totalpages){
+	    echo "<ul>";
     if ($page > 1) {
         $p = $page - 1;
         echo '<li><a href="?' . esc_attr($pageurl)  . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">Prev</a></li>';
@@ -98,9 +103,9 @@ function vrp_pagination($totalpages, $page = 1) {
 
     foreach (range($startrange, $totalrange) as $p) {
         if ($page == $p) {
-            echo '<li class="active"><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">$p</a></li>';
+            echo '<li class="active"><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">' . esc_attr($p) . '</a></li>';
         } else {
-            echo '<li><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">$p</a></li>';
+            echo '<li><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">' . esc_attr($p) . '</a></li>';
         }
     }
     if ($totalpages > 5) {
