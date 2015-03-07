@@ -224,7 +224,12 @@ function vrpsortlinks($unit) {
     if (!$show) {
         $show = 10;
     }
-    foreach ($sortoptions as $s) {
+    
+    // echo "</select>";
+	vrp_sort_ul($sortoptions, $show, $order);
+}
+function vrp_sort_ul($sortoptions,$show,$order){
+	foreach ($sortoptions as $s) {
 
         if ($sort == $s) {
             if ($order == "low") {
@@ -243,9 +248,7 @@ function vrpsortlinks($unit) {
         echo '<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=low">' . esc_attr($s) . '(low to high)</a></li>';
         echo '<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=high">' . esc_attr($s) . '(high to low)</a></li>';
     }
-    // echo "</select>";
 }
-
 function vrpsortlinks2($unit) {
 	$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
     if (isset($search['order'])) {
@@ -290,9 +293,9 @@ function vrpsortlinks2($unit) {
     if (!$show) {
         $show = 10;
     }
-	vrp_sort_select($sortoptions);
+	vrp_sort_select($sortoptions,$show,$order);
 }
-function vrp_sort_select($sortoptions){
+function vrp_sort_select($sortoptions,$show,$order){
 	echo "<select class='vrpsorter ui-widget ui-state-default' style='font-size:11px;'>";
 	foreach ( $sortoptions as $s => $val ) {
 
