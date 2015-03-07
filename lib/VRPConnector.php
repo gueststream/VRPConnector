@@ -530,7 +530,7 @@ class VRPConnector
         } elseif (isset($_SESSION['arrival'])) {
                 $obj->arrival   = $_SESSION['arrival'];
                 $obj->departure = $_SESSION['depart'];
-            }
+            
         }
         $obj->items = $compare;
         sort($obj->items);
@@ -583,7 +583,6 @@ class VRPConnector
         } elseif (isset($_SESSION['arrival'])) {
                 $obj->arrival   = $_SESSION['arrival'];
                 $obj->departure = $_SESSION['depart'];
-            }
         }
         $obj->arrival   = date("Y-m-d", strtotime($obj->arrival));
         $obj->departure = date("Y-m-d", strtotime($obj->departure));
