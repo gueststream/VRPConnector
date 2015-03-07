@@ -234,6 +234,8 @@ function vrpsortlinks($unit) {
 	vrp_sort_ul($sortoptions, $show, $order);
 }
 function vrp_sort_ul($sortoptions,$show,$order,$sort){
+	$checked='<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=' . esc_attr($order) . '" selected="selected">' . esc_attr($s) . '(' . esc_attr($other) . ' to ' . esc_attr($order) . ')</a></li>';
+	$notchecked='<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=' . esc_attr($order) .'">' . esc_attr($s) . '(' . esc_attr($order) . 'to' . esc_attr($other) . ')</a></li>';
 	foreach ($sortoptions as $s) {
 
         if ($sort == $s) {
@@ -244,8 +246,8 @@ function vrp_sort_ul($sortoptions,$show,$order,$sort){
                 $other = "low";
             } 
 
-            echo '<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=' . esc_attr($order) . '" selected="selected">' . esc_attr($s) . '(' . esc_attr($other) . ' to ' . esc_attr($order) . ')</a></li>';
-            echo '<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=' . esc_attr($order) .'">' . esc_attr($s) . '(' . esc_attr($order) . 'to' . esc_attr($other) . ')</a></li>';
+            echo $checked; //xss pass
+            echo $notchecked; //xss pass
             continue;
         }
 
