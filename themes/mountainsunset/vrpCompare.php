@@ -22,8 +22,8 @@
                 </td>
                 <td>
                     <?php 
-					$c=filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
-					foreach ($c['compare'] as $v) { ?>
+					$compare=filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+					foreach ($compare['compare'] as $v) { ?>
                         <input type="hidden" name="c[compare][]" value="<?php echo esc_attr($v); ?>">
                     <?php } ?>
 

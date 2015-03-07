@@ -280,7 +280,7 @@ function vrpsortlinks2($unit) {
     if (isset($unit->Rate)) {
         $sortoptions[] = "Rate";
     }
-    echo "<select class='vrpsorter ui-widget ui-state-default' style='font-size:11px;'>";
+
     if (isset($search['sort'])) {
         $sort = $search['sort'];
     } else {
@@ -290,28 +290,31 @@ function vrpsortlinks2($unit) {
     if (!$show) {
         $show = 10;
     }
-    foreach ($sortoptions as $s => $val) {
-
-        if ($sort == $s) {
-            if ($order == "low") {
-                $order = "high";
-                $other = "low";
-            } else {
-                $order = "low";
-                $other = "high";
-            }
-
-            echo '<option value="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=' . esc_attr($order) . '" selected="selected">' . esc_attr($val) . '(' . esc_attr($other) . ' to ' .  esc_attr($order) . ')</option>';
-            echo '<option value="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=' . esc_attr($order) .'">' . esc_attr($val) . '(' . esc_attr($order) . ' to ' . esc_attr($other) . ')</option>';
-            continue;
-        }
-
-        echo '<option value="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=low">' . esc_attr($val) . '(low to high)</option>';
-        echo '<option value="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=high">' . esc_attr($val) . '(high to low)</option>';
-    }
-    echo "</select>";
+	vrp_sort_select($sortoptions);
 }
+function vrp_sort_select($sortoptions){
+	echo "<select class='vrpsorter ui-widget ui-state-default' style='font-size:11px;'>";
+	foreach ( $sortoptions as $s => $val ) {
 
+		if ( $sort == $s ) {
+			if ( $order == "low" ) {
+				$order	 = "high";
+				$other	 = "low";
+			} else {
+				$order	 = "low";
+				$other	 = "high";
+			}
+
+			echo '<option value="?' . esc_attr( $pageurl ) . 'search[sort]=' . esc_attr( $s ) . '&show=' . esc_attr( $show ) . '&search[order]=' . esc_attr( $order ) . '" selected="selected">' . esc_attr( $val ) . '(' . esc_attr( $other ) . ' to ' . esc_attr( $order ) . ')</option>';
+			echo '<option value="?' . esc_attr( $pageurl ) . 'search[sort]=' . esc_attr( $s ) . '&show=' . esc_attr( $show ) . '&search[order]=' . esc_attr( $order ) . '">' . esc_attr( $val ) . '(' . esc_attr( $order ) . ' to ' . esc_attr( $other ) . ')</option>';
+			continue;
+		}
+
+		echo '<option value="?' . esc_attr( $pageurl ) . 'search[sort]=' . esc_attr( $s ) . '&show=' . esc_attr( $show ) . '&search[order]=low">' . esc_attr( $val ) . '(low to high)</option>';
+		echo '<option value="?' . esc_attr( $pageurl ) . 'search[sort]=' . esc_attr( $s ) . '&show=' . esc_attr( $show ) . '&search[order]=high">' . esc_attr( $val ) . '(high to low)</option>';
+	}
+	echo "</select>";
+}
 function vrp_resultsperpage() {
     $fields_string = "";
 	$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
