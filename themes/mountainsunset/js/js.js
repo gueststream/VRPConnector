@@ -1,7 +1,7 @@
 jQuery(document).ready(function(){
 
     // Unit Page Tabs
-    unitTabs = jQuery("#tabs").tabs();
+    var unitTabs = jQuery("#tabs").tabs();
 
     // Allow outside links to open tabs
     jQuery('.open-tab').click(function (event) {
@@ -25,7 +25,7 @@ jQuery(document).ready(function(){
     var inquireopen=false;
 
     jQuery("#inline").click(function(){
-        if (inquireopen == false){
+        if (inquireopen === false){
             jQuery("#pinquire").slideDown();
             inquireopen=true;
         }else{
@@ -63,14 +63,14 @@ jQuery(document).ready(function(){
         //buttonImageOnly: true,
 
         onSelect: function( selectedDate ) {
-            var option = this.id == "arrival" ? "minDate" : "30",
+            var option = this.id === "arrival" ? "minDate" : "30",
                 instance = jQuery( this ).data( "datepicker" ),
                 date = jQuery.datepicker.parseDate(
                     instance.settings.dateFormat ||
                     jQuery.datepicker._defaults.dateFormat,
                     selectedDate, instance.settings );
             dates.not( this ).datepicker( "option", option, date );
-            if (jQuery("#depart").val() != ''){
+            if (jQuery("#depart").val() !== ''){
                 var arrivalDate=jQuery("#arrival").datepicker("getDate");
                 var departureDate=jQuery("#depart").datepicker("getDate");
                 var oneDay = 1000*60*60*24;
@@ -93,14 +93,14 @@ jQuery(document).ready(function(){
 
 
         onSelect: function( selectedDate ) {
-            var option = this.id == "arrival2" ? "minDate" : "30",
+            var option = this.id === "arrival2" ? "minDate" : "30",
                 instance = jQuery( this ).data( "datepicker" ),
                 date = jQuery.datepicker.parseDate(
                     instance.settings.dateFormat ||
                     jQuery.datepicker._defaults.dateFormat,
                     selectedDate, instance.settings );
             dates2.not( this ).datepicker( "option", option, date );
-            if (jQuery("#depart2").val() != ''){
+            if (jQuery("#depart2").val() !== ''){
                 var arrivalDate=jQuery("#arrival2").datepicker("getDate");
                 var departureDate=jQuery("#depart2").datepicker("getDate");
                 var oneDay = 1000*60*60*24;
@@ -228,21 +228,21 @@ jQuery(document).ready(function(){
 
     jQuery("#country").change(function(){
 
-        if (jQuery(this).val() == 'CA' || jQuery(this).val() == 'US' || jQuery(this).val() == 'other'){
-            if (jQuery(this).val() == 'CA'){
+        if (jQuery(this).val() === 'CA' || jQuery(this).val() === 'US' || jQuery(this).val() === 'other'){
+            if (jQuery(this).val() === 'CA'){
                 jQuery("#state").val('');
 
                 jQuery("#provincetr").effect("highlight", {}, 2000);
                 jQuery("#othertr,#regiontr,#statetr").hide();
             }
-            if (jQuery(this).val() == 'US'){
+            if (jQuery(this).val() === 'US'){
                 jQuery("#province,#region").val('');
                 jQuery("#statetr").effect("highlight", {}, 2000);
 
                 jQuery("#othertr,#regiontr,#provincetr").hide();
             }
 
-            if (jQuery(this).val() == 'other'){
+            if (jQuery(this).val() === 'other'){
                 jQuery("#province,#state").val('');
 
 
@@ -267,7 +267,7 @@ jQuery(document).ready(function(){
             console.log(data);
             var obj=jQuery.parseJSON(data);
             //alert(obj.Bad);
-            if (obj.Bad.length != 0){
+            if (obj.Bad.length !== 0){
                 jQuery("#bookingbuttonvrp").show();
                 jQuery("#vrploadinggif").hide();
                 jQuery.each(obj.Bad,function(k,v){
@@ -286,7 +286,7 @@ jQuery(document).ready(function(){
                 alert("Please correct the errors with your reservation and try again.");
 
             }else{
-                if (obj.Error.length != 0){
+                if (obj.Error.length !== 0){
                     jQuery("#bookingbuttonvrp").show();
                     jQuery("#vrploadinggif").hide();
                     alert(obj.Error);
@@ -342,7 +342,7 @@ jQuery(document).ready(function(){
 });
 
 function checkavailability(){
-    if (jQuery("#arrival2").val() == ''){
+    if (jQuery("#arrival2").val() === ''){
         return false;
     }
     jQuery("#ures").fadeIn();
@@ -375,12 +375,13 @@ function ratebreakdown(obj){
     var tbl=jQuery("#ratebreakdown");
     console.log(obj);
     tbl.empty();
+    var row="";
     for (var i in obj.Charges){
-        var row="<tr><td>" + obj.Charges[i].Description + "</td><td>$" + obj.Charges[i].Amount + "</td></tr>";
+        row="<tr><td>" + obj.Charges[i].Description + "</td><td>$" + obj.Charges[i].Amount + "</td></tr>";
         tbl.append(row);
     }
-    if (obj.HasInsurance && obj.HasInsurance == 1) {
-        var row="<tr><td>Insurance</td><td>$" + obj.InsuranceAmount + "</td></tr>";
+    if (obj.HasInsurance && obj.HasInsurance === 1) {
+        row="<tr><td>Insurance</td><td>$" + obj.InsuranceAmount + "</td></tr>";
         tbl.append(row);
     }
     var tax="<tr><td>Tax:</td><td>$" + obj.TotalTax + "</td></tr>";
