@@ -53,6 +53,9 @@ you to seamlessly connect your website to your property management software data
 * Initial Release
 
 == Upgrade Notice ==
+= 0.09 =
+* Users can now build a list of favorite units.
+
 = 0.08 =
 * Now custom permalink structures work!
 * Established caching for a much faster guest experience.
