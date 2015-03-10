@@ -89,11 +89,12 @@ class VRPConnector
         add_action('init', array($this, 'rewrite'));
         add_action('init', array($this, 'villafilter'));
         add_action('parse_request', array($this, 'router'));
-        add_action('update_option_vrpApiKey', array($this, 'flush_rewrites'), 10, 2);
-        add_action('update_option_vrpAPI', array($this, 'flush_rewrites'), 10, 2);
-        add_action('wp', array($this, 'remove_filters'));
-
-        // Filters
+		add_action('update_option_vrpApiKey',array($this,'flush_rewrites'),10,2);
+		add_action('update_option_vrpAPI',array($this,'flush_rewrites'),10,2);
+		add_action( 'wp', array( $this, 'remove_filters' ) );
+		add_action('pre_get_posts', array($this, 'query_template'));
+		
+		// Filters
         add_filter('robots_txt', array($this, 'robots_mod'), 10, 2);
         remove_filter('template_redirect', 'redirect_canonical');
 
@@ -135,7 +136,21 @@ class VRPConnector
             include $this->theme . "/functions.php";
         }
     }
-
+	/**
+	 * Alters WP_Query to tell it to load the page template instead of home.
+	 * @param WP_Query $query
+	 * @return WP_Query
+	 */
+	public function query_template($query)
+	{
+		if (!isset($query->query_vars['action'])) {
+            return $query;
+        }
+		$query->is_page=true;
+		$query->is_home=false;
+		return $query;
+	}
+	
     public function themeActions()
     {
         $theme = new $this->themename;
