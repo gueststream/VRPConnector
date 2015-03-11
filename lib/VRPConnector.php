@@ -794,6 +794,7 @@ class VRPConnector
 				'body' => $params
 			);
 			$request = wp_remote_post( $this->apiURL . $this->apiKey . '/' . $call, $args );
+			print_r($request);
 			if ( !is_wp_error( $request ) ) {
 				$results = wp_remote_retrieve_body( $request );
 				wp_cache_set( $cache_key, $results, 'vrp', 300 ); // 5 Minutes.
