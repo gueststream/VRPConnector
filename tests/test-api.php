@@ -12,7 +12,6 @@ class ApiTest extends WP_UnitTestCase {
 		global $vrp;
 		$vrp->__load_demo_key();
 		$check = $vrp->testAPI();
-		print_r($check);
 		$this->assertTrue( ((isset( $check->Status )) && ( 'Online' == $check->Status ) ) );
 	}
 
