@@ -6,6 +6,7 @@ if ( !$_tests_dir ) $_tests_dir = '/tmp/wordpress-tests-lib';
 require_once $_tests_dir . '/includes/functions.php';
 
 function _manually_load_plugin() {
+	add_filter( 'https_ssl_verify', '__return_false' );
 	global $vrp;
 	require dirname( __FILE__ ) . '/../VRPConnector.php';
 }
