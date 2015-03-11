@@ -15,7 +15,11 @@ if($data->count == 0) {
     <?php foreach($data->results as $a_unit) { ?>
         <div class="row">
             <div class="row">
-                <h2><a href="<?php echo esc_url(get_bloginfo('url'))?>/vrp/unit/<?php echo esc_url($a_unit->page_slug); ?>"><?php echo esc_html($a_unit->Name); ?></a></h2>
+                <h2>
+                    <a href="<?php echo esc_url(get_bloginfo('url'))?>/vrp/unit/<?php echo esc_attr($a_unit->page_slug); ?>">
+                        <?php echo esc_html($a_unit->Name); ?>
+                    </a>
+                </h2>
             </div>
             <div class="row">
                 <div class="col-md-2">

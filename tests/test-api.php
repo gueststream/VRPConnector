@@ -26,5 +26,8 @@ class ApiTest extends WP_UnitTestCase {
 		}
 		$this->assertTrue( $cache );
 	}
-
+	
+	function test_wp_remote(){
+		print_r(wp_remote_get('http://google.com/'));
+	}
 }

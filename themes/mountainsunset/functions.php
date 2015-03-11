@@ -2,22 +2,27 @@
 
 class mountainsunset
 {
-
-    function actions() {
+    function actions()
+    {
         add_action('wp_enqueue_scripts', array($this, 'my_scripts_method'));
         add_action('wp_print_styles', array($this, 'add_my_stylesheet'));
     }
 
-    function my_scripts_method() {
-        wp_register_script(
-            'VRPjQueryUI',
-            plugins_url('/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.js', dirname(__FILE__)),
-            array('jquery')
-        );
+    function my_scripts_method()
+    {
+        if (file_exists(get_stylesheet_directory() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.js')) {
+            wp_register_script('VRPjQueryUI', get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.js');
+        } else {
+            wp_register_script(
+                'VRPjQueryUI',
+                plugins_url('/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.js', dirname(__FILE__)),
+                array('jquery')
+            );
+        }
 
         wp_enqueue_script('VRPjQueryUI');
 
-        if(file_exists(get_stylesheet_directory() . '/vrp/js/js.js')) {
+        if (file_exists(get_stylesheet_directory() . '/vrp/js/js.js')) {
             wp_enqueue_script('VRPthemeJS', get_stylesheet_directory_uri() . '/vrp/js/js.js');
         } else {
             wp_enqueue_script('VRPthemeJS', plugins_url('/mountainsunset/js/js.js', dirname(__FILE__)));
@@ -30,13 +35,26 @@ class mountainsunset
 			}
 		}
 
+        $script_vars = [
+            'site_url' => site_url(),
+            'stylesheet_dir_url' => get_stylesheet_directory_uri(),
+            'plugin_url' => plugins_url('',dirname(dirname(__FILE__)))
+        ];
+        wp_localize_script('VRPthemeJS','url_paths',$script_vars);
+
     }
 
-    function add_my_stylesheet() {
-        wp_enqueue_style('BootstrapCSS', plugins_url('/mountainsunset/css/bootstrap.min.css', dirname(__FILE__)));
-        wp_enqueue_style('VRPjQueryUISmoothness', plugins_url('/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.css', dirname(__FILE__)));
+    function add_my_stylesheet()
+    {
 
-        if(!file_exists(get_stylesheet_directory() . '/vrp/css/css.css')) {
+        if (file_exists(get_stylesheet_directory() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.css')) {
+            wp_enqueue_style('VRPjQueryUISmoothness', get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.css');
+        } else {
+            wp_enqueue_style('VRPjQueryUISmoothness',
+                plugins_url('/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.css', dirname(__FILE__)));
+        }
+
+        if (!file_exists(get_stylesheet_directory() . '/vrp/css/css.css')) {
             $myStyleUrl = plugins_url(
                 '/mountainsunset/css/css.css', dirname(__FILE__)
             );
@@ -49,7 +67,8 @@ class mountainsunset
     }
 }
 
-function vrp_pagination($totalpages, $page = 1) {
+function vrp_pagination($totalpages, $page = 1)
+{
     $fields_string = "";
 	$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
     foreach ($search as $key => $value) {
@@ -114,7 +133,8 @@ function vrp_pagination($totalpages, $page = 1) {
     echo "</ul>";
 }
 
-function vrp_paginationmobile($totalpages, $page = 1) {
+function vrp_paginationmobile($totalpages, $page = 1)
+{
     $fields_string = "";
 	$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
     foreach ($search as $key => $value) {
@@ -142,7 +162,8 @@ function vrp_paginationmobile($totalpages, $page = 1) {
     }
 }
 
-function vrp_pagination2($totalpages, $page = 1) {
+function vrp_pagination2($totalpages, $page = 1)
+{
     /* foreach ($_GET['search'] as $key => $value) {
       $fields_string .= 'search[' . $key . ']=' . $value . '&';
       }
@@ -312,7 +333,8 @@ function vrpsortlinks2($unit) {
     echo "</select>";
 }
 
-function vrp_resultsperpage() {
+function vrp_resultsperpage()
+{
     $fields_string = "";
 	$search=filter_input(INPUT_GET,'search',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
     foreach ($search as $key => $value) {
@@ -336,11 +358,12 @@ function vrp_resultsperpage() {
     echo "</ul>";
 }
 
-function dateSeries($start_date, $num) {
+function dateSeries($start_date, $num)
+{
     $dates = array();
 
     $dates[0] = $start_date;
-    for ($i = 0; $i < $num; $i++) {
+    for ($i = 0; $i < $num; $i ++) {
         $start = strtotime(end($dates));
         $day = mktime(0, 0, 0, date("m", $start), date("d", $start) + 1, date("Y", $start));
         $dates[] = date('Y-m-d', $day);
@@ -348,7 +371,8 @@ function dateSeries($start_date, $num) {
     return $dates;
 }
 
-function daysTo($from, $to, $round = true) {
+function daysTo($from, $to, $round = true)
+{
     $from = strtotime($from);
     $to = strtotime($to);
     $diff = $to - $from;
@@ -356,7 +380,8 @@ function daysTo($from, $to, $round = true) {
     return $round == true ? floor($days) : round($days, 2);
 }
 
-function vrpCalendar($r, $totalMonths = 3) {
+function vrpCalendar($r, $totalMonths = 3)
+{
 
     $datelist = array();
     $arrivals = array();
@@ -380,7 +405,7 @@ function vrpCalendar($r, $totalMonths = 3) {
     //print_r($final_date);
     //echo "</pre>";
     $today = strtotime(date("Y") . "-" . date("m") . "-01");
-    $calendar = new Calendar(date('Y-m-d'));
+    $calendar = new \Gueststream\Calendar(date('Y-m-d'));
     $calendar->link_days = 0;
     $calendar->highlighted_dates = $final_date;
     $calendar->arrival_dates = $arrivals;
@@ -397,7 +422,7 @@ function vrpCalendar($r, $totalMonths = 3) {
     $ret = "";
     $x = 0;
     $curYear = date('Y');
-    for ($i = 0; $i < $totalMonths; $i++) {
+    for ($i = 0; $i < $totalMonths; $i ++) {
 
         $nextyear = date("Y", mktime(0, 0, 0, date("m", $today) + $i, date("d", $today), date("Y", $today)));
         $nextmonth = date("m", mktime(0, 0, 0, date("m", $today) + $i, date("d", $today), date("Y", $today)));
@@ -405,9 +430,9 @@ function vrpCalendar($r, $totalMonths = 3) {
         $ret .= $calendar->output_calendar($nextyear, $nextmonth);
         if ($x == 3) {
             // $ret.="<br style=\"clear:both;\" /><br style=\"clear:both;\" />";
-            $x = -1;
+            $x = - 1;
         }
-        $x++;
+        $x ++;
     }
 
 

@@ -1,5 +1,3 @@
-
-
 .unit_thumbnail {
     width:100%;
 }
@@ -13,4 +11,8 @@
 
 .highlighted {
     background:#BDBDBD;
+}
+
+.vrp-favorite-button {
+    display: none;
 }

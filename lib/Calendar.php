@@ -1,5 +1,7 @@
 <?php
 
+namespace Gueststream;
+
 /**
  * Calendar Generation Class
  *
@@ -38,7 +40,7 @@ class Calendar
 
     /* CONSTRUCTOR */
 
-    function Calendar($date = null, $year = null, $month = null)
+    function __construct($date = null, $year = null, $month = null)
     {
         $self = htmlspecialchars(filter_input(INPUT_SERVER,'PHP_SELF',FILTER_SANITIZE_STRING)); 
         $this->link_to = $self;
@@ -109,7 +111,7 @@ class Calendar
 
         $col = '';
         $th = '';
-        for ($i = 1, $j = $this->week_start, $t = (3 + $this->week_start) * 86400; $i <= 7; $i++, $j++, $t += 86400) {
+        for ($i = 1, $j = $this->week_start, $t = (3 + $this->week_start) * 86400; $i <= 7; $i ++, $j ++, $t += 86400) {
             $localized_day_name = gmstrftime('%A', $t);
             $col .= "<col class=\"" . strtolower($localized_day_name) . "\" />\n";
             $th .= "\t<th title=\"" . ucfirst($localized_day_name) . "\">" . strtoupper($localized_day_name{0}) . "</th>\n";
@@ -137,12 +139,12 @@ class Calendar
 
         //--------------------------------------------------- pad start of month
         //------------------------------------ adjust for week start on saturday
-        for ($i = 1; $i <= $prepend; $i++) {
+        for ($i = 1; $i <= $prepend; $i ++) {
             $output .= "\t<td class=\"pad\">&nbsp;</td>\n";
         }
 
         //--------------------------------------------------- loop days of month
-        for ($day = 1, $cell = $prepend + 1; $day <= $days_in_month; $day++, $cell++) {
+        for ($day = 1, $cell = $prepend + 1; $day <= $days_in_month; $day ++, $cell ++) {
 
             /*
               if this is first cell and not also the first day, end previous row
@@ -170,7 +172,7 @@ class Calendar
 
             if (is_array($this->highlighted_dates)) {
                 if (in_array($day_date, $this->highlighted_dates)) {
-                    if (in_array($day_date, $this->depart_dates)) {
+                    if (in_array($day_date, $this->depart_dates) && !in_array($day_date, $this->arrival_dates)) {
                         $classes[] = $this->depart_class;
                     } elseif (in_array($day_date, $this->arrival_dates)) {
                         $classes[] = $this->arrival_class;
@@ -186,7 +188,7 @@ class Calendar
                 foreach ($classes AS $value) {
                     $day_class .= $value . " ";
                 }
-                $day_class = substr($day_class, 0, -1) . '"';
+                $day_class = substr($day_class, 0, - 1) . '"';
             } else {
                 $day_class = '';
             }
@@ -195,7 +197,8 @@ class Calendar
             // detect windows os and substitute for unsupported day of month modifer
             $title_format = (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') ? "%A, %B %#d, %Y" : "%A, %B %e, %Y";
 
-            $output .= "\t<td" . $day_class . " title=\"" . ucwords(strftime($title_format, strtotime($day_date))) . "\">";
+            $output .= "\t<td" . $day_class . " title=\"" . ucwords(strftime($title_format,
+                    strtotime($day_date))) . "\">";
 
             //----------------------------------------- unset to keep loop clean
             unset($day_class, $classes);
@@ -210,7 +213,8 @@ class Calendar
                     if (empty($this->formatted_link_to)) {
                         $output .= "<a href=\"" . $this->link_to . "?date=" . $day_date . "\">" . $day . "</a>";
                     } else {
-                        $output .= "<a href=\"" . strftime($this->formatted_link_to, strtotime($day_date)) . "\">" . $day . "</a>";
+                        $output .= "<a href=\"" . strftime($this->formatted_link_to,
+                                strtotime($day_date)) . "\">" . $day . "</a>";
                     }
                     break;
 
@@ -220,7 +224,8 @@ class Calendar
                             if (empty($this->formatted_link_to)) {
                                 $output .= "<a href=\"" . $this->link_to . "?date=" . $day_date . "\">";
                             } else {
-                                $output .= "<a href=\"" . strftime($this->formatted_link_to, strtotime($day_date)) . "\">";
+                                $output .= "<a href=\"" . strftime($this->formatted_link_to,
+                                        strtotime($day_date)) . "\">";
                             }
                         }
                     }
@@ -251,7 +256,7 @@ class Calendar
 
         //----------------------------------------------------- pad end of month
         if ($cell > 1) {
-            for ($i = $cell; $i <= 7; $i++) {
+            for ($i = $cell; $i <= 7; $i ++) {
                 $output .= "\t<td class=\"pad\">&nbsp;</td>\n";
             }
             $output .= "</tr>\n";

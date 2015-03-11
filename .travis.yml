@@ -6,10 +6,7 @@ php:
 
 env:
     - WP_VERSION=latest WP_MULTISITE=0
-    #- WP_VERSION=latest WP_MULTISITE=1
-    #- WP_VERSION=3.8 WP_MULTISITE=0
-    #- WP_VERSION=3.8 WP_MULTISITE=1
-
+    
 before_script:
     - code_path=$(pwd)
     - export WP_DEVELOP_DIR=/tmp/wordpress/
