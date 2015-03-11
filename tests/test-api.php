@@ -12,6 +12,7 @@ class ApiTest extends WP_UnitTestCase {
 		global $vrp;
 		$vrp->__load_demo_key();
 		$check = $vrp->testAPI();
+		print_r($check);
 		$this->assertTrue( ((isset( $check->Status )) && ( 'Online' == $check->Status ) ) );
 	}
 
@@ -27,7 +28,4 @@ class ApiTest extends WP_UnitTestCase {
 		$this->assertTrue( $cache );
 	}
 	
-	function test_wp_remote(){
-		print_r(wp_remote_get('http://google.com/'));
-	}
 }
