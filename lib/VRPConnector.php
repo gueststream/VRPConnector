@@ -789,18 +789,17 @@ class VRPConnector
         }
 
         $results = wp_cache_get($cache_key, 'vrp');
-        if (false == $results) {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $this->apiURL . $this->apiKey . "/" . $call);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            $results = curl_exec($ch);
-            curl_close($ch);
-            wp_cache_set($cache_key, $results, 'vrp', 300); // 5 Minutes.
-        }
-        return $results;
+        if ( false == $results ) {
+			$args	 = array(
+				'body' => $params
+			);
+			$request = wp_remote_post( $this->apiURL . $this->apiKey . '/' . $call, $args );
+			if ( !is_wp_error( $request ) ) {
+				$results = wp_remote_retrieve_body( $request );
+				wp_cache_set( $cache_key, $results, 'vrp', 300 ); // 5 Minutes.
+			}
+		}
+		return $results;
     }
 
     public function customcall($call)
