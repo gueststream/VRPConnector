@@ -1,6 +1,6 @@
 <?php global $vrp; ?>
 <div>
-    <img src="<?php echo plugins_url('/images/vrpconnector-logo.png',__FILE__);; ?>"
+    <img src="<?php echo esc_url(plugins_url('/images/vrpconnector-logo.png',__FILE__)); ?>"
          alt="VRP Connector Logo"/>
 </div>
 <h2>Vacation Rental Platform Connector Settings</h2>

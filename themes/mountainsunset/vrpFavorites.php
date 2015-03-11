@@ -25,7 +25,9 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <?php foreach ($_GET['favorites'] as $v) { ?>
+                    <?php 
+					$favorites=filter_input(INPUT_GET,'favorites',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+					foreach ($favorites as $v) { ?>
                         <input type="hidden" name="favorites[]" value="<?php echo esc_attr($v); ?>">
                     <?php } ?>
                     <input type="submit" class="ButtonView" value="Check Availability">
@@ -50,7 +52,7 @@
     </thead>
     <tbody>
     <?php foreach ($data->results as $prop) { ?>
-        <tr id="favorite_<?php echo $prop->id ?>">
+        <tr id="favorite_<?php echo esc_attr($prop->id); ?>">
             <td>
                 <a href="/vrp/unit/<?php echo esc_attr($prop->page_slug); ?>">
                     <img src="<?php echo esc_url($prop->Thumb); ?>" style="max-width:150px;">
@@ -96,7 +98,7 @@
                 </span>
             </td>
             <td>
-                <button class="vrp-favorite-button" data-unit="<?php echo $prop->id ?>"></button>
+                <button class="vrp-favorite-button" data-unit="<?php echo esc_attr($prop->id); ?>"></button>
             </td>
         </tr>
     <?php } ?>

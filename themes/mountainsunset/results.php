@@ -31,14 +31,14 @@
         </div>
 
         <div class="row">
-            <a href="<?php echo site_url() . "/vrp/favorites/show";?>">View Favorites</a>
+            <a href="<?php echo esc_url(site_url() . '/vrp/favorites/show');?>">View Favorites</a>
         </div>
 
         <?php foreach($data->results as $a_unit) { ?>
             <div class="row">
                 <div class="row">
                     <div class="col-md-10">
-                        <a href="<?php bloginfo('url'); ?>/vrp/unit/<?php echo $a_unit->page_slug; ?>/">
+                        <a href="<?php bloginfo('url'); ?>/vrp/unit/<?php echo esc_attr($a_unit->page_slug); ?>/">
                             <h2><?php echo esc_html($a_unit->Name); ?></h2>
                         </a>
                     </div>
@@ -55,7 +55,7 @@
                     </div>
                     <div class="col-md-6">
                         <?php echo wp_kses_post($a_unit->ShortDescription); ?>
-                        <button class="vrp-favorite-button" data-unit="<?php echo $a_unit->id; ?>"></button>
+                        <button class="vrp-favorite-button" data-unit="<?php echo esc_attr($a_unit->id); ?>"></button>
                     </div>
                 </div>
             </div>

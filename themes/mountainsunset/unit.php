@@ -21,7 +21,7 @@ if (!isset($_SESSION['depart'])) {
             </div>
         </div>
         <div class="col-md-2">
-            <button class="vrp-favorite-button" data-unit="<?php echo $data->id ?>"></button>
+            <button class="vrp-favorite-button" data-unit="<?php echo esc_attr($data->id); ?>"></button>
         </div>
     </div>
 

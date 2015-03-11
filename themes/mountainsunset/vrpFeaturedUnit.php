@@ -20,10 +20,10 @@
 if(is_array($data)) {
     foreach($data as $unit) {
         ?>
-        <a href="/vrp/unit/<?php echo $unit->page_slug; ?>"
-           Title="<?php echo $unit->Name; ?>"
+        <a href="/vrp/unit/<?php echo esc_attr($unit->page_slug); ?>"
+           Title="<?php echo esc_attr($unit->Name); ?>"
             >
-            <img src="<?php echo $unit->Photo; ?>">
+            <img src="<?php echo esc_url($unit->Photo); ?>">
         </a>
     <?php
     }

@@ -880,7 +880,8 @@ class VRPConnector
 
     private function addFavorite()
     {
-        if(!isset($_GET['unit'])) {
+		$unit_id = filter_input(INPUT_GET,'unit',FILTER_SANITIZE_NUMBER_INT);
+        if(!$unit_id) {
             return false;
         }
 
@@ -888,7 +889,7 @@ class VRPConnector
             $_SESSION['favorites'] = [];
         }
 
-        $unit_id = $_GET['unit'];
+        
         if(!in_array($unit_id,$_SESSION['favorites'])) {
             array_push($_SESSION['favorites'],$unit_id);
         }
@@ -898,13 +899,14 @@ class VRPConnector
 
     private function removeFavorite()
     {
-        if(!isset($_GET['unit'])) {
+		$unit = filter_input(INPUT_GET,'unit',FILTER_SANITIZE_NUMBER_INT);
+        if(!$unit) {
             return false;
         }
         if(!isset($_SESSION['favorites'])){
             return false;
         }
-        $unit = $_GET['unit'];
+    
         foreach($this->favorites as $key => $unit_id) {
             if($unit == $unit_id) {
                 unset($this->favorites[$key]);
@@ -927,12 +929,14 @@ class VRPConnector
 
     public function showFavorites()
     {
-        if (isset($_GET['shared'])) {
+		$shared=filter_input(INPUT_GET,'shared',FILTER_SANITIZE_NUMBER_INT);
+        if ($shared) {
             $_SESSION['cp'] = 1;
-            $id = (int) $_GET['shared'];
-            $source = "";
-            if (isset($_GET['source'])) {
-                $source = $_GET['source'];
+            $id = (int) $shared;
+            
+			$source=  filter_input(INPUT_GET, 'source', FILTER_SANITIZE_STRING);
+            if (!$source) {
+               $source = "";
             }
             $data = json_decode($this->call("getshared/" . $id . "/" . $source));
             $_SESSION['compare'] = $data->compare;
@@ -941,8 +945,8 @@ class VRPConnector
         }
 
         $obj = new \stdClass();
-
-        if(!isset($_GET['favorites'])) {
+		$compare=filter_input(INPUT_GET,'favorites',FILTER_SANITIZE_STRING,FILTER_REQUIRE_ARRAY);
+        if(!$compare) {
             if(count($this->favorites) == 0) {
                 return $this->loadTheme('vrpFavoritesEmpty');
             }
@@ -951,15 +955,16 @@ class VRPConnector
             foreach($this->favorites as $unit_id) {
                 $url_string .= "&favorites[]=".$unit_id;
             }
-            header("Location: ".$url_string);
+			wp_safe_redirect($url_string);
         }
 
-        $compare = $_GET['favorites'];
+
         $_SESSION['favorites'] = $compare;
 
-        if (isset($_GET['arrival'])) {
-            $obj->arrival = $_GET['arrival'];
-            $obj->departure = $_GET['depart'];
+		$arrival=filter_input(INPUT_GET,'arrival',FILTER_SANITIZE_STRING);
+        if ($arrival) {
+            $obj->arrival = $arrival;
+            $obj->departure = filter_input(INPUT_GET,'depart',FILTER_SANITIZE_STRING);;
             $_SESSION['arrival'] = $obj->arrival;
             $_SESSION['depart'] = $obj->departure;
         } else {
